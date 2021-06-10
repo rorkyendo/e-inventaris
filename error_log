@@ -1,0 +1,6 @@
+[24-Jun-2019 19:04:49 Asia/Jakarta] PHP Fatal error:  Call to undefined function base_url() in /home/u7044279/public_html/application/views/errors/html/error_404.php on line 256
+[24-Jun-2019 19:11:07 Asia/Jakarta] PHP Fatal error:  Call to undefined function base_url() in /home/u7044279/public_html/application/views/errors/html/error_404.php on line 109
+[24-Jun-2019 19:11:08 Asia/Jakarta] PHP Fatal error:  Call to undefined function base_url() in /home/u7044279/public_html/application/views/errors/html/error_404.php on line 109
+[24-Jun-2019 19:11:23 Asia/Jakarta] PHP Fatal error:  Call to undefined function base_url() in /home/u7044279/public_html/application/views/errors/html/error_404.php on line 109
+[24-Jun-2019 19:14:38 Asia/Jakarta] PHP Fatal error:  Call to undefined function base_url() in /home/u7044279/public_html/application/views/errors/html/error_404.php on line 109
+[24-Jun-2019 19:16:41 Asia/Jakarta] PHP Fatal error:  Call to a member function segment() on null in /home/u7044279/public_html/application/views/errors/html/error_404.php on line 109
