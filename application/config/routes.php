@@ -49,14 +49,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'Home';
+$route['default_controller'] = 'Auth';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = false;
-$route['tamu/(:any)'] = 'tamu/index/$1';
 $route['administrator'] = 'Auth';
-$route['administrator/(:any)'] = 'panel/$1';
-$route['administrator/(:any)/(:any)'] = 'panel/$1/$2';
-$route['administrator/(:any)/(:any)/(:any)'] = 'panel/$1/$2/$3';
-$route['administrator/(:any)/(:any)/(:any)/(:any)'] = 'panel/$1/$2/$3/$4';
-$route['administrator/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'panel/$1/$2/$3/$4/$5';
-$route['administrator/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'panel/$1/$2/$3/$4/$5/$6';

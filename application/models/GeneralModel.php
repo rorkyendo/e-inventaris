@@ -138,7 +138,7 @@ class GeneralModel extends CI_Model
 
   function get_kode_selects($id,$val)
   {
-    return $this->db->query("SELECT * FROM disdik_kode_selects WHERE $id = '$val' and status = 'aktif'")->result();
+    return $this->db->query("SELECT * FROM e_kode_selects WHERE $id = '$val' and status = 'aktif'")->result();
   }
 
   function getTrackData($table,$id,$val){
