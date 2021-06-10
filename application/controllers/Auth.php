@@ -24,7 +24,7 @@ class Auth extends CI_Controller {
 					foreach ($getUser as $key) {
 						$dataAkun = array(
 							'id_pengguna' => $key->id_pengguna,
-							'nama_lengkap' => $key->nama_lengkap_pengguna,
+							'nama_lengkap' => $key->nama_lengkap,
 							'username' => $key->username,
 							'email_pengguna' => $key->email_pengguna,
 							'foto_pengguna' => $key->foto_pengguna,

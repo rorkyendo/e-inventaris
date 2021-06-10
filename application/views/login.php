@@ -38,7 +38,7 @@
 		}
 	</style>
 	<style type="text/css">
-		.password_pengguna {
+		.password {
 			position: relative;
 		}
 
@@ -69,12 +69,12 @@
 									<form method="post" action="<?php echo base_url('auth/login/do_login');?>">
 										<?php echo $this->session->flashdata('notif');?>
 											<div class="form-group">
-													<i class="fa fa-user icon-input"></i> <input type="text" name="username_pengguna" id="userid" class="form-control input-line" placeholder="Masukkan Akun Pengguna" required="true"/>
+													<i class="fa fa-user icon-input"></i> <input type="text" name="username" id="userid" class="form-control input-line" placeholder="Masukkan Akun Pengguna" required="true"/>
 											</div>
 											<div class="form-group">
-													<div class="password_pengguna">
+													<div class="password">
 															<i style="margin-left:-20px;" class="fa fa-key icon-input"></i>
-															<input type="password" id="password_pengguna" name="password_pengguna" class="form-control input-line" placeholder="Masukkan Kata Sandi" required="true"/>
+															<input type="password" id="password" name="password" class="form-control input-line" placeholder="Masukkan Kata Sandi" required="true"/>
 															<span id="iconshow" name="iconshow" onClick="showPass()" class=" showbtn fa fa-eye-slash"></span>
 													</div>
 											</div>
@@ -146,12 +146,12 @@
 </script>
 <script type="text/javascript">
 		function showPass() {
-				if (document.getElementById("password_pengguna").type == 'password_pengguna') {
-						document.getElementById("password_pengguna").type = 'text';
+				if (document.getElementById("password").type == 'password') {
+						document.getElementById("password").type = 'text';
 						document.getElementById("iconshow").classList.remove('fa-eye-slash');
 						document.getElementById("iconshow").classList.add('fa-eye');
 				} else {
-						document.getElementById("password_pengguna").type = 'password_pengguna';
+						document.getElementById("password").type = 'password';
 						document.getElementById("iconshow").classList.remove('fa-eye');
 						document.getElementById("iconshow").classList.add('fa-eye-slash');
 				}

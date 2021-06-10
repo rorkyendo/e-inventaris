@@ -15,7 +15,7 @@
           </a>
         </div>
         <div class="info">
-          <?php echo $this->session->userdata('nama_lengkap_pengguna'); ?>
+          <?php echo $this->session->userdata('nama_lengkap'); ?>
           <?php if (!empty($this->session->userdata('nama_instansi'))) : ?>
             <small>Instansi - <?php echo $this->session->userdata('nama_instansi'); ?></small>
           <?php endif; ?>
