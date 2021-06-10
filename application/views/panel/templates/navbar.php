@@ -28,7 +28,7 @@
               <?php else: ?>
                 <img src="<?php echo base_url().$icon;?>" alt="" />
             <?php endif; ?>
-            <span class="hidden-xs"><?php echo $this->session->userdata('nama_lengkap');?></span> <b class="caret"></b>
+            <span class="hidden-xs"><?php echo $this->session->userdata('nama_lengkap_pengguna');?></span> <b class="caret"></b>
           </a>
           <ul class="dropdown-menu animated fadeInLeft">
             <li class="arrow"></li>

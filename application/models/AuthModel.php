@@ -20,9 +20,4 @@ class AuthModel extends CI_Model {
   function getUserModul($hak_akses){
     return $this->db->query("SELECT ha.modul_akses FROM e_hak_akses ha where ha.nama_hak_akses = '$hak_akses'")->row();
   }
-
-  function cekToken($user_id,$token){
-    return $this->db->query("SELECT * FROM e_pengguna p where p.id_pengguna = '$user_id' and p.login_token = '$token'")->row();
-  }
-
 }

@@ -20,11 +20,11 @@ if ( ! function_exists('cekModul'))
   {
     $CI =& get_instance();
     $hak_akses = $CI->session->userdata('hak_akses');
-    if ($hak_akses=='pegawai') {
-      return $link;
-    }else {
-      return str_replace('panel/','administrator/',$link);
-    }
+    // if ($hak_akses=='pegawai') {
+    //   return $link;
+    // }else {
+      return str_replace('panel/','panel/',$link);
+    // }
   }
 
 }

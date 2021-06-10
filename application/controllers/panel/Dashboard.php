@@ -13,7 +13,6 @@ class Dashboard extends CI_Controller {
 
 	public function index()
 	{
-		activityLog($this->parent_modul,'');
 		$data['title'] = $this->title;
 		$data['subtitle'] = 'Dashboard';
 		$data['content'] = 'panel/dashboard/index';
