@@ -6,7 +6,7 @@ if ( ! function_exists('cekModulPengguna'))
   function cekModulPengguna($modul,$id)
   {
     $CI =& get_instance();
-    $pengguna = $CI->GeneralModel->get_by_id_general('e_hak_akses','uuid_hak_akses',$id);
+    $pengguna = $CI->GeneralModel->get_by_id_general('e_hak_akses','id_hak_akses',$id);
     foreach ($pengguna as $key) {
       $hak_akses = $key->nama_hak_akses;
     }
