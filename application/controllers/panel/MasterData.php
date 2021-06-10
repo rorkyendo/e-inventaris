@@ -97,8 +97,6 @@ class MasterData extends CI_Controller
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1 == 'doUpdate') {
 			$dataPengguna = array(
-				'username' => $this->input->post('username'),
-				'password' => sha1($this->input->post('password')),
 				'email' => $this->input->post('email'),
 				'hak_akses' => $this->input->post('hak_akses'),
 				'nama_lengkap' => $this->input->post('nama_lengkap'),
