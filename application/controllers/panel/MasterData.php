@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\map;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class MasterData extends CI_Controller
@@ -20,10 +23,14 @@ class MasterData extends CI_Controller
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if($param1=='cari'){
+			$hak_akses_pengguna = $this->input->post('hak_akses_pengguna');
+			return $this->PenggunaModel->getPengguna($hak_akses_pengguna);
 		} else {
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Daftar Pengguna';
 			$data['content'] = 'panel/masterData/pengguna/index';
+			$data['getHakAkses'] = $this->GeneralModel->get_general('e_hak_akses');
+			$data['hak_akses'] = $this->input->get('hak_akses');
 			$this->load->view('panel/content', $data);
 		}
 	}
@@ -42,7 +49,40 @@ class MasterData extends CI_Controller
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1=='doCreate') {
-			# code...
+			$dataPengguna = array(
+				'username' => $this->input->post('username'),
+				'password' => sha1($this->input->post('password')),
+				'email' => $this->input->post('email'),
+				'hak_akses' => $this->input->post('hak_akses'),
+				'nama_lengkap' => $this->input->post('nama_lengkap'),
+				'jenkel' => $this->input->post('jenkel'),
+				'alamat' => $this->input->post('alamat'),	
+			);
+
+			//---------------- UPDATE FOTO PENGGUNA ---------------//
+			$config['upload_path']          = 'assets/img/pengguna/';
+			$config['allowed_types']        = 'gif|jpg|png|jpeg';
+			$config['max_size']             = 10000;
+
+
+			$this->upload->initialize($config);
+
+			if (!$this->upload->do_upload('foto_pengguna')) {
+			} else {
+				$dataPengguna += array('foto_pengguna' => $config['upload_path'] . $this->upload->data('file_name'));
+			}
+			if ($this->GeneralModel->get_by_id_general('e_pengguna','username',$dataPengguna['username']) == false) {
+				if ($this->GeneralModel->create_general('e_pengguna', $dataPengguna) == true) {
+					$this->session->set_flashdata('notif', '<div class="alert alert-success">Data pengguna berhasil ditambahkan</div>');
+					redirect(changeLink('panel/masterData/pengguna'));
+				} else {
+					$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data pengguna gagal ditambahkan</div>');
+					redirect(changeLink('panel/masterData/createPengguna'));
+				}
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data pengguna gagal ditambahkan, username_pengguna telah digunakan</div>');
+				redirect(changeLink('panel/settings/createPengguna'));
+			}
 		}else{
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Tambah Pengguna';
@@ -56,11 +96,59 @@ class MasterData extends CI_Controller
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1 == 'doUpdate') {
-			# code...
+			$dataPengguna = array(
+				'username' => $this->input->post('username'),
+				'password' => sha1($this->input->post('password')),
+				'email' => $this->input->post('email'),
+				'hak_akses' => $this->input->post('hak_akses'),
+				'nama_lengkap' => $this->input->post('nama_lengkap'),
+				'jenkel' => $this->input->post('jenkel'),
+				'alamat' => $this->input->post('alamat'),
+			);
+			//---------------- UPDATE FOTO PENGGUNA ---------------//
+			$config['upload_path']          = 'assets/img/pengguna/';
+			$config['allowed_types']        = 'gif|jpg|png|jpeg';
+			$config['max_size']             = 10000;
+
+
+			$this->upload->initialize($config);
+
+            $pengguna = $this->GeneralModel->get_by_id_general('e_pengguna', 'id_pengguna', $param2);
+			if (!$this->upload->do_upload('foto_pengguna')) {
+			} else {
+				$dataPengguna += array('foto_pengguna' => $config['upload_path'] . $this->upload->data('file_name'));
+				if (!empty($pengguna[0]->foto_pengguna)) {
+					try {
+						unlink($pengguna[0]->foto_pengguna);
+					} catch (\Exception $e) {
+					}
+				}
+			}
+			if ($this->session->userdata('id_pengguna') == $param2) {
+				$this->session->set_userdata($dataPengguna);
+			}
+			if (!empty($this->input->post('password'))) {
+				if ($this->input->post('password') == $this->input->post('re_password')) {
+					$dataPengguna += array(
+						'password' => sha1($this->input->post('password')),
+					);
+					$this->session->set_flashdata('notifpass', '<div class="alert alert-success">Password berhasil diubah</div>');
+				} else {
+					$this->session->set_flashdata('notifpass', '<div class="alert alert-danger">Password gagal diubah karena tidak sama dengan ulangi password_pengguna</div>');
+				}
+			}
+
+			if ($this->GeneralModel->update_general('e_pengguna', 'id_pengguna', $param2, $dataPengguna) == true) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data pengguna berhasil diupdate</div>');
+				redirect(changeLink('panel/masterData/pengguna'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data pengguna gagal diupdate</div>');
+				redirect(changeLink('panel/masterData/updatePengguna' . $pengguna[0]->id_pengguna));
+			}
 		} else {
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Tambah Pengguna';
-			$data['content'] = 'panel/masterData/pengguna/index';
+			$data['content'] = 'panel/masterData/pengguna/update';
 			$data['hakAkses'] = $this->GeneralModel->get_general('e_hak_akses');
 			$data['pengguna'] = $this->GeneralModel->get_by_id_general('e_pengguna','id_pengguna',$param1);
 			$this->load->view('panel/content', $data);
@@ -70,6 +158,20 @@ class MasterData extends CI_Controller
 	public function deletePengguna($param1 = '', $param2 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		$pengguna = $this->GeneralModel->get_by_id_general('e_pengguna', 'id_pengguna', $param1);
+		if (!empty($pengguna[0]->foto_pengguna)) {
+			try {
+				unlink($pengguna[0]->foto_pengguna);
+			} catch (\Exception $e) {
+			}
+		}
+		if ($this->GeneralModel->delete_general('e_pengguna', 'id_pengguna', $pengguna[0]->id_pengguna) == true) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data pengguna berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/pengguna'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data pengguna gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/pengguna'));
+		}
 	}
 
 	//--------------- HAK AKSES BEGIN------------------//
