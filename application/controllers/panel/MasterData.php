@@ -230,7 +230,6 @@ class MasterData extends CI_Controller
 	public function updateHakAkses($param1 = '', $param2 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		
 		if ($param1 == 'doUpdate') {
 			$nama_hak_akses = $this->input->post('nama_hak_akses');
 			$parent_modul = $this->input->post('class_parent_modul');
@@ -276,7 +275,6 @@ class MasterData extends CI_Controller
 	public function deleteAkses($param1 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		
 		if ($this->GeneralModel->delete_general('e_hak_akses', 'id_hak_akses', $param1) == TRUE) {
 			$this->session->set_flashdata('notif', '<div class="alert alert-success">Hak Akses berhasil dihapus</div>');
 			redirect(changeLink('panel/masterData/hakAkses/'));
