@@ -30,21 +30,21 @@
           <?php echo $this->session->flashdata('notifpass'); ?>
           <?php echo $this->session->flashdata('notif'); ?>
           <div class="col-md-4">
-            <select class="form-control select2" id="hak_akses" onchange="cariHakAses(this.value)">
-              <option value="">.:Pilih Hak Akses:.</option>
-              <?php foreach ($getHakAkses as $key) : ?>
-                <option value="<?php echo $key->nama_hak_akses; ?>"><?php echo $key->nama_hak_akses; ?></option>
+            <select class="form-control select2" id="id_kategori" onchange="carikategori(this.value)">
+              <option value="">.:Pilih Kategori Inventori:.</option>
+              <?php foreach ($getKategori as $key) : ?>
+                <option value="<?php echo $key->id_kategori; ?>"><?php echo $key->nama_kategori; ?></option>
               <?php endforeach; ?>
             </select>
           </div>
           <script type="text/javascript">
-            $('#hak_akses').val('<?php echo $hak_akses; ?>')
+            $('#id_kategori').val('<?php echo $id_kategori; ?>')
 
-            function cariHakAses(val) {
-              location.replace('<?php echo base_url(changeLink('panel/masterData/pengguna?hak_akses=')); ?>' + val)
+            function cariKategori(val) {
+              location.replace('<?php echo base_url(changeLink('panel/inventori/listInventori?id_kategori=')); ?>' + val)
             }
           </script>
-          <a href="<?php echo base_url(changeLink('panel/masterData/createPengguna/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Pengguna</a>
+          <a href="<?php echo base_url(changeLink('panel/inventori/createInventori/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Inventori</a>
           <br />
           <br />
           <br />
@@ -52,9 +52,11 @@
             <thead>
               <tr>
                 <th>NO</th>
-                <th>Nama Pengguna</th>
-                <th>Username</th>
-                <th>Hak Akses</th>
+                <th>Nama Barang</th>
+                <th>Kategori</th>
+                <th>Jumlah</th>
+                <th>Harga Pokok</th>
+                <th>Harga Jual</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -90,10 +92,10 @@
       "lengthChange": true,
       // Load data for the table's content from an Ajax source
       "ajax": {
-        "url": '<?php echo site_url(changeLink('panel/masterData/pengguna/cari')); ?>',
+        "url": '<?php echo site_url(changeLink('panel/inventori/listInventori/cari')); ?>',
         "type": "POST",
         "data": {
-          "hak_akses": "<?php echo $hak_akses; ?>"
+          "id_kategori": "<?php echo $id_kategori; ?>"
         }
       },
       //Set column definition initialisation properties.
@@ -106,16 +108,33 @@
           }
         },
         {
-          "data": "nama_lengkap",
+          "data": "nama_inventori",
           width: 100,
         },
         {
-          "data": "username",
+          "data": "nama_kategori",
           width: 100
         },
         {
-          "data": "hak_akses",
-          width: 100
+          "data": "jumlah_inventori",
+          width: 100,
+          render: function(data, type, row, meta) {
+            return new Intl.NumberFormat().format(row.jumlah_inventori) + ' ' + row.singkatan_satuan
+          }
+        },
+        {
+          "data": "harga_pokok",
+          width: 100,
+          render: function(data, type, row, meta) {
+            return "Rp" + new Intl.NumberFormat().format(row.harga_pokok)
+          }
+        },
+        {
+          "data": "harga_jual",
+          width: 100,
+          render: function(data, type, row, meta) {
+            return "Rp" + new Intl.NumberFormat().format(row.harga_jual)
+          }
         },
         {
           "data": "action",
