@@ -28,7 +28,7 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/createdoCreate/')); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/createHakAkses/doCreate/')); ?>">
             <div class="form-group">
               <label class="col-md-2 control-label">Nama Level Pengguna</label>
               <div class="col-md-10">
