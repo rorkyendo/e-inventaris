@@ -201,7 +201,7 @@ class Inventori extends CI_Controller
 				$id_inventori = $this->db->insert_id();
 				
 				//isi qrcode jika di scan
-				$codeContents = base_url('panel/inventori/detailInvetori/'). $id_inventori;
+				$codeContents = base_url('panel/inventori/detailInventori/'). $id_inventori;
 				//simpan file qrcode
 				QRcode::png($codeContents, $tempdir . $dataInventori['nama_inventori'].'.png', QR_ECLEVEL_H, 10, 4);
 
@@ -303,6 +303,7 @@ class Inventori extends CI_Controller
 	}
 
 	public function detailInventori($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		$data['title'] = $this->title;
 		$data['subtitle'] = 'Detail Inventori';
 		$data['content'] = 'panel/inventori/detail';
