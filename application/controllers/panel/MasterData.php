@@ -153,7 +153,7 @@ class MasterData extends CI_Controller
 		}
 	}
 
-	public function deletePengguna($param1 = '', $param2 = '')
+	public function deletePengguna($param1 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		$pengguna = $this->GeneralModel->get_by_id_general('e_pengguna', 'id_pengguna', $param1);

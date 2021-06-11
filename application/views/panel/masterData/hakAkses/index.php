@@ -46,7 +46,7 @@
                   <td><?php echo $no++; ?></td>
                   <td><?php echo $key->nama_hak_akses; ?></td>
                   <td>
-                    <a href="<?php echo base_url(changeLink('panel/masterData/deletHakAkses/') . $key->id_hak_akses); ?>" onclick="return confirm('Apakah kamu yakin akan menghapus hak akses <?php echo $key->nama_hak_akses; ?> ?')" class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
+                    <a href="<?php echo base_url(changeLink('panel/masterData/deleteHakAkses/') . $key->id_hak_akses); ?>" onclick="return confirm('Apakah kamu yakin akan menghapus hak akses <?php echo $key->nama_hak_akses; ?> ?')" class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
                     <a href="<?php echo base_url(changeLink('panel/masterData/updateHakAkses/') . $key->id_hak_akses); ?>" class="btn btn-xs btn-warning"><i class="fa fa-edit"></i></a>
                   </td>
                 </tr>

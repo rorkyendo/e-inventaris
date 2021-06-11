@@ -113,7 +113,7 @@
             <div class="form-group">
               <div class="col-md-12">
                 <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
-                <a href="<?php echo base_url(changeLink('panel/settings/daftarPengguna/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
+                <a href="<?php echo base_url(changeLink('panel/masterData/pengguna/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
               </div>
             </div>
         </div>
