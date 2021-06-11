@@ -57,6 +57,7 @@
                 <th>Jumlah</th>
                 <th>Harga Pokok</th>
                 <th>Harga Jual</th>
+                <th>QR CODE</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -134,6 +135,13 @@
           width: 100,
           render: function(data, type, row, meta) {
             return "Rp" + new Intl.NumberFormat().format(row.harga_jual)
+          }
+        },
+        {
+          "data": "qrcode",
+          width: 100,
+          render: function(data, type, row, meta) {
+            return "<img src='<?php echo base_url(); ?>" + row.qrcode + "' class='img-responsive' style='width:250px'>"
           }
         },
         {
