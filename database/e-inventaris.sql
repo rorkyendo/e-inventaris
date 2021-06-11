@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `e_identitas` (
 -- Dumping data for table e-inventori.e_identitas: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_identitas` DISABLE KEYS */;
 INSERT INTO `e_identitas` (`id_profile`, `apps_name`, `apps_version`, `apps_code`, `agency`, `address`, `city`, `telephon`, `fax`, `website`, `header`, `footer`, `keyword`, `logo`, `icon`, `sidebar_login`, `about_us`, `email`) VALUES
-	(1, 'e-inventaris', '1.0', 'eis', '| EIS', '', '', '', '', '', '', '', '', 'NULL', NULL, NULL, '', NULL);
+	(1, 'e-inventaris', '1.0', 'eis', '| EIS', '', '', '', '', '', '', '', '', 'NULL', NULL, 'assets/img/Jenis-Gudang-Harmony.jpg', '', NULL);
 /*!40000 ALTER TABLE `e_identitas` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_inventori
@@ -100,10 +100,10 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
   `id_inventori` int(11) NOT NULL AUTO_INCREMENT,
   `nama_inventori` varchar(250) NOT NULL,
   `satuan_inventori` int(11) NOT NULL,
-  `harga_pokok` int(11) NOT NULL,
+  `harga_pokok` int(11) DEFAULT NULL,
   `harga_jual` int(11) NOT NULL,
   `kategori_inventori` int(11) NOT NULL,
-  `jumlah_inventori` int(11) NOT NULL,
+  `jumlah_inventori` int(11) DEFAULT NULL,
   `created_by` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
@@ -113,10 +113,12 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
   KEY `FK_inventori_updated` (`updated_by`),
   CONSTRAINT `FK_inventori_created` FOREIGN KEY (`created_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_inventori_updated` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table e-inventori.e_inventori: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_inventori` DISABLE KEYS */;
+INSERT INTO `e_inventori` (`id_inventori`, `nama_inventori`, `satuan_inventori`, `harga_pokok`, `harga_jual`, `kategori_inventori`, `jumlah_inventori`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
+	(2, 'Gula', 1, NULL, 12000, 2, NULL, 1, '2021-06-11 15:56:43', NULL, NULL);
 /*!40000 ALTER TABLE `e_inventori` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_kategori_inventori
@@ -132,10 +134,13 @@ CREATE TABLE IF NOT EXISTS `e_kategori_inventori` (
   KEY `FK_updated_kategori` (`updated_by`),
   CONSTRAINT `FK_created_kategori` FOREIGN KEY (`created_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_updated_kategori` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_kategori_inventori: ~0 rows (approximately)
+-- Dumping data for table e-inventori.e_kategori_inventori: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_kategori_inventori` DISABLE KEYS */;
+INSERT INTO `e_kategori_inventori` (`id_kategori`, `nama_kategori`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
+	(1, 'Barang Non Produksi', 1, '2021-06-11 08:59:20', 1, '2021-06-11 09:02:18'),
+	(2, 'Barang Produksi', 1, '2021-06-11 15:06:23', NULL, NULL);
 /*!40000 ALTER TABLE `e_kategori_inventori` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_modul
@@ -246,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `e_pengguna` (
 -- Dumping data for table e-inventori.e_pengguna: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_pengguna` DISABLE KEYS */;
 INSERT INTO `e_pengguna` (`id_pengguna`, `username`, `password`, `email`, `hak_akses`, `nama_lengkap`, `foto_pengguna`, `jenkel`, `tgl_lahir`, `alamat`, `last_login`, `last_logout`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES
-	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', 'assets/img/pengguna/logo_disdik.png', 'L', NULL, NULL, '2021-06-11 06:28:58', '2021-06-10 09:45:19', '2021-06-10 09:32:44', NULL, NULL, NULL);
+	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', 'assets/img/pengguna/logo_disdik.png', 'L', NULL, NULL, '2021-06-11 14:26:31', '2021-06-11 09:40:09', '2021-06-10 09:32:44', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `e_pengguna` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_satuan_inventori
@@ -263,10 +268,12 @@ CREATE TABLE IF NOT EXISTS `e_satuan_inventori` (
   KEY `FK_updated_satuan` (`updated_by`),
   CONSTRAINT `FK_created_satuan` FOREIGN KEY (`created_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_updated_satuan` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_satuan_inventori: ~0 rows (approximately)
+-- Dumping data for table e-inventori.e_satuan_inventori: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_satuan_inventori` DISABLE KEYS */;
+INSERT INTO `e_satuan_inventori` (`id_satuan`, `nama_satuan`, `singkatan_satuan`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
+	(1, 'Kilogram', 'Kg', 1, '2021-06-11 09:16:36', NULL, NULL);
 /*!40000 ALTER TABLE `e_satuan_inventori` ENABLE KEYS */;
 
 -- Dumping structure for view e-inventori.v_detail_inventori
@@ -275,10 +282,10 @@ CREATE TABLE `v_detail_inventori` (
 	`id_inventori` INT(11) NOT NULL,
 	`nama_inventori` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
 	`satuan_inventori` INT(11) NOT NULL,
-	`harga_pokok` INT(11) NOT NULL,
+	`harga_pokok` INT(11) NULL,
 	`harga_jual` INT(11) NOT NULL,
 	`kategori_inventori` INT(11) NOT NULL,
-	`jumlah_inventori` INT(11) NOT NULL,
+	`jumlah_inventori` INT(11) NULL,
 	`created_by` INT(11) NOT NULL,
 	`created_time` DATETIME NOT NULL,
 	`updated_by` INT(11) NULL,
@@ -293,10 +300,10 @@ CREATE TABLE `v_inventori` (
 	`id_inventori` INT(11) NOT NULL,
 	`nama_inventori` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
 	`satuan_inventori` INT(11) NOT NULL,
-	`harga_pokok` INT(11) NOT NULL,
+	`harga_pokok` INT(11) NULL,
 	`harga_jual` INT(11) NOT NULL,
 	`kategori_inventori` INT(11) NOT NULL,
-	`jumlah_inventori` INT(11) NOT NULL,
+	`jumlah_inventori` INT(11) NULL,
 	`created_by` INT(11) NOT NULL,
 	`created_time` DATETIME NOT NULL,
 	`updated_by` INT(11) NULL,
