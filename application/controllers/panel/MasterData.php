@@ -221,7 +221,7 @@ class MasterData extends CI_Controller
 		} else {
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Tambah Hak Akses';
-			$data['content'] = 'panel/hakAkses/create';
+			$data['content'] = 'panel/masterData/hakAkses/create';
 			$data['parentModul'] = $this->GeneralModel->get_general_order_by('e_parent_modul', 'urutan', 'ASC');
 			$this->load->view('panel/content', $data);
 		}
