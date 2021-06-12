@@ -183,7 +183,7 @@ class MasterData extends CI_Controller
 			$this->load->view('panel/content', $data);
 	}
 
-	public function createAkses($param1 = '')
+	public function createHakAkses($param1 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 			
