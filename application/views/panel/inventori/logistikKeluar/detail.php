@@ -112,8 +112,10 @@
             <hr/>
             <div class="col-md-12">
               <a href="<?php echo base_url(changeLink('panel/inventori/logistikKeluar/')); ?>" class="btn btn-sm btn-danger pull-right" style="margin-left:10px;">Batal</a>
+            <?php if($faktur[0]->status_approval == 'pending'): ?>
               <a href="<?php echo base_url(changeLink('panel/inventori/approveLogistikKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan mengapprove faktur ini?')" style="margin-left:10px;">Approve</a>
               <a href="<?php echo base_url(changeLink('panel/inventori/rejectLogistikKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-warning pull-right" onclick="return confirm('apakah kamu yakin akan mereject faktur ini?')" style="margin-left:10px;">Reject</a>
+            <?php endif; ?>
             </div>
           </div>
         </div>
