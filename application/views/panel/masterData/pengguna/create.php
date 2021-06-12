@@ -102,7 +102,7 @@
                 <div class="col-md-10">
                   <select class="form-control" id="hak_akses" name="hak_akses" required>
                     <option value="">.:Pilih Hak Akses:.</option>
-                    <?php foreach ($hak_akses as $key) : ?>
+                    <?php foreach ($hakAkses as $key) : ?>
                       <option value="<?php echo $key->nama_hak_akses; ?>"><?php echo $key->nama_hak_akses; ?></option>
                     <?php endforeach; ?>
                   </select>
