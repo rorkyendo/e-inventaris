@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `e_faktur` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
+  `qrcode_faktur` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id_faktur`),
   KEY `FK_faktur_created` (`created_by`),
   KEY `FK_faktur_updated` (`updated_by`),
@@ -60,10 +61,10 @@ CREATE TABLE IF NOT EXISTS `e_hak_akses` (
   UNIQUE KEY `nama_hak_akses` (`nama_hak_akses`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_hak_akses: ~0 rows (approximately)
+-- Dumping data for table e-inventori.e_hak_akses: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_hak_akses` DISABLE KEYS */;
 INSERT INTO `e_hak_akses` (`id_hak_akses`, `nama_hak_akses`, `modul_akses`, `parent_modul_akses`, `created_time`) VALUES
-	(1, 'superuser', '{\n    "modul": [\n        "pengguna",\n        "createPengguna",\n        "updatePengguna",\n        "deletePengguna",\n        "hakAkses",\n        "createHakAkses",\n        "updateHakAkses",\n        "deleteHakAkses",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "satuan",\n        "createSatuan",\n        "updateSatuan",\n        "deleteSatuan",\n        "logistikMasuk",\n        "createLogistikMasuk",\n        "updateLogistikMasuk",\n        "deleteLogistikMasuk",\n        "approveLogistikMasuk",\n        "logistikKeluar",\n        "createLogistikKeluar",\n        "updateLogistikKeluar",\n        "deleteLogistikKeluar",\n        "approveLogistikKeluar",\n        "identitasAplikasi",\n        "daftarModul"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Pengaturan"\n    ]\n}', '2021-06-10 09:21:01');
+	(1, 'superuser', '{\n    "modul": [\n        "pengguna",\n        "createPengguna",\n        "updatePengguna",\n        "deletePengguna",\n        "hakAkses",\n        "createHakAkses",\n        "updateHakAkses",\n        "deleteHakAkses",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "satuan",\n        "createSatuan",\n        "updateSatuan",\n        "deleteSatuan",\n        "logistikMasuk",\n        "createLogistikMasuk",\n        "updateLogistikMasuk",\n        "deleteLogistikMasuk",\n        "approveLogistikMasuk",\n        "logistikKeluar",\n        "createLogistikKeluar",\n        "updateLogistikKeluar",\n        "deleteLogistikKeluar",\n        "approveLogistikKeluar",\n        "detailInventori",\n        "identitasAplikasi",\n        "daftarModul"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Pengaturan"\n    ]\n}', '2021-06-10 09:21:01');
 /*!40000 ALTER TABLE `e_hak_akses` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_identitas
@@ -89,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `e_identitas` (
   PRIMARY KEY (`id_profile`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table e-inventori.e_identitas: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_identitas: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_identitas` DISABLE KEYS */;
 INSERT INTO `e_identitas` (`id_profile`, `apps_name`, `apps_version`, `apps_code`, `agency`, `address`, `city`, `telephon`, `fax`, `website`, `header`, `footer`, `keyword`, `logo`, `icon`, `sidebar_login`, `about_us`, `email`) VALUES
 	(1, 'e-inventaris', '1.0', 'eis', '| EIS', '', '', '', '', '', '', '', '', 'assets/img/logotubes.png', 'assets/img/logotubes.ico', 'assets/img/Jenis-Gudang-Harmony.jpg', '', NULL);
@@ -114,12 +115,12 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
   KEY `FK_inventori_updated` (`updated_by`),
   CONSTRAINT `FK_inventori_created` FOREIGN KEY (`created_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_inventori_updated` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_inventori: ~2 rows (approximately)
+-- Dumping data for table e-inventori.e_inventori: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_inventori` DISABLE KEYS */;
 INSERT INTO `e_inventori` (`id_inventori`, `nama_inventori`, `satuan_inventori`, `harga_pokok`, `harga_jual`, `kategori_inventori`, `jumlah_inventori`, `qrcode`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
-	(7, 'Gula', 1, NULL, 12000, 2, NULL, 'assets/img/qrbarang/Gula.png', 1, '2021-06-12 00:03:38', NULL, NULL);
+	(8, 'Gula', 1, NULL, 12000, 2, NULL, 'assets/img/qrbarang/Gula.png', 1, '2021-06-12 00:15:34', NULL, NULL);
 /*!40000 ALTER TABLE `e_inventori` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_kategori_inventori
@@ -137,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `e_kategori_inventori` (
   CONSTRAINT `FK_updated_kategori` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_kategori_inventori: ~2 rows (approximately)
+-- Dumping data for table e-inventori.e_kategori_inventori: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_kategori_inventori` DISABLE KEYS */;
 INSERT INTO `e_kategori_inventori` (`id_kategori`, `nama_kategori`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
 	(1, 'Barang Non Produksi', 1, '2021-06-11 08:59:20', 1, '2021-06-11 09:02:18'),
@@ -164,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `e_modul` (
   CONSTRAINT `induk_child_modul` FOREIGN KEY (`induk_child_modul`) REFERENCES `e_modul` (`controller_modul`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_modul: ~33 rows (approximately)
+-- Dumping data for table e-inventori.e_modul: ~32 rows (approximately)
 /*!40000 ALTER TABLE `e_modul` DISABLE KEYS */;
 INSERT INTO `e_modul` (`id_modul`, `controller_modul`, `nama_modul`, `link_modul`, `type_modul`, `class_parent_modul`, `created_time`, `tampil_sidebar`, `child_module`, `induk_child_modul`) VALUES
 	(1, 'pengguna', 'Daftar Pengguna', 'panel/masterdata/pengguna', 'R', 'MasterData', '2021-06-10 07:59:17', 'Y', 'N', NULL),
@@ -253,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `e_pengguna` (
 -- Dumping data for table e-inventori.e_pengguna: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_pengguna` DISABLE KEYS */;
 INSERT INTO `e_pengguna` (`id_pengguna`, `username`, `password`, `email`, `hak_akses`, `nama_lengkap`, `foto_pengguna`, `jenkel`, `tgl_lahir`, `alamat`, `last_login`, `last_logout`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES
-	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', 'assets/img/pengguna/logo_disdik.png', 'L', NULL, NULL, '2021-06-11 22:52:07', '2021-06-11 22:51:55', '2021-06-10 09:32:44', NULL, NULL, NULL);
+	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', 'assets/img/pengguna/logo_disdik.png', 'L', NULL, NULL, '2021-06-12 08:59:41', '2021-06-12 00:23:59', '2021-06-10 09:32:44', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `e_pengguna` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_satuan_inventori
@@ -272,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `e_satuan_inventori` (
   CONSTRAINT `FK_updated_satuan` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_satuan_inventori: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_satuan_inventori: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_satuan_inventori` DISABLE KEYS */;
 INSERT INTO `e_satuan_inventori` (`id_satuan`, `nama_satuan`, `singkatan_satuan`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
 	(1, 'Kilogram', 'Kg', 1, '2021-06-11 09:16:36', NULL, NULL);
