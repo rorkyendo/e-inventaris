@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `e_faktur` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
+  `approval_time` datetime DEFAULT NULL,
   `qrcode_faktur` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id_faktur`),
   KEY `FK_faktur_created` (`created_by`),
