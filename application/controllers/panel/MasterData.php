@@ -306,6 +306,85 @@ class MasterData extends CI_Controller
 		}
 	}
 
+	public function tambahUnit($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doCreate') {
+			$cekKodeUnit = $this->GeneralModel->get_by_id_general('e_unit','kode_unit',$this->input->post('kode_unit'));
+			if ($cekKodeUnit) {
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode unit sudah ada</div>');
+				redirect('panel/masterData/tambahUnit');
+			}else{
+				$dataUnit = array(
+					'kode_unit' => $this->input->post('kode_unit'),
+					'nama_unit' => $this->input->post('nama_unit'),
+					'alamat_unit' => $this->input->post('alamat_unit'),
+					'created_by' => $this->session->userdata('id_pengguna')
+				);
+				if ($this->GeneralModel->create_general('e_unit',$dataUnit) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Unit berhasil ditambahkan</div>');
+					redirect('panel/masterData/daftarUnit');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, unit gagal ditambahkan</div>');
+					redirect('panel/masterData/daftarUnit');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Unit';
+			$data['content'] = 'panel/masterData/unit/create';
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateUnit($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$cekKodeUnit = $this->GeneralModel->get_by_multi_id_general('e_unit','id_unit',$param2,'kode_unit',$this->input->post('kode_unit'));
+			if ($cekKodeUnit) {
+				$dataUnit = array(
+					'kode_unit' => $this->input->post('kode_unit'),
+					'nama_unit' => $this->input->post('nama_unit'),
+					'alamat_unit' => $this->input->post('alamat_unit'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'updated_time' => DATE('Y-m-d H:i:s')
+				);
+				if ($this->GeneralModel->update_general('e_unit','id_unit',$param2,$dataUnit) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Unit berhasil diupdate</div>');
+					redirect('panel/masterData/daftarUnit');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, unit gagal diupdate</div>');
+					redirect('panel/masterData/daftarUnit');
+				}
+			}else{
+				$cekKodeUnit = $this->GeneralModel->get_by_id_general('e_unit','kode_unit',$this->input->post('kode_unit'));
+				if ($cekKodeUnit) {
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode unit yang sama sudah ada</div>');
+					redirect('panel/masterData/daftarUnit');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, unit gagal diupdate</div>');
+					redirect('panel/masterData/daftarUnit');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Unit';
+			$data['content'] = 'panel/masterData/unit/update';
+			$data['unit'] = $this->GeneralModel->get_by_id_general('e_unit','id_unit',$param1);
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function deleteUnit($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($this->GeneralModel->delete_general('e_unit', 'id_unit', $param1) == TRUE) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Unit berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarUnit/'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Unit gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarUnit/'));
+		}
+	}
 	//--------------- END OF UNIT------------------//
 	//--------------- SUB UNIT BEGIN------------------//
 	public function getSubUnit(){

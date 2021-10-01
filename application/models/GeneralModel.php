@@ -30,13 +30,13 @@ class GeneralModel extends CI_Model
   }
 
   function get_by_from_end_date($table,$from,$end,$col){
-    return $this->db->query("SELECT * FROM $table WHERE DATE_FORMAT($col,'%Y-%m-%d') >= '$from' and DATE_FORMAT($col,'%Y-%m-%d') <= '$end'")->result();
+    return $this->db->query("SELECT * FROM $table WHERE DATe_FORMAT($col,'%Y-%m-%d') >= '$from' and DATe_FORMAT($col,'%Y-%m-%d') <= '$end'")->result();
   }
 
   function get_by_from_end_date_by_id($table, $from, $end, $col, $id, $val)
   {
     return $this->db->query("SELECT * FROM $table WHERE 
-    DATE_FORMAT($col,'%Y-%m-%d') >= '$from' and DATE_FORMAT($col,'%Y-%m-%d') <= '$end' and $id = '$val'")->result();
+    DATe_FORMAT($col,'%Y-%m-%d') >= '$from' and DATe_FORMAT($col,'%Y-%m-%d') <= '$end' and $id = '$val'")->result();
   }
 
   function get_by_id_general_order_by($table,$id,$val,$by,$order)
@@ -71,9 +71,36 @@ class GeneralModel extends CI_Model
     return $query->result();
   }
 
+  function get_by_multi_id_general($table, $id, $val, $id2='', $val2='')
+  {
+    $this->db->where($id, $val);
+    if (!empty($id2) && !empty($val2)) {
+      $this->db->where($id2, $val2);
+    }
+    return $this->db->get($table)->result();
+  }
+
+    function get_by_triple_id_general($table, $id, $val, $id2='', $val2='', $id3='', $val3='')
+  {
+    $this->db->where($id, $val);
+    if (!empty($id2) && !empty($val2)) {
+      $this->db->where($id2, $val2);
+    }
+    if (!empty($id3) && !empty($val3)) {
+      $this->db->where($id3, $val3);
+    }
+    return $this->db->get($table)->result();
+  }
+
   function get_like_general($table, $id, $val)
   {
-    $query = $this->db->query("SELECT * FROM $table WHERE $id LIKE '%$val'");
+    $query = $this->db->query("SELECT * FROM $table WHERE $id LIKE '%$val%'");
+    return $query->result();
+  }
+
+  function get_like_multi_id_general($table, $id, $val, $id2, $val2)
+  {
+    $query = $this->db->query("SELECT * FROM $table WHERE $id LIKE '%$val%' and $id2 = '$val2'");
     return $query->result();
   }
 
@@ -91,6 +118,13 @@ class GeneralModel extends CI_Model
   function delete_general($table, $id, $val)
   {
     $this->db->where($id, $val);
+    return $this->db->delete($table);
+  }
+
+    function delete_multi_id_general($table, $id, $val, $id2, $val2)
+  {
+    $this->db->where($id, $val);
+    $this->db->where($id2, $val2);
     return $this->db->delete($table);
   }
 
@@ -113,16 +147,28 @@ class GeneralModel extends CI_Model
     return $this->db->get($table, $limit, $start)->result();
   }
 
+  function paginate_order_by_general($table,$order_by,$order_type,$limit,$start){
+    if (!empty($order_by) && !empty($order_type)) {
+      $this->db->order_by($order_by, $order_type);
+    }
+    return $this->db->get($table, $limit, $start)->result();
+  }
+
   function paginate_by_id_general($table,$id,$val,$limit,$start)
   {
     $this->db->where($id,$val);
     return $this->db->get($table, $limit, $start)->result();
   }
 
-  function paginate_by_multi_id_general($table, $id, $val, $id2, $val2, $limit, $start)
+  function paginate_by_multi_id_general($table, $id, $val, $id2='', $val2='', $order_by='', $order_type, $limit, $start)
   {
     $this->db->where($id, $val);
-    $this->db->where($id2, $val2);
+    if (!empty($id2) && !empty($val2)) {
+      $this->db->where($id2, $val2);
+    }
+    if (!empty($order_by) && !empty($order_type)) {
+      $this->db->order_by($order_by, $order_type);
+    }
     return $this->db->get($table, $limit, $start)->result();
   }
 

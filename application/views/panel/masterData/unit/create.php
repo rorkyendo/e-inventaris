@@ -28,85 +28,34 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/tmabahUnit/doCreate/')); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/tambahUnit/doCreate/')); ?>">
             <div class="col-md-12">
               <div class="form-group">
-                <label class="col-md-2 control-label">Nama Mapel</label>
+                <label class="col-md-2 control-label">Kode Unit</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Nama Mapel" name="nama_mapel" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Unit" name="kode_unit" required />
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label">Deskripsi Mapel</label>
+                <label class="col-md-2 control-label">Nama Unit</label>
                 <div class="col-md-10">
-                  <textarea name="deskripsi_mapel" id="deskripsi_mapel" class="form-control" cols="30" rows="10"></textarea>
-                </div>
-              </div>
-              <script>
-                  CKEDITOR.replace('deskripsi_mapel');
-              </script>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Pilih Paket Soal</label>
-                <div class="col-md-10">
-                  <select name="paket_soal" id="paket_soal" class="form-control select2">
-                    <option value="">.:Pilih Paket Soal:.</option>
-                    <?php foreach($paketSoal as $row):?>
-                      <option value="<?php echo $row->id_paket_soal;?>"><?php echo $row->judul_paket;?></option>
-                    <?php endforeach;?>
-                  </select>
+                  <input type="text" class="form-control" placeholder="Masukkan Nama Unit" name="nama_unit" required />
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label">Jenis Penilaian</label>
+                <label class="col-md-2 control-label">Alamat Unit</label>
                 <div class="col-md-10">
-                  <select name="penilaian_mapel" class="form-control" id="penilaian_mapel" onchange="pilihPenilaian(this.value)" required>
-                    <option value="">.:Pilih Jenis Penilaian:.</option>
-                    <option value="bobot">Bobot Nilai</option>
-                    <option value="soal">Nilai Persoal</option>
-                  </select>
+                  <textarea name="alamat_unit" class="form-control" cols="30" rows="10"></textarea>
                 </div>
               </div>
-              <script>
-                function pilihPenilaian(val){
-                  if (val == 'bobot') {
-                    $('#skorPenilaian').removeAttr('hidden');
-                  }else{
-                    $('#skorPenilaian').attr('hidden',true);
-                    $('#nilai_benar').val('')
-                    $('#nilai_salah').val('')
-                    $('#nilai_kosong').val('')
-                  }
-                }
-              </script>
-              <div id="skorPenilaian" hidden>
-                <div class="form-group">
-                  <label class="col-md-2 control-label">Nilai Benar</label>
-                  <div class="col-md-10">
-                    <input type="number" class="form-control" placeholder="Masukkan Nilai Benar" name="nilai_benar"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-2 control-label">Nilai Salah</label>
-                  <div class="col-md-10">
-                    <input type="number" class="form-control" placeholder="Masukkan Nilai Salah" name="nilai_salah"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-2 control-label">Nilai Kosong</label>
-                  <div class="col-md-10">
-                    <input type="number" class="form-control" placeholder="Masukkan Nilai Kosong" name="nilai_kosong"/>
-                  </div>
-                </div>
-              </div>
-            </div>
             <hr />
             <div class="form-group">
               <div class="col-md-12">
                 <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
-                <a href="<?php echo base_url(changeLink('panel/masterData/daftarMapel/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
+                <a href="<?php echo base_url(changeLink('panel/masterData/daftarUnit/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
               </div>
             </div>
-        </div>
+          </div>
         </form>
       </div>
     </div>
