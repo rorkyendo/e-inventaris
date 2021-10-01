@@ -9,7 +9,7 @@ class AuthModel extends CI_Model {
   }
 
   function getAccountLogin($username,$password){
-    return $this->db->query("SELECT p.* FROM e_pengguna p WHERE
+    return $this->db->query("SELECT p.* FROM v_pengguna p WHERE
                              p.username = '$username' and p.password = '$password'")->result();
   }
 

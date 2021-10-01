@@ -74,6 +74,12 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">No HP / WA</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan no hp/wa" name="no_wa" required />
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Jenkel</label>
                 <div class="col-md-10">
                   <select name="jenkel" id="jenkel" class="form-control">
@@ -108,6 +114,26 @@
                   </select>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Unit</label>
+                <div class="col-md-10">
+                  <select class="form-control select2" id="unit" onchange="cariSubUnit(this.value)" name="unit">
+                    <option value="">.:Pilih Unit:.</option>
+                    <?php foreach ($unit as $key) : ?>
+                      <option value="<?php echo $key->id_unit; ?>"><?php echo $key->nama_unit; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Sub Unit</label>
+                <div class="col-md-10">
+                  <font color="red">*Silahkan pilih unit terlebih dahulu</font>
+                  <select class="form-control select2" id="sub_unit" name="sub_unit">
+                    <option value="">.:Pilih Sub Unit:.</option>
+                  </select>
+                </div>
+              </div>
             </div>
             <hr />
             <div class="form-group">
@@ -127,5 +153,33 @@
 </div>
 <!-- end #content -->
 <script type="text/javascript">
-  $('#data-table').DataTable();
+  function cariSubUnit(val){
+    $('#sub_unit').html('<option value="">.:Pilih Sub Unit:.</option>');
+    $.ajax({
+      url:'<?php echo base_url('panel/masterData/getSubUnit');?>',
+      type:'GET',
+      data:{
+        'unit':val
+      },success:function(resp){
+        if (resp!='false') {
+          var data = JSON.parse(resp);
+          $.each(data,function(key,val){
+            $('#sub_unit').append('<option value="'+val.id_sub_unit+'">'+val.nama_sub_unit+'</option>');
+          })
+        }else{
+          Swal.fire({
+            type: 'error',
+            title: 'Gagal',
+            text: 'Sub unit tidak ditemukan',
+          })
+        }
+      },error:function(){
+        Swal.fire({
+          type: 'error',
+          title: 'Oopss..',
+          text: 'Terjadi kesalahan',
+        })
+      }
+    })
+  }
 </script>

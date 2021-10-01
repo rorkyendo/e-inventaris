@@ -57,6 +57,9 @@ class MasterData extends CI_Controller
 				'nama_lengkap' => $this->input->post('nama_lengkap'),
 				'jenkel' => $this->input->post('jenkel'),
 				'alamat' => $this->input->post('alamat'),	
+				'unit' => $this->input->post('unit'),	
+				'sub_unit' => $this->input->post('sub_unit'),	
+				'no_wa' => $this->input->post('no_wa'),	
 			);
 
 			//---------------- UPDATE FOTO PENGGUNA ---------------//
@@ -88,6 +91,7 @@ class MasterData extends CI_Controller
 			$data['subtitle'] = 'Tambah Pengguna';
 			$data['content'] = 'panel/masterData/pengguna/create';
 			$data['hakAkses'] = $this->GeneralModel->get_general('e_hak_akses');
+			$data['unit'] = $this->GeneralModel->get_general('e_unit');
 			$this->load->view('panel/content', $data);
 		}
 	}
@@ -102,6 +106,9 @@ class MasterData extends CI_Controller
 				'nama_lengkap' => $this->input->post('nama_lengkap'),
 				'jenkel' => $this->input->post('jenkel'),
 				'alamat' => $this->input->post('alamat'),
+				'unit' => $this->input->post('unit'),	
+				'sub_unit' => $this->input->post('sub_unit'),	
+				'no_wa' => $this->input->post('no_wa'),	
 			);
 			//---------------- UPDATE FOTO PENGGUNA ---------------//
 			$config['upload_path']          = 'assets/img/pengguna/';
@@ -149,6 +156,7 @@ class MasterData extends CI_Controller
 			$data['content'] = 'panel/masterData/pengguna/update';
 			$data['hakAkses'] = $this->GeneralModel->get_general('e_hak_akses');
 			$data['pengguna'] = $this->GeneralModel->get_by_id_general('e_pengguna','id_pengguna',$param1);
+			$data['unit'] = $this->GeneralModel->get_general('e_unit');
 			$this->load->view('panel/content', $data);
 		}
 	}
@@ -171,6 +179,7 @@ class MasterData extends CI_Controller
 			redirect(changeLink('panel/masterData/pengguna'));
 		}
 	}
+	//--------------- END OF PENGGUNA------------------//
 
 	//--------------- HAK AKSES BEGIN------------------//
 	public function hakAkses($param1 = '')
@@ -283,4 +292,31 @@ class MasterData extends CI_Controller
 			redirect(changeLink('panel/masterData/hakAkses/'));
 		}
 	}
+	//--------------- END OF HAK AKSES------------------//
+	//--------------- UNIT BEGIN------------------//
+	public function daftarUnit($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			return $this->MasterDataModel->getUnit();		
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Unit';
+			$data['content'] = 'panel/masterData/unit/index';
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	//--------------- END OF UNIT------------------//
+	//--------------- SUB UNIT BEGIN------------------//
+	public function getSubUnit(){
+		$this->input->get('unit');
+		$getUnit = $this->GeneralModel->get_by_id_general('e_sub_unit','unit',$this->input->get('unit'));
+		if ($getUnit) {
+			echo json_encode($getUnit,JSON_PRETTY_PRINT);
+		}else{
+			echo 'false';
+		}
+	}
+	//--------------- END OF SUB UNIT------------------//
+
 }

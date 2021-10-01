@@ -11,6 +11,7 @@
 	<meta content="" name="author" />
   <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url().$appsProfile->icon;?>">
 	<!-- ================== BEGIN BASE CSS STYLE ================== -->
+	<link rel="manifest" href="<?php echo base_url('/manifest.json'); ?>">
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 	<link href="<?php echo base_url('assets/');?>plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -31,6 +32,17 @@
 	<script src="<?php echo base_url('assets/');?>plugins/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url('assets/');?>js/main.js"></script>
 	<!-- ================== END BASE JS ================== -->
+	<script>
+	if ('serviceWorker' in navigator) {
+		console.log('SERVICE WORKER -> REGISTER -> Try to register the service worker');
+		navigator.serviceWorker.register('<?php echo base_url(); ?>service-worker.js')
+		.then(function(reg) {
+			console.log('SERVICE WORKER -> REGISTER -> Successfully registered!');
+		}).catch(function(err) {
+			console.log("'SERVICE WORKER -> REGISTER -> Registration failed! This happened: ", err)
+		});
+	}
+	</script>
 	<style type="text/css">
 		.login-page .form-box .univ-identity-box {
 				background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('<?php echo base_url(). $appsProfile->sidebar_login;?>') bottom;
@@ -64,7 +76,7 @@
 									</div>
 							</div>
 							<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12 form-login" align="center">
-									<img src="<?php echo base_url().$appsProfile->icon;?>" class="logo"><br />
+									<img src="<?php echo base_url().$appsProfile->logo;?>" class="logo"><br />
 									<h2 align="center" class="text-grey text-light">Silakan Login</h2><br />
 									<form method="post" action="<?php echo base_url('auth/login/do_login');?>">
 										<?php echo $this->session->flashdata('notif');?>

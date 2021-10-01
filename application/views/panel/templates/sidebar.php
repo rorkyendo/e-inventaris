@@ -10,7 +10,7 @@
             <?php if (!empty($this->session->userdata('foto_pengguna'))) : ?>
               <img src="<?php echo base_url() . $this->session->userdata('foto_pengguna'); ?>" alt="" />
             <?php else : ?>
-              <img src="<?php echo base_url() . $icon; ?>" alt="" />
+              <img src="<?php echo base_url() . $logo; ?>" alt="" />
             <?php endif; ?>
           </a>
         </div>
