@@ -388,12 +388,108 @@ class MasterData extends CI_Controller
 	//--------------- END OF UNIT------------------//
 	//--------------- SUB UNIT BEGIN------------------//
 	public function getSubUnit(){
-		$this->input->get('unit');
 		$getUnit = $this->GeneralModel->get_by_id_general('e_sub_unit','unit',$this->input->get('unit'));
 		if ($getUnit) {
 			echo json_encode($getUnit,JSON_PRETTY_PRINT);
 		}else{
 			echo 'false';
+		}
+	}
+
+	public function daftarSubUnit($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			$unit = $this->input->post('unit');
+			return $this->MasterDataModel->getSubUnit($unit);		
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Sub Unit';
+			$data['content'] = 'panel/masterData/subUnit/index';
+			$data['id_unit'] = $this->input->get('unit');
+			$data['unit'] = $this->GeneralModel->get_general('e_unit');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function tambahSubUnit($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doCreate') {
+			$cekKodeSubUnit = $this->GeneralModel->get_by_multi_id_general('e_sub_unit','unit',$this->input->post('unit'),'kode_sub_unit',$this->input->post('kode_sub_unit'));
+			if ($cekKodeSubUnit) {
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode sub unit sudah ada</div>');
+				redirect('panel/masterData/tambahUnit');
+			}else{
+				$dataSubUnit = array(
+					'unit' => $this->input->post('unit'),
+					'nama_sub_unit' => $this->input->post('nama_sub_unit'),
+					'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+					'created_by' => $this->session->userdata('id_pengguna')
+				);
+				if ($this->GeneralModel->create_general('e_sub_unit',$dataSubUnit) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Sub Unit berhasil ditambahkan</div>');
+					redirect('panel/masterData/daftarSubUnit');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, sub unit gagal ditambahkan</div>');
+					redirect('panel/masterData/daftarSubUnit');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Sub Unit';
+			$data['content'] = 'panel/masterData/subUnit/create';
+			$data['unit'] = $this->GeneralModel->get_general('e_unit');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateSubUnit($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$cekKodeSubUnit = $this->GeneralModel->get_by_triple_id_general('e_sub_unit','id_sub_unit',$param2,'unit',$this->input->post('unit'),'kode_sub_unit',$this->input->post('kode_sub_unit'));
+			if ($cekKodeSubUnit) {
+				$dataSubUnit = array(
+					'unit' => $this->input->post('unit'),
+					'nama_sub_unit' => $this->input->post('nama_sub_unit'),
+					'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'updated_time' => DATE('Y-m-d H:i:s')
+				);
+				if ($this->GeneralModel->update_general('e_sub_unit','id_sub_unit',$param2,$dataSubUnit) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Sub Unit berhasil diupdate</div>');
+					redirect('panel/masterData/daftarSubUnit');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, sub unit gagal diupdate</div>');
+					redirect('panel/masterData/daftarSubUnit');
+				}
+			}else{
+				$cekKodeUnit = $this->GeneralModel->get_by_multi_id_general('e_sub_unit','unit',$this->input->post('unit'),'kode_sub_unit',$this->input->post('kode_sub_unit'));
+				if ($cekKodeUnit) {
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode sub unit yang sama sudah ada</div>');
+					redirect('panel/masterData/daftarSubUnit');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, sub unit gagal diupdate</div>');
+					redirect('panel/masterData/daftarSubUnit');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Sub Unit';
+			$data['content'] = 'panel/masterData/subUnit/update';
+			$data['subUnit'] = $this->GeneralModel->get_by_id_general('e_sub_unit','id_sub_unit',$param1);
+			$data['unit'] = $this->GeneralModel->get_general('e_unit');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function deleteSubUnit($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($this->GeneralModel->delete_general('e_sub_unit', 'id_sub_unit', $param1) == TRUE) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Sub Unit berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarSubUnit/'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Sub Unit gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarSubUnit/'));
 		}
 	}
 	//--------------- END OF SUB UNIT------------------//

@@ -187,8 +187,8 @@
 </div>
 <!-- end #content -->
 <script type="text/javascript">
+  $('#unit').val('<?php echo $pengguna[0]->unit;?>');
   $(document).ready(function(){
-    $('#unit').val('<?php echo $pengguna[0]->unit;?>');
     cariSubUnit('<?php echo $pengguna[0]->unit;?>')
   })
   function cariSubUnit(val){

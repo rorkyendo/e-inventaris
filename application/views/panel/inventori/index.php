@@ -52,11 +52,11 @@
             <thead>
               <tr>
                 <th>NO</th>
+                <th>Kode Inventori</th>
                 <th>Nama Barang</th>
                 <th>Kategori</th>
                 <th>Jumlah</th>
-                <th>Harga Pokok</th>
-                <th>Harga Jual</th>
+                <th>Harga Barang</th>
                 <th>QR CODE</th>
                 <th>Aksi</th>
               </tr>
@@ -111,6 +111,13 @@
         {
           "data": "nama_inventori",
           width: 100,
+          render: function(data, type, row) {
+            return row.kode_unit+'/'+row.kode_sub_unit+'/'+row.kode_inventori
+          }
+        },
+        {
+          "data": "nama_inventori",
+          width: 100,
         },
         {
           "data": "nama_kategori",
@@ -124,17 +131,10 @@
           }
         },
         {
-          "data": "harga_pokok",
+          "data": "harga_barang",
           width: 100,
           render: function(data, type, row, meta) {
-            return "Rp" + new Intl.NumberFormat().format(row.harga_pokok)
-          }
-        },
-        {
-          "data": "harga_jual",
-          width: 100,
-          render: function(data, type, row, meta) {
-            return "Rp" + new Intl.NumberFormat().format(row.harga_jual)
+            return "Rp" + new Intl.NumberFormat().format(row.harga_barang)
           }
         },
         {

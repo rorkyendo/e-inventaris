@@ -15,9 +15,26 @@ class MasterDataModel extends CI_Model {
     $this->datatables->add_column(
       'action',
        anchor(changeLink('panel/masterData/updateUnit/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
-      . anchor(changeLink('panel/masterData/deleteUnit/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus event?')")),
+      . anchor(changeLink('panel/masterData/deleteUnit/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus unit?')")),
       'id_unit'
     );
     return print_r($this->datatables->generate('json'));
   }
+
+  public function getSubUnit($unit='')
+  {
+    $this->datatables->select('*,v_sub_unit.id_sub_unit as id_sub_unit');
+    $this->datatables->from('v_sub_unit');
+    $this->datatables->add_column(
+      'action',
+       anchor(changeLink('panel/masterData/updateSubUnit/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+      . anchor(changeLink('panel/masterData/deleteSubUnit/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus sub unit?')")),
+      'id_sub_unit'
+    );
+    if (!empty($unit)) {
+      $this->datatables->where('unit',$unit);
+    }
+    return print_r($this->datatables->generate('json'));
+  }
+
 }
