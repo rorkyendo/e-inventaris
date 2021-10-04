@@ -673,7 +673,9 @@ class Inventori extends CI_Controller
 		if ($param1 == 'doCreate') {
 			$dataFaktur = array(
 				'kategori_faktur' => 'out',
+				'kode_faktur' => $this->input->post('kode_faktur'),
 				'catatan_faktur' => $this->input->post('catatan_faktur'),
+				'status_keluar' => $this->input->post('status_keluar'),
 				'created_by' => $this->session->userdata('id_pengguna'),
 			);
 			$tempdir = "assets/img/qrfaktur/";
@@ -773,7 +775,9 @@ class Inventori extends CI_Controller
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1 == 'doUpdate') {
 			$dataFaktur = array(
+				'kode_faktur' => $this->input->post('kode_faktur'),
 				'catatan_faktur' => $this->input->post('catatan_faktur'),
+				'status_keluar' => $this->input->post('status_keluar'),
 				'updated_by' => $this->session->userdata('id_pengguna'),
 				'updated_time' => DATE('Y-m-d H:i:s'),
 			);

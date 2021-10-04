@@ -58,7 +58,7 @@
                 <label class="col-md-2 control-label">Status Keluar Faktur</label>
                 <div class="col-md-10">
                   <select name="status_keluar" id="status_keluar" class="form-control" required>
-                    <option value="">.:Pilih Jenis Pengeluaran:.</option>
+                    <option value="">.:Pilih Status Keluar:.</option>
                     <option value="rusak">Rusak</option>
                     <option value="pinjam">Dipinjam</option>
                   </select>
