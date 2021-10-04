@@ -552,17 +552,22 @@ class Inventori extends CI_Controller
 	public function deleteInventoriMasuk($param1=''){
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		$faktur = $this->GeneralModel->get_by_id_general('e_faktur', 'id_faktur', $param1);
-		if (!empty($faktur[0]->qrcode_faktur)) {
-			try {
-				unlink($faktur[0]->qrcode_faktur);
-			} catch (\Exception $e) {
+			if ($faktur[0]->status_approval == 'pending') {
+				if (!empty($faktur[0]->qrcode_faktur)) {
+					try {
+						unlink($faktur[0]->qrcode_faktur);
+					} catch (\Exception $e) {
+				}
 			}
-		}
-		if ($this->GeneralModel->delete_general('e_faktur', 'id_faktur', $param1) == TRUE) {
-			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil dihapus</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));
-		} else {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal dihapus</div>');
+			if ($this->GeneralModel->delete_general('e_faktur', 'id_faktur', $param1) == TRUE) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil dihapus</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal dihapus</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
+			}
+		}else{
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
 			redirect(changeLink('panel/inventori/inventoriMasuk'));
 		}
 	}
@@ -587,45 +592,57 @@ class Inventori extends CI_Controller
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		$detailFaktur = $this->GeneralModel->get_by_id_general('e_detail_faktur', 'id_faktur', $param1);
-		$dataFaktur = array(
-				'status_approval' => 'accept',
-				'approval_by' => $this->session->userdata('id_pengguna'),
-				'updated_by' => $this->session->userdata('id_pengguna'),
-				'approval_time' => DATE('Y-m-d H:i:s'),
-				'updated_time' => DATE('Y-m-d H:i:s'),
-		);
- 		if ($this->GeneralModel->update_general('e_faktur','id_faktur', $param1, $dataFaktur) == TRUE) {
-			foreach ($detailFaktur as $key) {
-				$oldStock = $this->GeneralModel->get_by_id_general('e_inventori','id_inventori',$key->id_inventori);
-				$dataInventori = array(
-					'jumlah_inventori' => $oldStock[0]->jumlah_inventori+$key->jumlah_inventori,
-					'harga_barang' => $key->harga_barang,
-				);
-				$this->GeneralModel->update_general('e_inventori', 'id_inventori', $key->id_inventori, $dataInventori);
+		$faktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
+		if ($faktur[0]->status_approval == 'pending') {
+			$dataFaktur = array(
+					'status_approval' => 'accept',
+					'approval_by' => $this->session->userdata('id_pengguna'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'approval_time' => DATE('Y-m-d H:i:s'),
+					'updated_time' => DATE('Y-m-d H:i:s'),
+			);
+			 if ($this->GeneralModel->update_general('e_faktur','id_faktur', $param1, $dataFaktur) == TRUE) {
+				foreach ($detailFaktur as $key) {
+					$oldStock = $this->GeneralModel->get_by_id_general('e_inventori','id_inventori',$key->id_inventori);
+					$dataInventori = array(
+						'jumlah_inventori' => $oldStock[0]->jumlah_inventori+$key->jumlah_inventori,
+						'harga_barang' => $key->harga_barang,
+					);
+					$this->GeneralModel->update_general('e_inventori', 'id_inventori', $key->id_inventori, $dataInventori);
+				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil diapprove</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal diapprove</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
 			}
-			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil diapprove</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));
-		} else {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal diapprove</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));
+		}else{
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
+			redirect(changeLink('panel/inventori/inventoriMasuk'));			
 		}
 	}
 
 	public function rejectInventoriMasuk($param1 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$dataFaktur = array(
-			'status_approval' => 'reject',
-			'approval_by' => $this->session->userdata('id_pengguna'),
-			'updated_by' => $this->session->userdata('id_pengguna'),
-			'approval_time' => DATE('Y-m-d H:i:s'),
-			'updated_time' => DATE('Y-m-d H:i:s'),
-		);
-		if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
-			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil direject</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));
-		} else {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal direject</div>');
+		$faktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
+		if ($faktur[0]->status_approval == 'pending') {
+			$dataFaktur = array(
+				'status_approval' => 'reject',
+				'approval_by' => $this->session->userdata('id_pengguna'),
+				'updated_by' => $this->session->userdata('id_pengguna'),
+				'approval_time' => DATE('Y-m-d H:i:s'),
+				'updated_time' => DATE('Y-m-d H:i:s'),
+			);
+			if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil direject</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal direject</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
+			}
+		}else{
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
 			redirect(changeLink('panel/inventori/inventoriMasuk'));
 		}
 	}
@@ -818,17 +835,22 @@ class Inventori extends CI_Controller
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		$faktur = $this->GeneralModel->get_by_id_general('e_faktur', 'id_faktur', $param1);
-		if (!empty($faktur[0]->qrcode_faktur)) {
-			try {
-				unlink($faktur[0]->qrcode_faktur);
-			} catch (\Exception $e) {
+		if ($faktur[0]->status_approval == 'pending') {
+			if (!empty($faktur[0]->qrcode_faktur)) {
+				try {
+					unlink($faktur[0]->qrcode_faktur);
+				} catch (\Exception $e) {
+				}
 			}
-		}
-		if ($this->GeneralModel->delete_general('e_faktur', 'id_faktur', $param1) == TRUE) {
-			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil dihapus</div>');
-			redirect(changeLink('panel/inventori/inventoriKeluar'));
-		} else {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal dihapus</div>');
+			if ($this->GeneralModel->delete_general('e_faktur', 'id_faktur', $param1) == TRUE) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil dihapus</div>');
+				redirect(changeLink('panel/inventori/inventoriKeluar'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal dihapus</div>');
+				redirect(changeLink('panel/inventori/inventoriKeluar'));
+			}
+		}else{
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
 			redirect(changeLink('panel/inventori/inventoriKeluar'));
 		}
 	}
@@ -853,53 +875,65 @@ class Inventori extends CI_Controller
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		$detailFaktur = $this->GeneralModel->get_by_id_general('e_detail_faktur', 'id_faktur', $param1);
-		foreach ($detailFaktur as $key) {
-			$oldStock = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $key->id_inventori);
-			if ($oldStock[0]->jumlah_inventori - $key->jumlah_inventori <= 0) {
-				$this->session->set_flashdata('notif', '<div class="alert alert-success">Mohon maaf stock tidak bisa dikeluarkan karena ada beberapa stock yang tidak mencukupi</div>');
-				redirect(changeLink('panel/inventori/inventoriKeluar'));
-			}
-		}
-		$dataFaktur = array(
-			'status_approval' => 'accept',
-			'approval_by' => $this->session->userdata('id_pengguna'),
-			'updated_by' => $this->session->userdata('id_pengguna'),
-			'approval_time' => DATE('Y-m-d H:i:s'),
-			'updated_time' => DATE('Y-m-d H:i:s'),
-		);
-		if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
+		$faktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
+		if ($faktur[0]->status_approval == 'pending') {
 			foreach ($detailFaktur as $key) {
-			$oldStock = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $key->id_inventori);
-					$dataInventori = array(
-						'jumlah_inventori' => $oldStock[0]->jumlah_inventori - $key->jumlah_inventori,
-						'harga_barang' => $key->harga_barang,
-					);
-					$this->GeneralModel->update_general('e_inventori', 'id_inventori', $key->id_inventori, $dataInventori);
+				$oldStock = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $key->id_inventori);
+				if ($oldStock[0]->jumlah_inventori - $key->jumlah_inventori <= 0) {
+					$this->session->set_flashdata('notif', '<div class="alert alert-success">Mohon maaf stock tidak bisa dikeluarkan karena ada beberapa stock yang tidak mencukupi</div>');
+					redirect(changeLink('panel/inventori/inventoriKeluar'));
+				}
 			}
-			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil diapprove</div>');
+			$dataFaktur = array(
+				'status_approval' => 'accept',
+				'approval_by' => $this->session->userdata('id_pengguna'),
+				'updated_by' => $this->session->userdata('id_pengguna'),
+				'approval_time' => DATE('Y-m-d H:i:s'),
+				'updated_time' => DATE('Y-m-d H:i:s'),
+			);
+			if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
+				foreach ($detailFaktur as $key) {
+				$oldStock = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $key->id_inventori);
+						$dataInventori = array(
+							'jumlah_inventori' => $oldStock[0]->jumlah_inventori - $key->jumlah_inventori,
+							'harga_barang' => $key->harga_barang,
+						);
+						$this->GeneralModel->update_general('e_inventori', 'id_inventori', $key->id_inventori, $dataInventori);
+				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil diapprove</div>');
 				redirect(changeLink('panel/inventori/inventoriKeluar'));
-		} else {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal diapprove</div>');
-				redirect(changeLink('panel/inventori/inventoriKeluar'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal diapprove</div>');
+					redirect(changeLink('panel/inventori/inventoriKeluar'));
+			}
+		}else{
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
+			redirect(changeLink('panel/inventori/inventoriKeluar'));
 		}
 	}
 
 	public function rejectInventoriKeluar($param1 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$dataFaktur = array(
-			'status_approval' => 'reject',
-			'approval_by' => $this->session->userdata('id_pengguna'),
-			'updated_by' => $this->session->userdata('id_pengguna'),
-			'approval_time' => DATE('Y-m-d H:i:s'),
-			'updated_time' => DATE('Y-m-d H:i:s'),
-		);
-		if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
-			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil direject</div>');
-				redirect(changeLink('panel/inventori/inventoriKeluar'));
-		} else {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal direject</div>');
-				redirect(changeLink('panel/inventori/inventoriKeluar'));
+		$faktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
+		if ($faktur[0]->status_approval == 'pending') {
+			$dataFaktur = array(
+				'status_approval' => 'reject',
+				'approval_by' => $this->session->userdata('id_pengguna'),
+				'updated_by' => $this->session->userdata('id_pengguna'),
+				'approval_time' => DATE('Y-m-d H:i:s'),
+				'updated_time' => DATE('Y-m-d H:i:s'),
+			);
+			if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil direject</div>');
+					redirect(changeLink('panel/inventori/inventoriKeluar'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal direject</div>');
+					redirect(changeLink('panel/inventori/inventoriKeluar'));
+			}
+		}else{
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
+			redirect(changeLink('panel/inventori/inventoriKeluar'));
 		}
 	}
 

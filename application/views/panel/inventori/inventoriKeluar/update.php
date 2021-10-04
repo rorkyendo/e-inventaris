@@ -1,3 +1,4 @@
+<?php foreach($faktur as $row):?>
 <!-- begin #content -->
 <div id="content" class="content">
   <!-- begin breadcrumb -->
@@ -28,42 +29,74 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/updateInventoriKeluar/doUpdate/' . $faktur[0]->id_faktur)); ?>" enctype="multipart/form-data">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/updateInventoriKeluar/doUpdate/'.$row->id_faktur)); ?>" enctype="multipart/form-data">
+          <div class="col-md-12">
+          <center>
+            <h3>Scan QR disini</h3>
+            <br>
+              <div hidden id="reader" class="img-fluid" style="width:280px"></div>
+              <br>
+              <br>
+              <button class="btn btn-xs btn-info" type="button" onclick="scan()"><i class="fa fa-camera"></i> Scan</button>
+              <br>
+              <br>
+            </center>
+          </div>
             <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Faktur</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Faktur" name="kode_faktur" value="<?php echo $row->kode_faktur;?>" required/>
+                </div>
+              </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Catatan Faktur</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Nama Catatan Faktur (Misal : Inventori Keluar untuk TOKO A)" name="catatan_faktur" value="<?php echo $faktur[0]->catatan_faktur; ?>" required />
+                  <input type="text" class="form-control" value="<?php echo $row->catatan_faktur;?>" placeholder="Masukkan Nama Catatan Faktur (Misal : Inventori Masuk dari Supplier A)" name="catatan_faktur" required />
                 </div>
               </div>
-              <hr />
-              <?php foreach ($detailFaktur as $row) : ?>
-                <div class="panel panel-inverse" id="groupInvent">
-                  <div class="panel-heading">
-                    <div class="panel-heading-btn">
-                      <button type="button" id="add" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Tambah</button>
-                      <button type="button" id="delete" class="btn btn-xs btn-danger"><i class="fa fa-times"></i> Hapus</button>
-                    </div>
-                    <h4 class="panel-title">Pilih Inventori</h4>
-                  </div>
-                  <div class="panel-body">
-                    <div class="col-md-3">
-                      <select name="id_inventori[]" id="id_inventori<?php echo $row->id_detail_faktur; ?>" class="form-control" required>
-                        <option value="">.:Pilih Inventori:.</option>
-                        <?php foreach ($inventori as $key) : ?>
-                          <option value="<?php echo $key->id_inventori; ?>"><?php echo $key->nama_inventori; ?> (<?php echo $key->singkatan_satuan; ?>)</option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                    <script>
-                      $('#id_inventori<?php echo $row->id_detail_faktur; ?>').val('<?php echo $row->id_inventori;?>')
-                    </script>
-                    <div class="col-md-3">
-                      <input type="number" name="jumlah[]" value="<?php echo $row->jumlah_inventori;?>" id="jumlah" class="form-control" placeholder="Masukkan Jumlah" required>
-                    </div>
-                  </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Status Keluar Faktur</label>
+                <div class="col-md-10">
+                  <select name="status_keluar" id="status_keluar" class="form-control" required>
+                    <option value="">.:Pilih Jenis Pengeluaran:.</option>
+                    <option value="rusak">Rusak</option>
+                    <option value="pinjam">Dipinjam</option>
+                  </select>
                 </div>
-              <?php endforeach; ?>
+              </div>
+              <script>
+                $("#status_keluar").val('<?php echo $key->status_keluar;?>')
+              </script>
+              <hr />
+              <div class="panel panel-inverse">
+                <div class="panel-heading">
+                  <h4 class="panel-title">List Inventori</h4>
+                </div>
+                <div class="panel-body" id="groupInvent">
+                  <?php foreach($detailFaktur as $key):?>
+                    <?php $kode_inventori = $key->kode_unit.'/'.$key->kode_sub_unit.'/'.$key->kode_inventori;?>
+                    <div class="col-md-12" id="inventori<?php echo $key->id_inventori;?>">
+                      <div class="col-md-12">
+                        <button class="btn btn-xs btn-danger" type="button" onclick="hapus('<?php echo $key->id_inventori;?>')"><i class="fa fa-times"></i> Hapus</button>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="">Kode inventori</label>
+                        <input type="text" class="form-control" value="<?php echo $kode_inventori;?>" readonly>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="">Nama inventori</label>
+                        <input type="text" class="form-control" value="<?php echo $key->nama_inventori;?> (<?php echo $key->singkatan_satuan;?>)" readonly>
+                      </div>
+                      <div class="col-md-3">
+                        <input type="hidden" name="id_inventori[]" class="form-control" value="<?php echo $key->id_inventori;?>" required>
+                        <label for="">Jumlah Inventori</label>
+                        <input type="number" name="jumlah[]" class="form-control" value="<?php echo $key->jumlah_inventori_faktur;?>" required>
+                      </div>
+                    </div>
+                  <?php endforeach;?>
+                </div>
+              </div>
               <div class="col-md-12">
                 <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
                 <a href="<?php echo base_url(changeLink('panel/inventori/inventoriKeluar/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
@@ -79,13 +112,109 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
-<script type="text/javascript">
-  $(document).ready(function() {
-    $(document).on("click", "#add", function() {
-      $('#groupInvent:first').clonePolyfill().insertAfter("#groupInvent:last");
+<script>
+  const html5QrCode = new Html5Qrcode("reader");
+  var sound = new Audio("<?php echo base_url('assets/audio/');?>beep.mp3");
+
+  function scan(){
+    $("#reader").removeAttr('hidden')
+    // This method will trigger user permissions
+    Html5Qrcode.getCameras().then(devices => {
+    /**
+     * devices would be an array of objects of type:
+     * { id: "id", label: "label" }
+     */
+    if (devices && devices.length) {
+      var cameraId = devices[0].id;
+      html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,    // sets the framerate to 10 frame per second 
+        qrbox: 180  // sets only 250 X 250 region of viewfinder to
+              // scannable, rest shaded.
+      },
+      qrCodeMessage => {
+        // do something when code is read. For example:
+        sound.play();	
+        cariInventori(qrCodeMessage)
+      },
+      errorMessage => {
+        // parse error, ideally ignore it. For example:
+        // console.log(`QR Code no longer in front of camera.`);
+      })
+      .catch(err => {
+        // Start failed, handle it. For example, 
+        console.log(`Unable to start scanning, error: ${err}`);
+      });
+    }
+    }).catch(err => {
+    // handle err
     });
-    $(document).on("click", "#delete", function() {
-      $(this).closest("#groupInvent").remove();
-    });
-  });
+  }
 </script>
+<script>
+  function cariInventori(kode_inventori){
+    $.ajax({
+      url:'<?php echo base_url('panel/inventori/cariInventori');?>',
+      type:'GET',
+      data:{
+        kode_inventori:kode_inventori
+      },
+      success:function(resp){
+        if (resp!='false') {          
+          var data = JSON.parse(resp)
+          console.log(data)
+          $.each(data,function(key,val){
+            hapus(val.id_inventori);
+            var kode = val.kode_unit+'/'+val.kode_sub_unit+'/'+val.kode_inventori;
+            var onclick = "hapus('"+val.id_inventori+"')";
+            html5QrCode.stop().then((ignore) => {
+              // QR Code scanning is stopped.
+              $('#reader').attr('hidden',true);
+            }).catch((err) => {
+              // Stop failed, handle it.
+            });
+            $('#groupInvent').appendPolyfill('<div class="col-md-12" id="inventori'+val.id_inventori+'"><div class="col-md-12">'+
+            '<button class="btn btn-xs btn-danger" type="button" onclick="'+onclick+'"><i class="fa fa-times"></i> Hapus</button>'+
+            '</div><div class="col-md-3">'+
+                '<label>Kode Inventori</label>'+
+                '<input type="text" value="'+kode+'" class="form-control" readonly>'+
+              '</div>'+
+              '<div class="col-md-3">'+
+                '<label>Nama Inventori</label>'+
+                  '<input type="text" value="'+val.nama_inventori+' ('+val.singkatan_satuan+')" class="form-control" readonly>'+
+                '</div>'+
+                '<div class="col-md-3">'+
+                  '<input type="hidden" name="id_inventori[]" value="'+val.id_inventori+'">'+
+                  '<label>Jumlah Inventori</label>'+
+                  '<input type="number" name="jumlah[]" id="jumlah" class="form-control" placeholder="Masukkan Jumlah" required>'+
+                '</div></div>');          
+                Swal.fire({
+                  type: 'success',
+                  title: val.nama_inventori+' (kode:'+kode+')',
+                  text: 'berhasil di tambahkan',
+                })
+          })
+        }else{
+          Swal.fire({
+            type: 'error',
+            title: 'Oopps..',
+            text: 'Inventori tidak ditemukan',
+          })
+        }
+      },error:function(){
+        Swal.fire({
+          type: 'error',
+          title: 'Oopps..',
+          text: 'Terjadi kesalahan',
+        })
+      }
+    })
+  }
+</script>
+<script>
+  function hapus(id_inventori){
+    $('#inventori'+id_inventori).remove();
+  }
+</script>
+<?php endforeach;?>

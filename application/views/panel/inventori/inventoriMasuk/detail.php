@@ -133,13 +133,3 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
-<script type="text/javascript">
-  $(document).ready(function() {
-    $(document).on("click", "#add", function() {
-      $('#groupInvent:first').clone().insertAfter("#groupInvent:last");
-    });
-    $(document).on("click", "#delete", function() {
-      $(this).closest("#groupInvent").remove();
-    });
-  });
-</script>

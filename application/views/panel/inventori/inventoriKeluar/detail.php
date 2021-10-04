@@ -38,6 +38,22 @@
                   </td>
                 </tr>
                 <tr>
+                  <td>Kode Faktur</td>
+                  <td> :
+                    <?php echo $faktur[0]->kode_faktur; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Status Keluar Faktur</td>
+                  <td> :
+                    <?php if($faktur[0]->status_keluar == 'rusak'): ?>
+                      <b class="text-danger">Rusak</b>
+                    <?php elseif($faktur[0]->status_keluar == 'pinjam'): ?>
+                      <b class="text-primary">Dipinjam</b>
+                    <?php endif; ?>
+                  </td>
+                </tr>
+                <tr>
                   <td>Dibuat Oleh</td>
                   <td> :
                     <?php echo $faktur[0]->pembuat_faktur; ?>
@@ -104,15 +120,15 @@
                     <td><?php echo number_format($row->jumlah_inventori_faktur, 0, '.', '.'); ?> <?php echo $row->singkatan_satuan; ?></td>
                   </tr>
               </tbody>
-              <?php endforeach; ?>
+            <?php endforeach; ?>
             </table>
-            <hr/>
+            <hr />
             <div class="col-md-12">
               <a href="<?php echo base_url(changeLink('panel/inventori/inventoriKeluar/')); ?>" class="btn btn-sm btn-danger pull-right" style="margin-left:10px;">Batal</a>
-            <?php if($faktur[0]->status_approval == 'pending'): ?>
-              <a href="<?php echo base_url(changeLink('panel/inventori/approveInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan mengapprove faktur ini?')" style="margin-left:10px;">Approve</a>
-              <a href="<?php echo base_url(changeLink('panel/inventori/rejectInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-warning pull-right" onclick="return confirm('apakah kamu yakin akan mereject faktur ini?')" style="margin-left:10px;">Reject</a>
-            <?php endif; ?>
+              <?php if ($faktur[0]->status_approval == 'pending') : ?>
+                <a href="<?php echo base_url(changeLink('panel/inventori/approveInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan mengapprove faktur ini?')" style="margin-left:10px;">Approve</a>
+                <a href="<?php echo base_url(changeLink('panel/inventori/rejectInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-warning pull-right" onclick="return confirm('apakah kamu yakin akan mereject faktur ini?')" style="margin-left:10px;">Reject</a>
+              <?php endif; ?>
             </div>
           </div>
         </div>
@@ -124,13 +140,3 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
-<script type="text/javascript">
-  $(document).ready(function() {
-    $(document).on("click", "#add", function() {
-      $('#groupInvent:first').clone().insertAfter("#groupInvent:last");
-    });
-    $(document).on("click", "#delete", function() {
-      $(this).closest("#groupInvent").remove();
-    });
-  });
-</script>
