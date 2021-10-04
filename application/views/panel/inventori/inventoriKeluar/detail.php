@@ -93,7 +93,6 @@
                   <th>No</th>
                   <th>Nama Inventori</th>
                   <th>Jumlah</th>
-                  <th>Harga Pokok</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,18 +102,16 @@
                     <td><?php echo $no++; ?></td>
                     <td><?php echo $row->nama_inventori; ?></td>
                     <td><?php echo number_format($row->jumlah_inventori_faktur, 0, '.', '.'); ?> <?php echo $row->singkatan_satuan; ?></td>
-                    <td>Rp <?php echo number_format($row->harga_jual, 0, '.', '.'); ?></td>
                   </tr>
               </tbody>
               <?php endforeach; ?>
             </table>
-            Total Penjualan <b class="pull-right">Rp <?php echo number_format($faktur[0]->total_penjualan,0,'.','.');?></b>
             <hr/>
             <div class="col-md-12">
-              <a href="<?php echo base_url(changeLink('panel/inventori/logistikKeluar/')); ?>" class="btn btn-sm btn-danger pull-right" style="margin-left:10px;">Batal</a>
+              <a href="<?php echo base_url(changeLink('panel/inventori/inventoriKeluar/')); ?>" class="btn btn-sm btn-danger pull-right" style="margin-left:10px;">Batal</a>
             <?php if($faktur[0]->status_approval == 'pending'): ?>
-              <a href="<?php echo base_url(changeLink('panel/inventori/approveLogistikKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan mengapprove faktur ini?')" style="margin-left:10px;">Approve</a>
-              <a href="<?php echo base_url(changeLink('panel/inventori/rejectLogistikKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-warning pull-right" onclick="return confirm('apakah kamu yakin akan mereject faktur ini?')" style="margin-left:10px;">Reject</a>
+              <a href="<?php echo base_url(changeLink('panel/inventori/approveInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan mengapprove faktur ini?')" style="margin-left:10px;">Approve</a>
+              <a href="<?php echo base_url(changeLink('panel/inventori/rejectInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-warning pull-right" onclick="return confirm('apakah kamu yakin akan mereject faktur ini?')" style="margin-left:10px;">Reject</a>
             <?php endif; ?>
             </div>
           </div>

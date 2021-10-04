@@ -81,7 +81,7 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Harga Pokok (Satuan)</label>
                 <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Harga Pokok" name="harga_pokok" value="<?php echo $inventori[0]->harga_pokok; ?>" disabled />
+                  <input type="number" class="form-control" placeholder="Masukkan Harga Pokok" name="harga_barang" value="<?php echo $inventori[0]->harga_barang; ?>" disabled />
                   <font color="red">Harga pokok akan terupdate secara otomatis saat stock masuk</font>
                 </div>
               </div>
@@ -109,6 +109,3 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
-<script type="text/javascript">
-  $('#data-table').DataTable();
-</script>

@@ -27,7 +27,6 @@
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>
         <div class="panel-body">
-          <?php echo $this->session->flashdata('notifpass'); ?>
           <?php echo $this->session->flashdata('notif'); ?>
           <div class="col-md-3">
             <select class="form-control select2" id="status_approval" onchange="cariStatusApproval(this.value)">
@@ -41,10 +40,10 @@
             $('#status_approval').val('<?php echo $status_approval; ?>')
 
             function cariStatusApproval(val) {
-              location.replace('<?php echo base_url(changeLink('panel/inventori/logistikMasuk?start_date=' . $start_date . '&end_date=' . $end_date . '&status_approval=')); ?>' + val)
+              location.replace('<?php echo base_url(changeLink('panel/inventori/inventoriKeluar?start_date=' . $start_date . '&end_date=' . $end_date . '&status_approval=')); ?>' + val)
             }
           </script>
-          <form action="<?php echo base_url('panel/inventori/logistikMasuk?status_approval=' . $status_approval); ?>" class="form-horizontal" method="GET">
+          <form action="<?php echo base_url('panel/inventori/inventoriKeluar?status_approval=' . $status_approval); ?>" class="form-horizontal" method="GET">
             <div class="col-md-3">
               <input type="date" class="form-control" name="start_date" value="<?php echo $start_date; ?>">
             </div>
@@ -57,7 +56,7 @@
           </form>
           <br />
           <br />
-          <a href="<?php echo base_url(changeLink('panel/inventori/createLogistikMasuk/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Logistik Masuk</a>
+          <a href="<?php echo base_url(changeLink('panel/inventori/createInventoriKeluar/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Inventori Keluar</a>
           <br />
           <br />
           <table id="table" class="table table-striped table-bordered" width="100%">
@@ -67,7 +66,7 @@
                 <th>ID Faktur</th>
                 <th>Catatan Faktur</th>
                 <th>Status Approval</th>
-                <th>Total Belanja</th>
+                <th>Total Penjualan</th>
                 <th>Tgl Dibuat</th>
                 <th>Tgl Approval</th>
                 <th>QR CODE</th>
@@ -78,7 +77,6 @@
             </tbody>
           </table>
           <?php echo $this->session->flashdata('notif'); ?>
-          <?php echo $this->session->flashdata('notifpass'); ?>
         </div>
       </div>
       <!-- end panel -->
@@ -106,7 +104,7 @@
             "lengthChange": true,
             // Load data for the table's content from an Ajax source
             "ajax": {
-              "url": '<?php echo site_url(changeLink('panel/inventori/logistikMasuk/cari')); ?>',
+              "url": '<?php echo site_url(changeLink('panel/inventori/inventoriKeluar/cari')); ?>',
               "type": "POST",
               "data": {
                 "status_approval": "<?php echo $status_approval; ?>",
@@ -145,10 +143,10 @@
                 }
               },
               {
-                "data": "total_belanja",
+                "data": "total_penjualan",
                 width: 100,
                 render: function(data, type, row, meta) {
-                  return "Rp" + new Intl.NumberFormat().format(row.total_belanja)
+                  return "Rp" + new Intl.NumberFormat().format(row.total_penjualan)
                 }
               },
               {

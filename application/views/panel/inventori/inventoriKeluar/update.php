@@ -28,7 +28,7 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/updateLogistikKeluar/doUpdate/' . $faktur[0]->id_faktur)); ?>" enctype="multipart/form-data">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/updateInventoriKeluar/doUpdate/' . $faktur[0]->id_faktur)); ?>" enctype="multipart/form-data">
             <div class="col-md-12">
               <div class="form-group">
                 <label class="col-md-2 control-label">Catatan Faktur</label>
@@ -59,17 +59,14 @@
                       $('#id_inventori<?php echo $row->id_detail_faktur; ?>').val('<?php echo $row->id_inventori;?>')
                     </script>
                     <div class="col-md-3">
-                      <input type="text" onkeypress="return isNumberKey(event)" name="jumlah[]" value="<?php echo $row->jumlah_inventori;?>" id="jumlah" class="form-control" placeholder="Masukkan Jumlah" required>
-                    </div>
-                    <div class="col-md-3">
-                      <input type="text" onkeypress="return isNumberKey(event)" name="harga_jual[]" value="<?php echo $row->harga_jual;?>" id="harga_pokok" class="form-control" placeholder="Masukkan Harga Jual Per Satuan" required>
+                      <input type="number" name="jumlah[]" value="<?php echo $row->jumlah_inventori;?>" id="jumlah" class="form-control" placeholder="Masukkan Jumlah" required>
                     </div>
                   </div>
                 </div>
               <?php endforeach; ?>
               <div class="col-md-12">
                 <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
-                <a href="<?php echo base_url(changeLink('panel/inventori/logistikKeluar/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
+                <a href="<?php echo base_url(changeLink('panel/inventori/inventoriKeluar/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
               </div>
             </div>
         </div>
@@ -85,7 +82,7 @@
 <script type="text/javascript">
   $(document).ready(function() {
     $(document).on("click", "#add", function() {
-      $('#groupInvent:first').clone().insertAfter("#groupInvent:last");
+      $('#groupInvent:first').clonePolyfill().insertAfter("#groupInvent:last");
     });
     $(document).on("click", "#delete", function() {
       $(this).closest("#groupInvent").remove();

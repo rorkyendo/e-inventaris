@@ -14,7 +14,7 @@ class InventoriModel extends CI_Model {
     $this->datatables->from('v_inventori');
     $this->datatables->add_column(
       'action',
-       anchor(changeLink('panel/inventori/updateInventori/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+      anchor(changeLink('panel/inventori/updateInventori/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
       . anchor(changeLink('panel/inventori/deleteInventori/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
       'id_inventori'
     );
@@ -31,15 +31,16 @@ class InventoriModel extends CI_Model {
     if ($kategori_faktur == 'in') {
       $this->datatables->add_column(
         'action',
-        anchor(changeLink('panel/inventori/updateLogistikMasuk/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
-        . anchor(changeLink('panel/inventori/deleteLogistikMasuk/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
+        anchor(changeLink('panel/inventori/detailInventoriMasuk/$1'), '<i class="fa fa-info"></i> Detail', array('class' => 'btn btn-info btn-xs')) . ' '
+        . anchor(changeLink('panel/inventori/updateInventoriMasuk/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+        . anchor(changeLink('panel/inventori/deleteInventoriMasuk/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
         'id_faktur'
       );
     }else{
       $this->datatables->add_column(
         'action',
-          anchor(changeLink('panel/inventori/updateLogistikKeluar/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
-          . anchor(changeLink('panel/inventori/deleteLogistikKeluar/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
+          anchor(changeLink('panel/inventori/updateInventoriKeluar/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+          . anchor(changeLink('panel/inventori/deleteInventoriKeluar/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
         'id_faktur'
       );
     }

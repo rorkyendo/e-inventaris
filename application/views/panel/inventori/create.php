@@ -117,7 +117,7 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Jumlah</label>
                 <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Jumlah Inventori" name="jumlah_inventori" value="<?php echo $inventori[0]->jumlah_inventori;?>" disabled />
+                  <input type="number" class="form-control" placeholder="Masukkan Jumlah Inventori" name="jumlah_inventori" />
                   <font color="red">Jumlah inventori akan terupdate secara otomatis saat stock masuk</font>
                 </div>
               </div>

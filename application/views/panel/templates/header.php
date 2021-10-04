@@ -58,6 +58,7 @@
 	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>js/table-manage-default.demo.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>js/apps.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>js/qrscanner.js"></script>
 	<!-- ================== END PAGE LEVEL JS ================== -->
 	<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>plugins/summernote/summernote.min.js"></script>
