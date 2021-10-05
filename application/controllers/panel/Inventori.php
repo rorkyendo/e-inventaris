@@ -247,11 +247,11 @@ class Inventori extends CI_Controller
 				$logo_height = imagesy($logo);
 
 				// Scale logo to fit in the QR Code
-				$logo_qr_width = $QR_width / 6;
+				$logo_qr_width = $QR_width / 5;
 				$scale = $logo_width / $logo_qr_width;
 				$logo_qr_height = $logo_height / $scale;
 
-				imagecopyresampled($QR, $logo, $QR_width / 3, $QR_height / 3.2, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+				imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
 
 				// Simpan kode QR lagi, dengan logo di atasnya
 				imagepng($QR, $tempdir . $dataQrFile);
@@ -462,11 +462,11 @@ class Inventori extends CI_Controller
 				$logo_height = imagesy($logo);
 
 				// Scale logo to fit in the QR Code
-				$logo_qr_width = $QR_width / 3;
+				$logo_qr_width = $QR_width / 5;
 				$scale = $logo_width / $logo_qr_width;
 				$logo_qr_height = $logo_height / $scale;
 
-				imagecopyresampled($QR, $logo, $QR_width / 3, $QR_height / 3.2, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+				imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
 
 				// Simpan kode QR lagi, dengan logo di atasnya
 				imagepng($QR, $tempdir . $namaQrcode);
@@ -716,11 +716,11 @@ class Inventori extends CI_Controller
 				$logo_height = imagesy($logo);
 
 				// Scale logo to fit in the QR Code
-				$logo_qr_width = $QR_width / 3;
+				$logo_qr_width = $QR_width / 5;
 				$scale = $logo_width / $logo_qr_width;
 				$logo_qr_height = $logo_height / $scale;
 
-				imagecopyresampled($QR, $logo, $QR_width / 3, $QR_height / 3.2, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+				imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
 
 				// Simpan kode QR lagi, dengan logo di atasnya
 				imagepng($QR, $tempdir . $namaQrcode);
