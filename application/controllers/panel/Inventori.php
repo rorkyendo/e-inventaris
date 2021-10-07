@@ -214,7 +214,8 @@ class Inventori extends CI_Controller
 				
 			$identitasAplikasi = $this->GeneralModel->get_by_id_general('e_identitas','id_profile',1);
 
-			$logopath = $identitasAplikasi[0]->logo;
+			// $logopath = $identitasAplikasi[0]->logo;
+			$logopath = base_url('assets/img/Fasilkom-TI.png');
 
 			if ($this->GeneralModel->create_general('e_inventori', $dataInventori) == true) {
 				$id_inventori = $this->db->insert_id();
