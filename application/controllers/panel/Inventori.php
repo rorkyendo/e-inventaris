@@ -319,6 +319,23 @@ class Inventori extends CI_Controller
 			}
 
 			if ($this->GeneralModel->update_general('e_inventori', 'id_inventori', $param2, $dataInventori) == true) {
+				$id_unit = $this->GeneralModel->get_by_id_general('e_unit','kode_unit',$this->input->post('kode_unit'));
+				$id_unit1 = $id_unit[0]->id_unit;
+				$id_unit_string = substr($id_unit1,0,3);
+				$id_sub_unit = $this->GeneralModel->get_by_id_general('e_sub_unit','kode_sub_unit',$this->input->post('kode_sub_unit'));
+				$id_sub_unit1 = $id_sub_unit[0]->id_sub_unit;
+				$id_sub_unit_string = substr($id_sub_unit1,0,3);
+				//------------------ Pembuatan Barcode ----------------------------//
+				$this->zend->load('Zend/Barcode.php'); 
+				$barcode = $id_unit_string.$id_sub_unit_string.$id_inventori;
+				$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$barcode), array())->draw($barcode,'image', array('text'=>$barcode), array());
+				$imageName = $barcode.'.jpg';
+				$imagePath = 'assets/img/barcodebarang/';
+				imagejpeg($imageResource, $imagePath.$imageName); 
+				$pathBarcode = $imagePath.$imageName; 				
+				$dataInventori2 = array(
+					'barcode' => $pathBarcode
+				);
 				//------------------ Pembuatan QR Code ----------------------------//
 				$tempdir = "assets/img/qrbarang/";
 				if (!file_exists($tempdir))
@@ -326,7 +343,8 @@ class Inventori extends CI_Controller
 
 				$identitasAplikasi = $this->GeneralModel->get_by_id_general('e_identitas','id_profile',1);
 
-				$logopath = $identitasAplikasi[0]->logo;
+				// $logopath = $identitasAplikasi[0]->logo;
+				$logopath = base_url('assets/img/Fasilkom-TI.png');
 
 				$dataQrFile = $dataInventori['kode_unit'].$dataInventori['kode_sub_unit'].$dataInventori['kode_inventori'].'.png';				
 				//isi qrcode jika di scan
@@ -337,7 +355,7 @@ class Inventori extends CI_Controller
 				// ambil file qrcode
 				$QR = imagecreatefrompng($tempdir .$dataQrFile);
 
-				$dataInventori2 = array(
+				$dataInventori2 += array(
 					'qrcode' => 'assets/img/qrbarang/'.$dataQrFile
 				);
 
@@ -449,9 +467,21 @@ class Inventori extends CI_Controller
 
 			$identitasAplikasi = $this->GeneralModel->get_by_id_general('e_identitas', 'id_profile', 1);
 
-			$logopath = $identitasAplikasi[0]->logo;
+			// $logopath = $identitasAplikasi[0]->logo;
+			$logopath = base_url('assets/img/Fasilkom-TI.png');
 			if ($this->GeneralModel->create_general('e_faktur',$dataFaktur) == TRUE) {
 				$id_faktur = $this->db->insert_id();
+				//------------------ Pembuatan Barcode ----------------------------//
+				$this->zend->load('Zend/Barcode.php'); 
+				$barcode = $id_faktur;
+				$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$barcode), array())->draw($barcode,'image', array('text'=>$barcode), array());
+				$imageName = $barcode.'.jpg';
+				$imagePath = 'assets/img/barcodefaktur/';
+				imagejpeg($imageResource, $imagePath.$imageName); 
+				$pathBarcode = $imagePath.$imageName; 				
+				$dataInventori2 = array(
+					'barcode_faktur' => $pathBarcode
+				);
 				$namaQrcode = 'Faktur-'.$id_faktur.'.png';
 				//isi qrcode jika di scan
 				$codeContents = base_url('panel/inventori/detailInventoriMasuk/') . $id_faktur;
@@ -461,7 +491,7 @@ class Inventori extends CI_Controller
 				// ambil file qrcode
 				$QR = imagecreatefrompng($tempdir . $namaQrcode);
 
-				$dataFaktur2 = array(
+				$dataFaktur2 += array(
 					'qrcode_faktur' => 'assets/img/qrfaktur/' . $namaQrcode
 				);
 
@@ -703,9 +733,22 @@ class Inventori extends CI_Controller
 
 			$identitasAplikasi = $this->GeneralModel->get_by_id_general('e_identitas', 'id_profile', 1);
 
-			$logopath = $identitasAplikasi[0]->logo;
+			// $logopath = $identitasAplikasi[0]->logo;
+			$logopath = base_url('assets/img/Fasilkom-TI.png');
+
 			if ($this->GeneralModel->create_general('e_faktur', $dataFaktur) == TRUE) {
 				$id_faktur = $this->db->insert_id();
+				//------------------ Pembuatan Barcode ----------------------------//
+				$this->zend->load('Zend/Barcode.php'); 
+				$barcode = $id_faktur;
+				$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$barcode), array())->draw($barcode,'image', array('text'=>$barcode), array());
+				$imageName = $barcode.'.jpg';
+				$imagePath = 'assets/img/barcodefaktur/';
+				imagejpeg($imageResource, $imagePath.$imageName); 
+				$pathBarcode = $imagePath.$imageName; 				
+				$dataInventori2 = array(
+					'barcode_faktur' => $pathBarcode
+				);
 				$namaQrcode = 'Faktur-' . $id_faktur . '.png';
 				//isi qrcode jika di scan
 				$codeContents = base_url('panel/inventori/detailInventoriKeluar/') . $id_faktur;
@@ -715,7 +758,7 @@ class Inventori extends CI_Controller
 				// ambil file qrcode
 				$QR = imagecreatefrompng($tempdir . $namaQrcode);
 
-				$dataFaktur2 = array(
+				$dataFaktur2 += array(
 					'qrcode_faktur' => 'assets/img/qrfaktur/' . $namaQrcode
 				);
 

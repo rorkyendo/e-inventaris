@@ -70,6 +70,7 @@
                 <th>Tgl Dibuat</th>
                 <th>Tgl Approval</th>
                 <th>QR CODE</th>
+                <th>Barcode</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -162,6 +163,13 @@
                 width: 100,
                 render: function(data, type, row, meta) {
                   return "<img src='<?php echo base_url(); ?>" + row.qrcode_faktur + "' class='img-responsive' style='width:250px'>"
+                }
+              },
+              {
+                "data": "barcode",
+                width: 100,
+                render: function(data, type, row, meta) {
+                  return "<img src='<?php echo base_url(); ?>" + row.barcode_faktur + "' class='img-responsive' style='width:100%'>"
                 }
               },
               {
