@@ -154,9 +154,49 @@
         },
         {
           "data": "action",
-          width: 100
+          width: 100,
+          render: function(data, type, row, meta) {
+            var onclick = "cetak('<?php echo base_url(); ?>" + row.qrcode + "','<?php echo base_url(); ?>" + row.barcode + "')"
+            var btprint = "btPrint('<?php echo base_url(); ?>" + row.qrcode + "','<?php echo base_url(); ?>" + row.barcode + "')"
+            return row.action+'<button type="button" style="margin-left:3px;" class="btn btn-xs btn-primary" onclick="'+onclick+'"><i class="fa fa-print"></i></button><button type="button" style="margin-left:3px;" class="btn btn-xs btn-primary" onclick="'+btprint+'"><i class="fa fa-bluetooth"></i></button>'
+          }
         },
       ],
     });
   });
+</script>
+
+<script>
+  function cetak(qrcode,barcode){
+    $('#print_qr').attr("src",qrcode);
+    $('#print_barcode').attr("src",barcode);
+    printCode($('<div/>').append($('#pre_print').clone()).html())
+  }
+
+  function printCode(data) {
+    var printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>CETAK TRANSAKSI</title>');
+    printWindow.document.write('<style>@media print{@page{size: 80mm auto} #pre_print {width: 80mm;font-size: 15px;}}</style></head><body>');
+    printWindow.document.write(data);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    setTimeout(() => { printWindow.print(); }, 1000);
+  }
+</script>
+
+<div id="pre_print" class="hidden">
+  <center>
+    <img src="" id="print_qr" alt="qrcode">
+    <img src="" id="print_barcode" alt="barcode">
+  </center>
+</div>
+
+<script>
+  function btPrint(qrcode,barcode) {
+    var text = "<CENTER><IMAGE>"+qrcode+"<BR>" +
+               "<CENTER><IMAGE>"+barcode+"<BR>" +
+               "<BR>**************************<BR><cut>";
+      var textEncoded = encodeURI(text);
+      window.location.href = "intent://" + textEncoded + "#Intent;scheme=quickprinter;package=pe.diegoveloper.printerserverapp;end;";
+  }
 </script>
