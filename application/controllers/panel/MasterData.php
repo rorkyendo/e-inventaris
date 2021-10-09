@@ -493,5 +493,97 @@ class MasterData extends CI_Controller
 		}
 	}
 	//--------------- END OF SUB UNIT------------------//
+	//--------------- UNIT BEGIN------------------//
+	public function daftarSumberDana($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			return $this->MasterDataModel->getSumberDana();		
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Sumber Dana';
+			$data['content'] = 'panel/masterData/sumberDana/index';
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function tambahSumberDana($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doCreate') {
+			$cekKodeSumberDana = $this->GeneralModel->get_by_id_general('e_sumber_dana','kode_sumber_dana',$this->input->post('kode_sumber_dana'));
+			if ($cekKodeSumberDana) {
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode sumber dana sudah ada</div>');
+				redirect('panel/masterData/tambahSumberDana');
+			}else{
+				$dataUnit = array(
+					'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
+					'keterangan_sumber_dana' => $this->input->post('keterangan_sumber_dana'),
+					'created_by' => $this->session->userdata('id_pengguna')
+				);
+				if ($this->GeneralModel->create_general('e_sumber_dana',$dataUnit) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Sumber dana berhasil ditambahkan</div>');
+					redirect('panel/masterData/daftarSumberDana');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, sumber dana gagal ditambahkan</div>');
+					redirect('panel/masterData/daftarSumberDana');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Sumber Dana';
+			$data['content'] = 'panel/masterData/sumberDana/create';
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateSumberDana($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$cekKodeSumberDana = $this->GeneralModel->get_by_multi_id_general('e_sumber_dana','id_sumber_dana',$param2,'kode_sumber_dana',$this->input->post('kode_sumber_dana'));
+			if ($cekKodeSumberDana) {
+				$dataSumberDana = array(
+					'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
+					'keterangan_sumber_dana' => $this->input->post('keterangan_sumber_dana'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'updated_time' => DATE('Y-m-d H:i:s')
+				);
+				if ($this->GeneralModel->update_general('e_unit','id_unit',$param2,$dataSumberDana) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Sumber dana berhasil diupdate</div>');
+					redirect('panel/masterData/daftarSumberDana');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, sumber dana gagal diupdate</div>');
+					redirect('panel/masterData/daftarSumberDana');
+				}
+			}else{
+				$cekKodeSumberDana = $this->GeneralModel->get_by_id_general('e_sumber_dana','kode_sumber_dana',$this->input->post('kode_sumber_dana'));
+				if ($cekKodeSumberDana) {
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode sumebr dana yang sama sudah ada</div>');
+					redirect('panel/masterData/daftarSumberDana');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, sumber dana gagal diupdate</div>');
+					redirect('panel/masterData/daftarSumberDana');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Sumber Dana';
+			$data['content'] = 'panel/masterData/sumberDana/update';
+			$data['sumberDana'] = $this->GeneralModel->get_by_id_general('e_sumber_dana','id_sumber_dana',$param1);
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function deleteSumberDana($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($this->GeneralModel->delete_general('e_sumber_dana', 'id_sumber_dana', $param1) == TRUE) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Sumber dana berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarSumberDana/'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Sumber dana gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarSumberDana/'));
+		}
+	}
+	//--------------- END OF SUMBER DANA------------------//
+
 
 }

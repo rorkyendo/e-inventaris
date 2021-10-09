@@ -15,7 +15,8 @@ class InventoriModel extends CI_Model {
     $this->datatables->add_column(
       'action',
       anchor(changeLink('panel/inventori/updateInventori/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
-      . anchor(changeLink('panel/inventori/deleteInventori/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
+      .anchor(changeLink('panel/inventori/deleteInventori/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")) . ' '
+      .anchor(changeLink('panel/inventori/detailInventori/$1'), '<i class="fa fa-info"></i> Detail', array('class' => 'btn btn-info btn-xs')),
       'id_inventori'
     );
     if (!empty($id_kategori)) {

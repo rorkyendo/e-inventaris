@@ -1,4 +1,3 @@
-<?php foreach($subUnit as $row):?>
 <!-- begin #content -->
 <div id="content" class="content">
   <!-- begin breadcrumb -->
@@ -29,39 +28,25 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/updateSubUnit/doUpdate/'.$row->id_sub_unit)); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/tambahSumberDana/doCreate/')); ?>">
             <div class="col-md-12">
               <div class="form-group">
-                <label class="col-md-2 control-label">Unit</label>
+                <label class="col-md-2 control-label">Kode Sumber Dana</label>
                 <div class="col-md-10">
-                  <select name="unit" id="unit" class="form-control select2" required>
-                    <option value="">.:Pilih Unit:.</option>
-                    <?php foreach($unit as $key):?>
-                      <option value="<?php echo $key->id_unit;?>"><?php echo $key->kode_unit;?> | <?php echo $key->nama_unit;?></option>
-                    <?php endforeach;?>
-                  </select>
-                </div>
-              </div>
-              <script>
-                $('#unit').val('<?php echo $row->unit;?>')
-              </script>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Kode Sub Unit</label>
-                <div class="col-md-10">
-                  <input type="text" class="form-control" value="<?php echo $row->kode_sub_unit;?>" placeholder="Masukkan Kode Sub Unit" name="kode_sub_unit" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Sumber Dana" name="kode_sumber_dana" required />
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label">Nama Sub Unit</label>
+                <label class="col-md-2 control-label">Keterangan Sumber Dana</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" value="<?php echo $row->nama_sub_unit;?>" placeholder="Masukkan Nama Unit" name="nama_sub_unit" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Keterangan Sumber Dana" name="keterangan_sumber_dana" required />
                 </div>
               </div>
             <hr />
             <div class="form-group">
               <div class="col-md-12">
                 <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
-                <a href="<?php echo base_url(changeLink('panel/masterData/daftarSubUnit/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
+                <a href="<?php echo base_url(changeLink('panel/masterData/daftarSumberDana/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
               </div>
             </div>
           </div>
@@ -74,4 +59,3 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
-<?php endforeach;?>

@@ -46,4 +46,21 @@ class Scan extends CI_Controller
 			echo 'false';
 		}
 	}
+
+	public function scanBarcodeInventori(){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Scan Barcode Inventori';
+			$data['content'] = 'panel/scan/scanBarcodeInventori';
+			$this->load->view('panel/content', $data);
+	}
+
+	public function scanBarcodeFaktur(){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Scan Barcode Faktur';
+			$data['content'] = 'panel/scan/scanBarcodeFaktur';
+			$this->load->view('panel/content', $data);
+	}
+
 }

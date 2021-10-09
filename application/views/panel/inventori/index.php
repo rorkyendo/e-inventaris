@@ -52,6 +52,7 @@
             <thead>
               <tr>
                 <th>NO</th>
+                <th>Keterangan Sumber Dana</th>
                 <th>Kode Inventori</th>
                 <th>Nama Barang</th>
                 <th>Kategori</th>
@@ -110,6 +111,10 @@
           }
         },
         {
+          "data": "keterangan_sumber_dana",
+          width: 100,
+        },
+        {
           "data": "nama_inventori",
           width: 100,
           render: function(data, type, row) {
@@ -156,9 +161,8 @@
           "data": "action",
           width: 100,
           render: function(data, type, row, meta) {
-            var onclick = "cetak('<?php echo base_url(); ?>" + row.qrcode + "','<?php echo base_url(); ?>" + row.barcode + "')"
-            var btprint = "btPrint('<?php echo base_url(); ?>" + row.qrcode + "','<?php echo base_url(); ?>" + row.barcode + "')"
-            return row.action+'<button type="button" style="margin-left:3px;" class="btn btn-xs btn-primary" onclick="'+onclick+'"><i class="fa fa-print"></i></button><button type="button" style="margin-left:3px;" class="btn btn-xs btn-primary" onclick="'+btprint+'"><i class="fa fa-bluetooth"></i></button>'
+            var onclick = "cetak('<?php echo base_url(); ?>" + row.qrcode + "','<?php echo base_url(); ?>" + row.barcode + "','"+row.keterangan_sumber_dana+"')"
+            return row.action+'<button type="button" class="btn btn-xs btn-success" onclick="'+onclick+'"><i class="fa fa-print"></i> Print</button>'
           }
         },
       ],
@@ -167,7 +171,8 @@
 </script>
 
 <script>
-  function cetak(qrcode,barcode){
+  function cetak(qrcode,barcode,sumberDana){
+    $('#sumberDana').text(sumberDana);
     $('#print_qr').attr("src",qrcode);
     $('#print_barcode').attr("src",barcode);
     printCode($('<div/>').append($('#pre_print').clone()).html())
@@ -186,17 +191,14 @@
 
 <div id="pre_print" class="hidden">
   <center>
-    <img src="" id="print_qr" alt="qrcode">
-    <img src="" id="print_barcode" alt="barcode">
+    <table border="1px" style="border-collapse: collapse;">
+      <tr>
+        <td colspan="2" align="center"><b id="sumberDana"></b></td>
+      </tr>
+      <tr>
+        <td><img src="" id="print_qr" style="width:80px;" alt="qrcode"></td>
+        <td><img src="" id="print_barcode" alt="barcode"></td>
+      </tr>
+    </table>
   </center>
 </div>
-
-<script>
-  function btPrint(qrcode,barcode) {
-    var text = "<CENTER><IMAGE>"+qrcode+"<BR>" +
-               "<CENTER><IMAGE>"+barcode+"<BR>" +
-               "<BR>**************************<BR><cut>";
-      var textEncoded = encodeURI(text);
-      window.location.href = "intent://" + textEncoded + "#Intent;scheme=quickprinter;package=pe.diegoveloper.printerserverapp;end;";
-  }
-</script>

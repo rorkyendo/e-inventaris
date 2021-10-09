@@ -198,6 +198,7 @@ class Inventori extends CI_Controller
 			$dataInventori = array(
 				'kode_unit' => $this->input->post('kode_unit'),
 				'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+				'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
 				'kode_inventori' => $this->input->post('kode_inventori'),
 				'nama_inventori' => $this->input->post('nama_inventori'),
 				'satuan_inventori' => $this->input->post('id_satuan'),
@@ -279,6 +280,7 @@ class Inventori extends CI_Controller
 			$data['subtitle'] = 'Tambah Inventori';
 			$data['content'] = 'panel/inventori/create';
 			$data['kategori'] = $this->GeneralModel->get_general('e_kategori_inventori');
+			$data['sumberDana'] = $this->GeneralModel->get_general('e_sumber_dana');
 			$data['satuan'] = $this->GeneralModel->get_general('e_satuan_inventori');
 			$data['unit'] = $this->GeneralModel->get_general('e_unit');
 			$this->load->view('panel/content', $data);
@@ -292,6 +294,7 @@ class Inventori extends CI_Controller
 			$dataInventori = array(
 				'kode_unit' => $this->input->post('kode_unit'),
 				'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+				'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
 				'kode_inventori' => $this->input->post('kode_inventori'),
 				'nama_inventori' => $this->input->post('nama_inventori'),
 				'satuan_inventori' => $this->input->post('id_satuan'),
@@ -380,6 +383,7 @@ class Inventori extends CI_Controller
 			$data['subtitle'] = 'Update Inventori';
 			$data['content'] = 'panel/inventori/update';
 			$data['inventori'] = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $param1);
+			$data['sumberDana'] = $this->GeneralModel->get_general('e_sumber_dana');
 			$data['satuan'] = $this->GeneralModel->get_general('e_satuan_inventori');
 			$data['kategori'] = $this->GeneralModel->get_general('e_kategori_inventori');
 			$data['unit'] = $this->GeneralModel->get_general('e_unit');
@@ -411,9 +415,7 @@ class Inventori extends CI_Controller
 		$data['title'] = $this->title;
 		$data['subtitle'] = 'Detail Inventori';
 		$data['content'] = 'panel/inventori/detail';
-		$data['inventori'] = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $param1);
-		$data['satuan'] = $this->GeneralModel->get_general('e_satuan_inventori');
-		$data['kategori'] = $this->GeneralModel->get_general('e_kategori_inventori');
+		$data['inventori'] = $this->GeneralModel->get_by_id_general('v_inventori', 'id_inventori', $param1);
 		$this->load->view('panel/content', $data);
 	}
 

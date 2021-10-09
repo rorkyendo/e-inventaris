@@ -81,6 +81,17 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Kode Sumber Dana</label>
+                <div class="col-md-10">
+                  <select name="kode_sumber_dana" id="kode_sumber_dana" class="form-control select2">
+                    <option value="">.:Pilih Kode Sumber Dana:.</option>
+                    <?php foreach($sumberDana as $key):?>
+                      <option value="<?php echo $key->kode_sumber_dana;?>"><?php echo $key->kode_sumber_dana;?> | <?php echo $key->keterangan_sumber_dana;?></option>
+                    <?php endforeach;?>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Kode Inventori</label>
                 <div class="col-md-10">
                   <input type="text" class="form-control" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" required />

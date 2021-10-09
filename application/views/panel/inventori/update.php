@@ -89,6 +89,20 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Kode Sumber Dana</label>
+                <div class="col-md-10">
+                  <select name="kode_sumber_dana" id="kode_sumber_dana" class="form-control select2">
+                    <option value="">.:Pilih Kode Sumber Dana:.</option>
+                    <?php foreach($sumberDana as $key):?>
+                      <option value="<?php echo $key->kode_sumber_dana;?>"><?php echo $key->kode_sumber_dana;?> | <?php echo $key->keterangan_sumber_dana;?></option>
+                    <?php endforeach;?>
+                  </select>
+                </div>
+              </div>
+              <script>
+                $('#kode_sumber_dana').val('<?php echo $inventori[0]->kode_sumber_dana;?>')
+              </script>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Kode Inventori</label>
                 <div class="col-md-10">
                   <input type="text" class="form-control" placeholder="Masukkan Kode Inventori" name="kode_inventori" value="<?php echo $inventori[0]->kode_inventori;?>" required />

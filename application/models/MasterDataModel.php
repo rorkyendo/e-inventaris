@@ -21,6 +21,19 @@ class MasterDataModel extends CI_Model {
     return print_r($this->datatables->generate('json'));
   }
 
+  public function getSumberDana()
+  {
+    $this->datatables->select('*,e_sumber_dana.id_sumber_dana as id_sumber_dana');
+    $this->datatables->from('e_sumber_dana');
+    $this->datatables->add_column(
+      'action',
+       anchor(changeLink('panel/masterData/updateSumberDana/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+      . anchor(changeLink('panel/masterData/deleteSumberDana/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus sumber dana?')")),
+      'id_sumber_dana'
+    );
+    return print_r($this->datatables->generate('json'));
+  }
+
   public function getSubUnit($unit='')
   {
     $this->datatables->select('*,v_sub_unit.id_sub_unit as id_sub_unit');

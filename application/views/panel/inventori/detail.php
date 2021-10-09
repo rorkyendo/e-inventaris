@@ -1,3 +1,4 @@
+<?php foreach($inventori as $key):?>
 <!-- begin #content -->
 <div id="content" class="content">
   <!-- begin breadcrumb -->
@@ -19,78 +20,56 @@
       <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
         <div class="panel-heading">
           <div class="panel-heading-btn">
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            <button type="button" onclick="cetak('<?php echo base_url() . $key->qrcode; ?>','<?php echo base_url() . $key->barcode; ?>','<?php echo $key->keterangan_sumber_dana;?>')" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Print</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
           <form class="form-horizontal">
-            <div class="col-md-12">
+            <div class="col-md-6">
               <h4 class="text-center">QR CODE</h4>
               <center>
-                  <img src="<?php echo base_url() . $inventori[0]->qrcode; ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
+                  <img src="<?php echo base_url() . $key->qrcode; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
+              </center>
+              <br />
+            </div>
+            <div class="col-md-6">
+              <h4 class="text-center">BARCODE</h4>
+              <center>
+                  <img src="<?php echo base_url() . $key->barcode; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
               </center>
               <br />
             </div>
             <div class="col-md-12">
-              <div class="form-group">
-                <label class="col-md-2 control-label">Nama Inventori</label>
-                <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Nama Inventori" name="nama_inventori" value="<?php echo $inventori[0]->nama_inventori; ?>" disabled />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Kategori Inventori</label>
-                <div class="col-md-10">
-                  <select name="id_kategori" id="id_kategori" class="form-control" disabled>
-                    <option value="">.:Pilih Kategori:.</option>
-                    <?php foreach ($kategori as $key) : ?>
-                      <option value="<?php echo $key->id_kategori; ?>"><?php echo $key->nama_kategori; ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-              <script>
-                $('#id_kategori').val('<?php echo $inventori[0]->kategori_inventori; ?>');
-              </script>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Satuan Inventori</label>
-                <div class="col-md-10">
-                  <select name="id_satuan" id="id_satuan" class="form-control" disabled>
-                    <option value="">.:Pilih Satuan:.</option>
-                    <?php foreach ($satuan as $key) : ?>
-                      <option value="<?php echo $key->id_satuan; ?>"><?php echo $key->nama_satuan; ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-              <script>
-                $('#id_satuan').val('<?php echo $inventori[0]->satuan_inventori; ?>')
-              </script>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Jumlah</label>
-                <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Jumlah Inventori" name="jumlah_inventori" value="<?php echo $inventori[0]->jumlah_inventori; ?>" disabled />
-                  <font color="red">Jumlah inventori akan terupdate secara otomatis saat stock masuk</font>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Harga Pokok (Satuan)</label>
-                <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Harga Pokok" name="harga_barang" value="<?php echo $inventori[0]->harga_barang; ?>" disabled />
-                  <font color="red">Harga pokok akan terupdate secara otomatis saat stock masuk</font>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Harga Jual</label>
-                <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Harga Jual" name="harga_jual" value="<?php echo $inventori[0]->harga_jual; ?>" disabled />
-                </div>
-              </div>
+              <table class="table table-striped table-bordered" style="width:100%">
+                <tbody>
+                  <tr>
+                    <td>Kode Sumber Dana</td>
+                    <td><?php echo $key->kode_sumber_dana;?></td>
+                    <td>Keterangan Sumber Dana</td>
+                    <td><?php echo $key->keterangan_sumber_dana;?></td>
+                  </tr>
+                  <tr>
+                    <td>Nama Unit</td>
+                    <td><?php echo $key->nama_unit;?></td>
+                    <td>Nama Sub Unit</td>
+                    <td><?php echo $key->nama_sub_unit;?></td>
+                  </tr>
+                  <tr>
+                    <td>Kode Inventori</td>
+                    <td><?php echo $key->kode_inventori;?></td>
+                    <td>Nama Inventori</td>
+                    <td><?php echo $key->nama_inventori;?></td>
+                  </tr>
+                  <tr>
+                    <td>Jumlah Inventori</td>
+                    <td><?php echo number_format($key->jumlah_inventori,0,'.','.');?></td>
+                    <td>Harga Inventori</td>
+                    <td>Rp <?php echo number_format($key->harga_barang,0,'.','.');?></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <hr />
             <div class="form-group">
@@ -109,3 +88,37 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
+<script>
+  function cetak(qrcode,barcode,sumberDana){
+    $('#sumberDana').text(sumberDana);
+    $('#print_qr').attr("src",qrcode);
+    $('#print_barcode').attr("src",barcode);
+    printCode($('<div/>').append($('#pre_print').clone()).html())
+  }
+
+  function printCode(data) {
+    var printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>CETAK TRANSAKSI</title>');
+    printWindow.document.write('<style>@media print{@page{size: 80mm auto} #pre_print {width: 80mm;font-size: 15px;}}</style></head><body>');
+    printWindow.document.write(data);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    setTimeout(() => { printWindow.print(); }, 1000);
+  }
+</script>
+
+<div id="pre_print" class="hidden">
+  <center>
+    <table border="1px" style="border-collapse: collapse;">
+      <tr>
+        <td colspan="2" align="center"><b id="sumberDana"></b></td>
+      </tr>
+      <tr>
+        <td><img src="" id="print_qr" style="width:80px;" alt="qrcode"></td>
+        <td><img src="" id="print_barcode" alt="barcode"></td>
+      </tr>
+    </table>
+  </center>
+</div>
+
+<?php endforeach;?>
