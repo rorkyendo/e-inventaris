@@ -1000,4 +1000,74 @@ class Inventori extends CI_Controller
 			echo 'false';
 		}
 	}
+
+	public function pengembalianInventoriKeluar($id_faktur){
+		$getFaktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$id_faktur);
+		if ($getFaktur[0]->status_approval == 'accept' && $getFaktur[0]->status_keluar == 'pinjam' && $getFaktur[0]->status_pengembalian == 'belum') {
+			$getDetailFaktur = $this->GeneralModel->get_by_id_general('e_detail_faktur','id_faktur',$id_faktur);
+			foreach ($getDetailFaktur as $key) {
+				$getInventori = $this->GeneralModel->get_by_id_general('e_inventori','id_inventori',$key->id_inventori);
+				$dataInventori = array(
+					'jumlah_inventori' => $getInventori[0]->jumlah_inventori + $key->jumlah_inventori
+				);
+				$this->GeneralModel->update_general('e_inventori','id_inventori',$key->id_inventori,$dataInventori);
+			}
+
+			$dataFaktur = array(
+				'status_pengembalian' => 'sudah',
+				'dikembalikan_oleh' => $this->session->userdata('id_pengguna'),
+				'tgl_pengembalian' => DATE('Y-m-d H:i:s')
+			);
+
+			$this->GeneralModel->update_general('e_faktur','id_faktur',$id_faktur,$dataFaktur);
+
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Pengembalian berhasil dilakukan</div>');
+			redirect(changeLink('panel/inventori/detailInventoriKeluar/'.$id_faktur));
+		}else{
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur ini tidak dapat di lakukan pengembalian</div>');
+			redirect(changeLink('panel/inventori/detailInventoriKeluar/'.$id_faktur));
+		}
+	}
+
+		public function laporanInventori($param1='')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			$kategori_faktur = $this->input->post('kategori_faktur');
+			$status_keluar = $this->input->post('status_keluar');
+			$status_pengembalian = $this->input->post('status_pengembalian');
+			$status_approval = $this->input->post('status_approval');
+			$start_date = $this->input->post('start_date');
+			$end_date = $this->input->post('end_date');
+			return $this->InventoriModel->getLaporanInventori($kategori_faktur,$status_keluar,$status_pengembalian,$status_approval,$start_date,$end_date);
+		} else {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Laporan Inventori';
+			if ($param1 == 'out') {
+				$data['content'] = 'panel/inventori/laporanKeluar';
+				$data['kategori_faktur'] = 'out';
+			}else{
+				$data['content'] = 'panel/inventori/laporanMasuk';
+				$data['kategori_faktur'] = 'in';
+			}
+
+			if (!empty($this->input->get('start_date'))) {
+				$data['start_date']  = $this->input->get('start_date');
+			}else{
+				$data['start_date'] = DATE('Y-m-01');
+			}
+
+			if (!empty($this->input->get('end_date'))) {
+				$data['end_date']  = $this->input->get('end_date');
+			}else{
+				$data['end_date'] = DATE('Y-m-t');
+			}
+
+			$data['status_keluar'] = $this->input->get('status_keluar');
+			$data['status_pengembalian'] = $this->input->get('status_pengembalian');
+			$data['status_approval'] = $this->input->get('status_approval');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
 }

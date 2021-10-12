@@ -89,6 +89,18 @@
                     <?php echo $faktur[0]->pengaprove_faktur; ?>
                   </td>
                 </tr>
+                <tr>
+                  <td>Dikembalikan Pada</td>
+                  <td> :
+                    <?php echo $faktur[0]->tgl_pengembalian; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dikembalikan oleh</td>
+                  <td> :
+                    <?php echo $faktur[0]->pengembali_faktur; ?>
+                  </td>
+                </tr>
               </table>
             </div>
             <div class="col-md-6">
@@ -130,11 +142,13 @@
             </table>
             <hr />
             <div class="col-md-12">
-              <a href="<?php echo base_url(changeLink('panel/inventori/inventoriKeluar/')); ?>" class="btn btn-sm btn-danger pull-right" style="margin-left:10px;">Batal</a>
               <?php if ($faktur[0]->status_approval == 'pending') : ?>
                 <a href="<?php echo base_url(changeLink('panel/inventori/approveInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan mengapprove faktur ini?')" style="margin-left:10px;">Approve</a>
                 <a href="<?php echo base_url(changeLink('panel/inventori/rejectInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-warning pull-right" onclick="return confirm('apakah kamu yakin akan mereject faktur ini?')" style="margin-left:10px;">Reject</a>
+              <?php elseif($faktur[0]->status_approval == 'accept' && $faktur[0]->status_keluar == 'pinjam' && $faktur[0]->status_pengembalian == 'belum'):?>
+                <a href="<?php echo base_url(changeLink('panel/inventori/pengembalianInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan melakukan pengembalian pada faktur ini?')" style="margin-left:10px;"><i class="fa fa-undo"></i> Pengembaliam</a>
               <?php endif; ?>
+              <a href="<?php echo base_url(changeLink('panel/inventori/inventoriKeluar/')); ?>" class="btn btn-sm btn-danger pull-right" style="margin-left:10px;">Kembali</a>
             </div>
           </div>
         </div>

@@ -58,4 +58,27 @@ class InventoriModel extends CI_Model {
     return print_r($this->datatables->generate('json'));
   }
 
+  function getLaporanInventori($kategori_faktur='',$status_keluar='',$status_pengembalian='',$status_approval='',$start_date='',$end_date='')
+  {
+    $this->datatables->select('*,v_detail_inventori.id_faktur as id_faktur');
+    $this->datatables->from('v_detail_inventori');
+    if (!empty($kategori_faktur)) {
+      $this->datatables->where("kategori_faktur = '$kategori_faktur'");
+    }
+    if (!empty($status_keluar)) {
+      $this->datatables->where("status_keluar = '$status_keluar'");
+    }
+    if (!empty($status_pengembalian)) {
+      $this->datatables->where("status_pengembalian = '$status_pengembalian'");
+    }
+    if (!empty($status_approval)) {
+      $this->datatables->where("status_approval = '$status_approval'");
+    }
+    if (!empty($start_date) && !empty($end_date)) {
+      $this->db->where("DATE_FORMAT(created_time,'%Y-%m-%d') >= '$start_date' && DATE_FORMAT(created_time,'%Y-%m-%d') <= '$end_date'");
+    }
+    return print_r($this->datatables->generate('json'));
+  }
+
+
 }

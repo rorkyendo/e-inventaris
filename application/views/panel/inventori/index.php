@@ -27,7 +27,6 @@
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>
         <div class="panel-body">
-          <?php echo $this->session->flashdata('notifpass'); ?>
           <?php echo $this->session->flashdata('notif'); ?>
           <div class="col-md-4">
             <select class="form-control select2" id="id_kategori" onchange="carikategori(this.value)">
@@ -67,7 +66,6 @@
             </tbody>
           </table>
           <?php echo $this->session->flashdata('notif'); ?>
-          <?php echo $this->session->flashdata('notifpass'); ?>
         </div>
       </div>
       <!-- end panel -->
