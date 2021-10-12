@@ -114,81 +114,111 @@
                 "end_date": "<?php echo $end_date; ?>"
               }
             },
-            //Set column definition initialisation properties.
-            "columns": [{
-                "data": null,
-                width: 10,
-                "sortable": false,
-                render: function(data, type, row, meta) {
-                  return meta.row + meta.settings._iDisplayStart + 1;
-                }
-              },
-              {
-                "data": "id_faktur",
-                width: 100,
-              },
-              {
-                "data": "kode_faktur",
-                width: 100
-              },
-              {
-                "data": "catatan_faktur",
-                width: 100
-              },
-              {
-                "data": "status_approval",
-                width: 100,
-                render: function(data, type, row, meta) {
-                  if (row.status_approval == 'pending') {
-                    return "<b class='text-warning'>Pending</b>"
-                  } else if (row.status_approval == 'reject') {
-                    return "<b class='text-danger'>Rejected</b>"
-                  } else if (row.status_approval == 'accept') {
-                    return "<b class='text-success'>Accepted</b>"
-                  }
-                }
-              },
-              {
-                "data": "total_belanja",
-                width: 100,
-                render: function(data, type, row, meta) {
-                  return "Rp" + new Intl.NumberFormat().format(row.total_belanja)
-                }
-              },
-              {
-                "data": "created_time",
-                width: 100
-              },
-              {
-                "data": "approval_time",
-                width: 100
-              },
-              {
-                "data": "qrcode",
-                width: 100,
-                render: function(data, type, row, meta) {
-                  return "<img src='<?php echo base_url(); ?>" + row.qrcode_faktur + "' class='img-responsive' style='width:250px'>"
-                }
-              },
-              {
-                "data": "barcode",
-                width: 100,
-                render: function(data, type, row, meta) {
-                  return "<img src='<?php echo base_url(); ?>" + row.barcode_faktur + "' class='img-responsive' style='width:100%'>"
-                }
-              },
-              {
-                "data": "action",
-                width: 100,
-                render: function(data, type, row, meta) {
-                    if (row.status_approval == 'pending') {
-                      return row.action;
-                    }else{
-                      return "<b class='text-danger'>Data tidak bisa diupdate</b>";
-                    }
-                  }
-                },
-              ],
-            });
+        //Set column definition initialisation properties.
+        "columns": [{
+            "data": null,
+            width: 10,
+            "sortable": false,
+            render: function(data, type, row, meta) {
+              return meta.row + meta.settings._iDisplayStart + 1;
+            }
+          },
+          {
+            "data": "id_faktur",
+            width: 100,
+          },
+          {
+            "data": "kode_faktur",
+            width: 100,
+          },
+          {
+            "data": "catatan_faktur",
+            width: 100
+          },
+          {
+            "data": "status_approval",
+            width: 100,
+            render: function(data, type, row, meta) {
+              if (row.status_approval == 'pending') {
+                return "<b class='text-warning'>Pending</b>"
+              } else if (row.status_approval == 'reject') {
+                return "<b class='text-danger'>Rejected</b>"
+              } else if (row.status_approval == 'accept') {
+                return "<b class='text-success'>Accepted</b>"
+              }
+            }
+          },
+          {
+            "data": "total_belanja",
+            width: 100,
+            render: function(data, type, row, meta) {
+              return "Rp" + new Intl.NumberFormat().format(row.total_belanja)
+            }
+          },
+          {
+            "data": "created_time",
+            width: 100
+          },
+          {
+            "data": "approval_time",
+            width: 100
+          },
+          {
+            "data": "qrcode",
+            width: 100,
+            render: function(data, type, row, meta) {
+              return "<img src='<?php echo base_url(); ?>" + row.qrcode_faktur + "' class='img-responsive' style='width:250px'>"
+            }
+          },
+          {
+            "data": "barcode",
+            width: 100,
+            render: function(data, type, row, meta) {
+              return "<img src='<?php echo base_url(); ?>" + row.barcode_faktur + "' class='img-responsive' style='width:100%'>"
+            }
+          },
+          {
+            "data": "action",
+            width: 100,
+            render: function(data, type, row, meta) {
+                var onclick = "cetak('<?php echo base_url(); ?>" + row.qrcode_faktur + "','<?php echo base_url(); ?>" + row.barcode_faktur + "','"+row.id_faktur+"')"
+                return row.action+'<button type="button" class="btn btn-xs btn-success" onclick="'+onclick+'"><i class="fa fa-print"></i> Print</button>'
+              }
+            },
+          ],
         });
+      });
 </script>
+
+<script>
+  function cetak(qrcode,barcode,faktur){
+    $('#idFaktur').text(faktur);
+    $('#print_qr').attr("src",qrcode);
+    $('#print_barcode').attr("src",barcode);
+    printCode($('<div/>').append($('#pre_print').clone()).html())
+  }
+
+  function printCode(data) {
+    var printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>CETAK FAKTUR</title>');
+    printWindow.document.write('<style>@media print{@page{size: 80mm auto} #pre_print {width: 80mm;font-size: 15px;}}</style></head><body>');
+    printWindow.document.write(data);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    setTimeout(() => { printWindow.print(); }, 1000);
+  }
+</script>
+
+<div id="pre_print" class="hidden">
+  <center>
+    <table border="1px" style="border-collapse: collapse;">
+      <tr>
+        <td colspan="2" align="center"><b id="idFaktur"></b></td>
+      </tr>
+      <tr>
+        <td><img src="" id="print_qr" style="width:80px;" alt="qrcode"></td>
+        <td><img src="" id="print_barcode" alt="barcode"></td>
+      </tr>
+    </table>
+  </center>
+</div>

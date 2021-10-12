@@ -73,7 +73,7 @@
       qrCodeMessage => {
         // do something when code is read. For example:
         sound.play();	
-        location.replace(qrCodeMessage)
+        cariFaktur(qrCodeMessage);
       },
       errorMessage => {
         // parse error, ideally ignore it. For example:
@@ -87,5 +87,45 @@
     }).catch(err => {
     // handle err
     });
+  }
+</script>
+<script>
+  function cariFaktur(id_faktur){
+    $.ajax({
+      url:'<?php echo base_url('panel/scan/cariFaktur');?>',
+      type:'GET',
+      data:{
+        faktur:id_faktur
+      },
+      success:function(resp){
+        if (resp!='false') {          
+          var data = JSON.parse(resp)
+          html5QrCode.stop().then((ignore) => {
+            $('#reader').attr('hidden',true);
+          }).catch((err) => {
+            // Stop failed, handle it.
+          });
+          $.each(data,function(key,val){
+            if (val.kategori_faktur == 'in') {
+              location.replace('<?php echo base_url('panel/inventori/detailInventoriMasuk/');?>'+val.id_faktur)              
+            }else{
+              location.replace('<?php echo base_url('panel/inventori/detailInventoriKeluar/');?>'+val.id_faktur)              
+            }
+          })
+        }else{
+          Swal.fire({
+            type: 'error',
+            title: 'Oopps..',
+            text: 'Faktur tidak ditemukan',
+          })
+        }
+      },error:function(){
+        Swal.fire({
+          type: 'error',
+          title: 'Oopps..',
+          text: 'Terjadi kesalahan',
+        })
+      }
+    })
   }
 </script>

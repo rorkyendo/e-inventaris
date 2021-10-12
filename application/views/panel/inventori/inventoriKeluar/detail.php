@@ -32,12 +32,6 @@
             <div class="col-md-6">
               <table>
                 <tr>
-                  <td>ID Faktur</td>
-                  <td> :
-                    <?php echo $faktur[0]->id_faktur; ?>
-                  </td>
-                </tr>
-                <tr>
                   <td>Kode Faktur</td>
                   <td> :
                     <?php echo $faktur[0]->kode_faktur; ?>
@@ -98,7 +92,19 @@
               </table>
             </div>
             <div class="col-md-6">
-              <img src="<?php echo base_url() . $faktur[0]->qrcode_faktur; ?>" class="img-responsive pull-right" alt="" style="width:250px">
+              <table class="table table-bordered" class="pull-right" style="width: 100%;">
+                <tr>
+                  <td align="center" colspan="2">ID FAKTUR : <?php echo $faktur[0]->id_faktur;?></td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <img src="<?php echo base_url() . $faktur[0]->qrcode_faktur; ?>" class="img-responsive" alt="" style="width:80px">
+                  </td>
+                  <td align="center">
+                    <img src="<?php echo base_url() . $faktur[0]->barcode_faktur; ?>" class="img-responsive" alt="" style="width:80px">
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
           <div class="col-md-12">

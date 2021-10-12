@@ -180,7 +180,7 @@
 
   function printCode(data) {
     var printWindow = window.open('', '', 'height=400,width=800');
-    printWindow.document.write('<html><head><title>CETAK TRANSAKSI</title>');
+    printWindow.document.write('<html><head><title>CETAK INVENTORI</title>');
     printWindow.document.write('<style>@media print{@page{size: 80mm auto} #pre_print {width: 80mm;font-size: 15px;}}</style></head><body>');
     printWindow.document.write(data);
     printWindow.document.write('</body></html>');

@@ -63,4 +63,18 @@ class Scan extends CI_Controller
 			$this->load->view('panel/content', $data);
 	}
 
+	public function cariFaktur(){
+		$faktur = $this->input->get('faktur');
+		if (!empty($faktur)) {
+			$getFaktur = $this->GeneralModel->get_by_id_general('v_faktur','id_faktur',$faktur);
+			if ($getFaktur == TRUE) {
+				echo json_encode($getFaktur,JSON_PRETTY_PRINT);
+			}else{
+				echo 'false';
+			}
+		}else{
+			echo 'false';
+		}
+	}
+
 }
