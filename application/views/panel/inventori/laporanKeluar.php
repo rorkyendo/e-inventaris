@@ -146,7 +146,7 @@
           "data": "id_faktur",
           width: 100,
           render: function(data, type, row) {
-            return '<a href="<?php echo base_url('panel/inventori/detailInventoriMasuk/');?>'+row.id_faktur+'" class="btn btn-xs btn-primary">'+row.id_faktur+'</a>';
+            return '<a href="<?php echo base_url('panel/inventori/detailInventoriKeluar/');?>'+row.id_faktur+'" class="btn btn-xs btn-primary">'+row.id_faktur+'</a>';
           }
         },
         {
