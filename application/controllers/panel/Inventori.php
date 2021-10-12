@@ -456,7 +456,7 @@ class Inventori extends CI_Controller
 				$id_faktur = $this->db->insert_id();
 				//------------------ Pembuatan Barcode ----------------------------//
 				$this->zend->load('Zend/Barcode.php'); 
-				$barcode = $id_faktur;
+				$barcode = $id_faktur.'.png';
 				$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$barcode), array())->draw($barcode,'image', array('text'=>$barcode), array());
 				$imageName = $barcode;
 				$imagePath = 'assets/img/barcodefaktur/';
@@ -720,7 +720,7 @@ class Inventori extends CI_Controller
 				$id_faktur = $this->db->insert_id();
 				//------------------ Pembuatan Barcode ----------------------------//
 				$this->zend->load('Zend/Barcode.php'); 
-				$barcode = $id_faktur;
+				$barcode = $id_faktur.'.png';
 				$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$barcode), array())->draw($barcode,'image', array('text'=>$barcode), array());
 				$imageName = $barcode;
 				$imagePath = 'assets/img/barcodefaktur/';
