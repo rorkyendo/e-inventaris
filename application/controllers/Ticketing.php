@@ -48,13 +48,13 @@ class Ticketing extends CI_Controller {
   }
 
   public function cekLaporan(){
-	$data['detailLaporan'] = $this->GeneralModel->get_by_id_general('v_ticketing','id_ticketing',$this->input->get('id_ticketing'));
+	$data['detailLaporan'] = $this->GeneralModel->get_by_id_general('v_ticketing','id_ticket',$this->input->get('id_ticketing'));
 	$data['appsProfile'] = $this->SettingsModel->get_profile();
 	$this->load->view('cekLaporan',$data);
   }
 
   public function getSubUnit(){
-	  $getSubUnit = $this->GeneralModel->get_by_id_general('e_sub_unit','id_unit',$this->input->get('id_unit'));
+	  $getSubUnit = $this->GeneralModel->get_by_id_general('e_sub_unit','unit',$this->input->get('id_unit'));
 	  if ($getSubUnit) {
 		  echo json_encode($getSubUnit,JSON_PRETTY_PRINT);
 	  }else{

@@ -71,92 +71,87 @@
 	<div class="container">
 			<div class="row">
 					<div class="form-box col-md-8 col-sm-10 col-xs-12">
-							<div class="col-lg-12 form-login" align="center">
-									<img src="<?php echo base_url().$appsProfile->logo;?>" class="logo"><br />
-									<h2 align="center" class="text-grey text-light">Menu Laporan Aplikasi</h2><br />
-									<form method="post" action="<?php echo base_url('ticketing/lapor/doCreate');?>" enctype="multipart/form-data">
+							<div class="col-lg-12 form-login">
+									<?php if(empty($detailLaporan)): ?>
+										<img src="<?php echo base_url().$appsProfile->logo;?>" class="logo"><br />
+									<?php else:?>
+										<img src="<?php echo base_url().$appsProfile->logo;?>" style="margin-top: 320px;" class="logo"><br />
+									<?php endif; ?>
+									<h2 align="center" class="text-grey text-light">Detail Laporan Aplikasi</h2><br />
+									<form method="GET" action="<?php echo base_url('ticketing/cekLaporan');?>">
 										<?php echo $this->session->flashdata('notif');?>
-											<center>
-												<h3 class="text-center">Foto Laporan</h3>
-												<img src="<?php echo base_url('assets/img/no-image.png');?>" class="img-responsive" style="width:300px" id="preview" alt="Preview">
-												<br>
+											<?php if(empty($detailLaporan)): ?>
 												<div class="form-group">
-														<input type="file" name="foto_laporan" id="foto_laporan" class="form-control" placeholder="Masukkan Foto Laporan" accept="image/*" required/>
+													<input type="text" name="id_ticketing" id="id_ticketing" class="form-control" placeholder="Masukkan ID Tiket" required/>
 												</div>
-												<script type="text/javascript">
-												function readURL(input) {
-													if (input.files && input.files[0]) {
-													var reader = new FileReader();
-													reader.onload = function(e) {
-														$('#preview').attr('src', e.target.result);
-													}
-													reader.readAsDataURL(input.files[0]);
-													}
-												}
-												$("#foto_laporan").change(function() {
-													readURL(this);
-												});
-												</script>
-											</center>
-											<div class="form-group">
-													<input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" placeholder="Masukkan Nama Lengkap" required/>
+											<?php endif; ?>
+											<?php foreach($detailLaporan as $key):?>
+											<div class="table-responsive">
+												<table class="table table-striped table-bordered">
+													<tr>
+														<td colspan="2" align="center">
+															<img src="<?php echo base_url().$key->foto_laporan;?>" style="width:300px" alt="Foto laporan" class="img-responsive">
+														</td>
+														<tr align="left">
+															<td>ID Tiket</td>
+															<td> <?php echo $key->id_ticket;?></td>
+														</tr>
+														<tr align="left">
+															<td>Nama Pelapor</td>
+															<td> <?php echo $key->nama_lengkap;?></td>
+														</tr>
+														<tr align="left">
+															<td>Unit</td>
+															<td> <?php echo $key->nama_unit;?></td>
+														</tr>
+														<tr align="left">
+															<td>Sub Unit</td>
+															<td> <?php echo $key->nama_sub_unit;?></td>
+														</tr>
+														<tr align="left">
+															<td>Detail Lokasi</td>
+															<td> <?php echo $key->detail_lokasi;?></td>
+														</tr>
+														<tr align="left">
+															<td>Keterangan Laporan</td>
+															<td> <?php echo $key->keterangan_laporan;?></td>
+														</tr>
+														<tr align="left">
+															<td>Tgl Laporan</td>
+															<td> <?php echo $key->dibuat_pada;?></td>
+														</tr>
+														<tr align="left">
+															<td>Status Laporan</td>
+															<?php if($key->status_laporan == 'N'): ?>
+																<td><b class="text-danger">Belum ditanggapi</b></td>
+															<?php else: ?>
+																<td><b class="text-success">Sudah ditanggapi</b></td>
+															<?php endif; ?>
+														</tr>
+														<tr align="left">
+															<td>Ditanggapi Oleh</td>
+															<td> <?php echo $key->nama_penanggap;?></td>
+														</tr>
+														<tr align="left">
+															<td>Tanggapan Laporan</td>
+															<td> <?php echo $key->tanggapan_laporan;?></td>
+														</tr>
+														<tr align="left">
+															<td>Ditanggapi pada</td>
+															<td> <?php echo $key->ditanggapi_pada;?></td>
+														</tr>
+													</tr>
+												</table>
 											</div>
-											<div class="form-group">
-													<select name="id_unit" class="form-control select2" id="id_unit" onchange="cariSubUnit(this.value)">
-														<option value="">.:Pilih Unit:.</option>
-														<?php foreach($unit as $key):?>
-															<option value="<?php echo $key->id_unit;?>"><?php echo $key->nama_unit;?></option>
-														<?php endforeach;?>
-													</select>
-											</div>
-											<div class="form-group">
-													<select name="id_sub_unit" class="form-control select2" id="id_sub_unit">
-														<option value="">.:Pilih Sub Unit:.</option>
-													</select>
-											</div>
-											<script>
-												function cariSubUnit(val){
-												$('#id_sub_unit').html('<option value="">.:Pilih Sub Unit:.</option>');
-												$.ajax({
-													url:"<?php echo base_url('ticketing/getSubUnit');?>",
-													type:"GET",
-													data:{
-													"id_unit":val
-													},success:function(resp){
-													if (resp!='false') {
-														var data = JSON.parse(resp)
-														$.each(data,function(key,val){
-															$('#id_sub_unit').append('<option value="'+val.id_sub_unit+'">'+val.nama_sub_unit+'</option>');
-														})
-													}else{
-														Swal.fire({
-														type: 'error',
-														title: 'Gagal',
-														text: 'Sub unit tidak ditemukan',
-														})
-													}
-													},error:function(){
-													Swal.fire({
-														type: 'error',
-														title: 'Oopps..',
-														text: 'Terjadi kesalahan',
-													})
-													}
-												})
-												}
-											</script>
-											<div class="form-group">
-													<input type="text" name="detail_lokasi" id="detail_lokasi" class="form-control" placeholder="Masukkan Detail Lokasi" required/>
-											</div>
-											<div class="form-group">
-													<input type="text" name="keterangan_laporan" id="keterangan_laporan" class="form-control" placeholder="Masukkan Keterangan Laporan" required/>
-											</div>
+											<?php endforeach;?>
 											<br />
 											<div class="form-group" align="center">
-													<button type="submit" class="btn btn-flat btn-success"><i class="fa fa-envelope"></i> Kirim Laporan</button>
+													<?php if(empty($detailLaporan)): ?>
+														<button type="submit" class="btn btn-flat btn-success"><i class="fa fa-search"></i> Cari Laporan</button>
+													<?php endif; ?>
 													<hr/>
 													<a href="<?php echo base_url();?>" class="btn btn-flat btn-danger"><i class="fa fa-backward"></i> Laman login</a>
-													<a href="<?php echo base_url('ticketing/cekLaporan');?>" class="btn btn-flat btn-info"><i class="fa fa-info-circle"></i> Cek Laporan</a>
+													<a href="<?php echo base_url('ticketing/lapor');?>" class="btn btn-flat btn-primary"><i class="fa fa-pencil"></i> Buat Laporan</a>
 													<br>
 													<small><?php echo $appsProfile->footer;?></small>
 											</div>
