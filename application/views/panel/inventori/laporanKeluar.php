@@ -201,7 +201,7 @@
           render: function(data, type, row) {
             if (row.status_keluar == 'pinjam') {
               return '<b class="text-warning">Dipinjam</b>';
-            }else if(row.kategori_faktur == 'out'){
+            }else if(row.status_keluar == 'rusak'){
               return '<b class="text-danger">Rusak</b>';
             }
           }
