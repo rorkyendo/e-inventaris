@@ -5,7 +5,7 @@
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-	<title><?php echo $appsProfile->apps_name;?></title>
+	<title><?php echo $appsProfile->apps_name;?> | LAPOR </title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -16,6 +16,7 @@
 	<link href="<?php echo base_url('assets/');?>plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+	<link href="<?php echo base_url('assets/'); ?>plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>css/animate.min.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>css/login.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>css/style-responsive.min.css" rel="stylesheet" />
@@ -23,6 +24,7 @@
 	<link href="<?php echo base_url('assets/');?>css/uniform.default.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>css/loginv2.css" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/');?>css/login.anim.css" rel="stylesheet" />
+	<link href="<?php echo base_url('assets/'); ?>plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 	<!-- ================== END BASE CSS STYLE ================== -->
 
 	<!-- ================== BEGIN BASE JS ================== -->
@@ -31,6 +33,7 @@
 	<script src="<?php echo base_url('assets/');?>plugins/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 	<script src="<?php echo base_url('assets/');?>plugins/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url('assets/');?>js/main.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/sweetalert/sweetalert2.all.js"></script>
 	<!-- ================== END BASE JS ================== -->
 	<script>
 	if ('serviceWorker' in navigator) {
@@ -68,34 +71,92 @@
 	<div class="container">
 			<div class="row">
 					<div class="form-box col-md-8 col-sm-10 col-xs-12">
-							<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12 univ-identity-box">
-									<div class="univ-text">
-											<h4 class="welcome text-light">Selamat Datang</h4>
-											<div class="clearfix"></div>
-											<h2 class="no-margin text-light"><?php echo $appsProfile->apps_name;?></h2>
-									</div>
-							</div>
-							<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12 form-login" align="center">
+							<div class="col-lg-12 form-login" align="center">
 									<img src="<?php echo base_url().$appsProfile->logo;?>" class="logo"><br />
-									<h2 align="center" class="text-grey text-light">Silakan Login</h2><br />
-									<form method="post" action="<?php echo base_url('auth/login/do_login');?>">
+									<h2 align="center" class="text-grey text-light">Menu Laporan Aplikasi</h2><br />
+									<form method="post" action="<?php echo base_url('ticketing/lapor/doCreate');?>" enctype="multipart/form-data">
 										<?php echo $this->session->flashdata('notif');?>
+											<center>
+												<h3 class="text-center">Foto Laporan</h3>
+												<img src="<?php echo base_url('assets/img/no-image.png');?>" class="img-responsive" style="width:300px" id="preview" alt="Preview">
+												<br>
+												<div class="form-group">
+														<input type="file" name="foto_laporan" id="foto_laporan" class="form-control" placeholder="Masukkan Foto Laporan" required/>
+												</div>
+												<script type="text/javascript">
+												function readURL(input) {
+													if (input.files && input.files[0]) {
+													var reader = new FileReader();
+													reader.onload = function(e) {
+														$('#preview').attr('src', e.target.result);
+													}
+													reader.readAsDataURL(input.files[0]);
+													}
+												}
+												$("#foto_laporan").change(function() {
+													readURL(this);
+												});
+												</script>
+											</center>
 											<div class="form-group">
-													<i class="fa fa-user icon-input"></i> <input type="text" name="username" id="userid" class="form-control input-line" placeholder="Masukkan Akun Pengguna" required="true"/>
+													<input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" placeholder="Masukkan Nama Lengkap" required/>
 											</div>
 											<div class="form-group">
-													<div class="password">
-															<i style="margin-left:-20px;" class="fa fa-key icon-input"></i>
-															<input type="password" id="password" name="password" class="form-control input-line" placeholder="Masukkan Kata Sandi" required="true"/>
-															<span id="iconshow" name="iconshow" onClick="showPass()" class=" showbtn fa fa-eye-slash"></span>
-													</div>
+													<select name="id_unit" class="form-control select2" id="id_unit" onchange="cariSubUnit(this.value)">
+														<option value="">.:Pilih Unit:.</option>
+														<?php foreach($unit as $key):?>
+															<option value="<?php echo $key->id_unit;?>"><?php echo $key->nama_unit;?></option>
+														<?php endforeach;?>
+													</select>
+											</div>
+											<div class="form-group">
+													<select name="id_sub_unit" class="form-control select2" id="id_sub_unit">
+														<option value="">.:Pilih Sub Unit:.</option>
+													</select>
+											</div>
+											<script>
+												function cariSubUnit(val){
+												$('#id_unit').html('<option value="">.:Pilih Sub Unit:.</option>');
+												$.ajax({
+													url:"<?php echo base_url('ticketing/getSubUnit');?>",
+													type:"GET",
+													data:{
+													"id_unit":val
+													},success:function(resp){
+													if (resp!='false') {
+														var data = JSON.parse(resp)
+														$.each(data,function(key,val){
+															$('#id_sub_unit').append('<option value="'+val.id_sub_unit+'">'+val.nama_sub_unit+'</option>');
+														})
+													}else{
+														Swal.fire({
+														type: 'error',
+														title: 'Gagal',
+														text: 'Sub unit tidak ditemukan',
+														})
+													}
+													},error:function(){
+													Swal.fire({
+														type: 'error',
+														title: 'Oopps..',
+														text: 'Terjadi kesalahan',
+													})
+													}
+												})
+												}
+											</script>
+											<div class="form-group">
+													<input type="text" name="detail_lokasi" id="detail_lokasi" class="form-control" placeholder="Masukkan Detail Lokasi" required/>
+											</div>
+											<div class="form-group">
+													<input type="text" name="keterangan_laporan" id="keterangan_laporan" class="form-control" placeholder="Masukkan Keterangan Laporan" required/>
 											</div>
 											<br />
 											<div class="form-group" align="center">
-													<button type="submit" class="btn btn-flat btn-primary ">Masuk Aplikasi <i class="fa fa-angle-right"></i></button>
+													<button type="submit" class="btn btn-flat btn-success"><i class="fa fa-envelope"></i> Kirim Laporan</button>
 													<hr/>
+													<a href="<?php echo base_url();?>" class="btn btn-flat btn-danger"><i class="fa fa-backward"></i> Laman login</a>
 													<a href="<?php echo base_url('ticketing/cekLaporan');?>" class="btn btn-flat btn-info"><i class="fa fa-info-circle"></i> Cek Laporan</a>
-													<a href="<?php echo base_url('ticketing/lapor');?>" class="btn btn-flat btn-primary"><i class="fa fa-pencil"></i> Buat Laporan</a>
 													<br>
 													<small><?php echo $appsProfile->footer;?></small>
 											</div>
@@ -122,6 +183,10 @@
 		$(document).ready(function() {
 			App.init();
 		});
+	</script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/select2/dist/js/select2.min.js"></script>
+		<script type="text/javascript">
+		$('.select2').select2();
 	</script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
