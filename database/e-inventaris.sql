@@ -23,10 +23,13 @@ CREATE TABLE IF NOT EXISTS `e_detail_faktur` (
   KEY `FK_detail_faktur_id_inventori` (`id_inventori`),
   CONSTRAINT `FK_detail_faktur_id_faktur` FOREIGN KEY (`id_faktur`) REFERENCES `e_faktur` (`id_faktur`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_detail_faktur_id_inventori` FOREIGN KEY (`id_inventori`) REFERENCES `e_inventori` (`id_inventori`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table e-inventori.e_detail_faktur: ~2 rows (approximately)
 /*!40000 ALTER TABLE `e_detail_faktur` DISABLE KEYS */;
+INSERT INTO `e_detail_faktur` (`id_detail_faktur`, `id_faktur`, `id_inventori`, `jumlah_inventori`, `harga_barang`) VALUES
+	(1, 27, 14, 100, NULL),
+	(2, 28, 14, 100, 25000);
 /*!40000 ALTER TABLE `e_detail_faktur` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_faktur
@@ -36,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `e_faktur` (
   `catatan_faktur` varchar(250) NOT NULL,
   `kategori_faktur` enum('in','out') NOT NULL,
   `status_keluar` enum('pinjam','rusak') DEFAULT NULL,
+  `status_pengembalian` enum('belum','sudah') DEFAULT 'belum',
   `status_approval` enum('pending','accept','reject') NOT NULL DEFAULT 'pending',
   `created_by` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -43,6 +47,8 @@ CREATE TABLE IF NOT EXISTS `e_faktur` (
   `updated_time` datetime DEFAULT NULL,
   `approval_by` int(11) DEFAULT NULL,
   `approval_time` datetime DEFAULT NULL,
+  `dikembalikan_oleh` int(11) DEFAULT NULL,
+  `tgl_pengembalian` datetime DEFAULT NULL,
   `qrcode_faktur` varchar(250) DEFAULT NULL,
   `barcode_faktur` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id_faktur`),
@@ -52,17 +58,13 @@ CREATE TABLE IF NOT EXISTS `e_faktur` (
   CONSTRAINT `FK_e_faktur_e_pengguna` FOREIGN KEY (`approval_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_faktur_created` FOREIGN KEY (`created_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_faktur_updated` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_faktur: ~5 rows (approximately)
+-- Dumping data for table e-inventori.e_faktur: ~2 rows (approximately)
 /*!40000 ALTER TABLE `e_faktur` DISABLE KEYS */;
-INSERT INTO `e_faktur` (`id_faktur`, `kode_faktur`, `catatan_faktur`, `kategori_faktur`, `status_keluar`, `status_approval`, `created_by`, `created_time`, `updated_by`, `updated_time`, `approval_by`, `approval_time`, `qrcode_faktur`, `barcode_faktur`) VALUES
-	(14, NULL, 'Faktur dari toko A', 'in', NULL, 'accept', 1, '2021-06-12 11:26:59', 1, '2021-06-12 12:02:18', 1, '2021-06-12 12:02:18', 'assets/img/qrfaktur/Faktur-14.png', NULL),
-	(16, NULL, 'Pemesanan Barang dari TOKO A', 'out', NULL, 'accept', 1, '2021-06-12 15:32:45', 1, '2021-06-12 15:40:52', 1, '2021-06-12 15:40:52', 'assets/img/qrfaktur/Faktur-16.png', NULL),
-	(17, NULL, 'Faktur Masuk dari Toko B', 'in', NULL, 'accept', 1, '2021-06-12 15:42:53', 1, '2021-06-12 15:43:11', 1, '2021-06-12 15:43:11', 'assets/img/qrfaktur/Faktur-17.png', NULL),
-	(18, NULL, 'Pemesanan Barang dari TOKO A', 'out', NULL, 'accept', 1, '2021-06-12 15:43:46', 1, '2021-06-12 15:44:54', 1, '2021-06-12 15:44:54', 'assets/img/qrfaktur/Faktur-18.png', NULL),
-	(21, 'A1234', 'Percobaan', 'in', NULL, 'accept', 1, '2021-10-04 16:01:13', 1, '2021-10-04 22:51:07', 1, '2021-10-04 22:51:07', 'assets/img/qrfaktur/Faktur-21.png', NULL),
-	(26, 'A123', 'Faktur dari toko A', 'in', NULL, 'pending', 1, '2021-10-08 09:43:47', NULL, NULL, NULL, NULL, 'assets/img/qrfaktur/Faktur-26.png', 'assets/img/barcodefaktur/26.jpg');
+INSERT INTO `e_faktur` (`id_faktur`, `kode_faktur`, `catatan_faktur`, `kategori_faktur`, `status_keluar`, `status_pengembalian`, `status_approval`, `created_by`, `created_time`, `updated_by`, `updated_time`, `approval_by`, `approval_time`, `dikembalikan_oleh`, `tgl_pengembalian`, `qrcode_faktur`, `barcode_faktur`) VALUES
+	(27, 'A123', 'Peminjaman Untuk Acara PEMA', 'out', 'pinjam', 'sudah', 'accept', 1, '2021-10-12 10:11:56', 1, '2021-10-12 13:08:37', 1, '2021-10-12 13:08:37', 1, '2021-10-12 22:27:44', 'assets/img/qrfaktur/Faktur-27.png', 'assets/img/barcodefaktur/27'),
+	(28, 'A123', 'Penambahan inventori', 'in', NULL, 'belum', 'pending', 1, '2021-10-12 10:35:21', NULL, NULL, NULL, NULL, NULL, NULL, 'assets/img/qrfaktur/Faktur-28.png', 'assets/img/barcodefaktur/28');
 /*!40000 ALTER TABLE `e_faktur` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_hak_akses
@@ -79,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `e_hak_akses` (
 -- Dumping data for table e-inventori.e_hak_akses: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_hak_akses` DISABLE KEYS */;
 INSERT INTO `e_hak_akses` (`id_hak_akses`, `nama_hak_akses`, `modul_akses`, `parent_modul_akses`, `created_time`) VALUES
-	(1, 'superuser', '{\n    "modul": [\n        "pengguna",\n        "createPengguna",\n        "updatePengguna",\n        "deletePengguna",\n        "hakAkses",\n        "createHakAkses",\n        "updateHakAkses",\n        "deleteHakAkses",\n        "daftarUnit",\n        "tambahUnit",\n        "updateUnit",\n        "deleteUnit",\n        "daftarSubUnit",\n        "tambahSubUnit",\n        "updateSubUnit",\n        "deleteSubUnit",\n        "daftarSumberDana",\n        "tambahSumberDana",\n        "updateSumberDana",\n        "deleteSumberDana",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "satuan",\n        "createSatuan",\n        "updateSatuan",\n        "deleteSatuan",\n        "inventoriMasuk",\n        "createInventoriMasuk",\n        "updateInventoriMasuk",\n        "deleteInventoriMasuk",\n        "approveInventoriMasuk",\n        "inventoriKeluar",\n        "createInventoriKeluar",\n        "updateInventoriKeluar",\n        "deleteInventoriKeluar",\n        "approveInventoriKeluar",\n        "detailInventori",\n        "detailInventoriMasuk",\n        "detailInventoriKeluar",\n        "rejectInventoriMasuk",\n        "rejectInventoriKeluar",\n        "scanInventori",\n        "scanFaktur",\n        "scanBarcodeInventori",\n        "scanBarcodeFaktur",\n        "identitasAplikasi",\n        "daftarModul"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Scan",\n        "Pengaturan"\n    ]\n}', '2021-06-10 09:21:01');
+	(1, 'superuser', '{\n    "modul": [\n        "pengguna",\n        "createPengguna",\n        "updatePengguna",\n        "deletePengguna",\n        "hakAkses",\n        "createHakAkses",\n        "updateHakAkses",\n        "deleteHakAkses",\n        "daftarUnit",\n        "tambahUnit",\n        "updateUnit",\n        "deleteUnit",\n        "daftarSubUnit",\n        "tambahSubUnit",\n        "updateSubUnit",\n        "deleteSubUnit",\n        "daftarSumberDana",\n        "tambahSumberDana",\n        "updateSumberDana",\n        "deleteSumberDana",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "satuan",\n        "createSatuan",\n        "updateSatuan",\n        "deleteSatuan",\n        "inventoriMasuk",\n        "createInventoriMasuk",\n        "updateInventoriMasuk",\n        "deleteInventoriMasuk",\n        "approveInventoriMasuk",\n        "inventoriKeluar",\n        "createInventoriKeluar",\n        "updateInventoriKeluar",\n        "deleteInventoriKeluar",\n        "approveInventoriKeluar",\n        "detailInventori",\n        "detailInventoriMasuk",\n        "detailInventoriKeluar",\n        "rejectInventoriMasuk",\n        "rejectInventoriKeluar",\n        "laporanInventori",\n        "scanInventori",\n        "scanFaktur",\n        "scanBarcodeInventori",\n        "scanBarcodeFaktur",\n        "daftarTiket",\n        "detailTiket",\n        "tanggapanTiket",\n        "hapusTiket",\n        "identitasAplikasi",\n        "daftarModul"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Scan",\n        "Tiket",\n        "Pengaturan"\n    ]\n}', '2021-06-10 09:21:01');
 /*!40000 ALTER TABLE `e_hak_akses` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_identitas
@@ -136,12 +138,12 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
   CONSTRAINT `FK_e_inventori_e_sub_unit` FOREIGN KEY (`kode_sub_unit`) REFERENCES `e_sub_unit` (`kode_sub_unit`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_e_inventori_e_sumber_dana` FOREIGN KEY (`kode_sumber_dana`) REFERENCES `e_sumber_dana` (`kode_sumber_dana`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_e_inventori_e_unit` FOREIGN KEY (`kode_unit`) REFERENCES `e_unit` (`kode_unit`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_inventori: ~2 rows (approximately)
+-- Dumping data for table e-inventori.e_inventori: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_inventori` DISABLE KEYS */;
 INSERT INTO `e_inventori` (`id_inventori`, `kode_unit`, `kode_sub_unit`, `kode_sumber_dana`, `kode_inventori`, `nama_inventori`, `satuan_inventori`, `harga_barang`, `kategori_inventori`, `jumlah_inventori`, `qrcode`, `barcode`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
-	(13, 'GF1', 'RA1', 'SA', 'KRS', 'Kursi', 1, 25000, 3, 1000, 'assets/img/qrbarang/GF1RA1KRS.png', 'assets/img/barcodebarang/GF1RA1KRS.png', 1, '2021-10-10 00:19:40', NULL, NULL);
+	(14, 'GF1', 'RA1', 'SA', 'KRS', 'Kursi', 1, NULL, 3, 1000, 'assets/img/qrbarang/GF1RA1KRS.png', 'assets/img/barcodebarang/GF1RA1KRS.png', 1, '2021-10-12 10:07:48', NULL, NULL);
 /*!40000 ALTER TABLE `e_inventori` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_kategori_inventori
@@ -185,9 +187,9 @@ CREATE TABLE IF NOT EXISTS `e_modul` (
   KEY `induk_child_modul` (`induk_child_modul`),
   CONSTRAINT `class_parent_modul` FOREIGN KEY (`class_parent_modul`) REFERENCES `e_parent_modul` (`class`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `induk_child_modul` FOREIGN KEY (`induk_child_modul`) REFERENCES `e_modul` (`controller_modul`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_modul: ~49 rows (approximately)
+-- Dumping data for table e-inventori.e_modul: ~46 rows (approximately)
 /*!40000 ALTER TABLE `e_modul` DISABLE KEYS */;
 INSERT INTO `e_modul` (`id_modul`, `controller_modul`, `nama_modul`, `link_modul`, `type_modul`, `class_parent_modul`, `created_time`, `tampil_sidebar`, `child_module`, `induk_child_modul`) VALUES
 	(1, 'pengguna', 'Daftar Pengguna', 'panel/masterdata/pengguna', 'R', 'MasterData', '2021-06-10 07:59:17', 'Y', 'N', NULL),
@@ -242,7 +244,12 @@ INSERT INTO `e_modul` (`id_modul`, `controller_modul`, `nama_modul`, `link_modul
 	(50, 'daftarSumberDana', 'Daftar Sumber Dana', 'panel/masterData/daftarSumberDana', 'R', 'MasterData', '2021-10-09 23:42:05', 'Y', 'N', NULL),
 	(51, 'tambahSumberDana', 'Tambah Sumber Dana', 'panel/masterData/tambahSumberDana', 'C', 'MasterData', '2021-10-09 23:42:34', 'N', 'N', NULL),
 	(52, 'updateSumberDana', 'Update Sumber Dana', 'panel/masterData/updateSumberDana', 'U', 'MasterData', '2021-10-09 23:42:57', 'N', 'N', NULL),
-	(53, 'deleteSumberDana', 'Delete Sumber Dana', 'panel/masterData/deleteSumberDana', 'D', 'MasterData', '2021-10-09 23:43:25', 'N', 'N', NULL);
+	(53, 'deleteSumberDana', 'Delete Sumber Dana', 'panel/masterData/deleteSumberDana', 'D', 'MasterData', '2021-10-09 23:43:25', 'N', 'N', NULL),
+	(54, 'laporanInventori', 'Laporan Inventori', 'panel/inventori/laporanInventori', 'R', 'Inventori', '2021-10-12 22:31:48', 'Y', 'N', NULL),
+	(55, 'daftarTiket', 'Daftar Tiket', 'panel/tiket/daftarTiket', 'R', 'Tiket', '2021-10-13 19:37:10', 'Y', 'N', NULL),
+	(56, 'detailTiket', 'DetailTiket', 'panel/tiket/detailTiket', 'R', 'Tiket', '2021-10-13 19:39:46', 'N', 'N', NULL),
+	(57, 'tanggapanTiket', 'Tanggapan Tiket', 'panel/tiket/tanggapanTiket', 'U', 'Tiket', '2021-10-13 19:38:03', 'N', 'N', NULL),
+	(58, 'hapusTiket', 'Hapus Tiket', 'panel/tiker/hapusTiket', 'D', 'Tiket', '2021-10-13 22:14:54', 'N', 'N', NULL);
 /*!40000 ALTER TABLE `e_modul` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_parent_modul
@@ -258,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `e_parent_modul` (
   `tampil_sidebar_parent` enum('Y','N') NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id_parent_modul`),
   UNIQUE KEY `class` (`class`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table e-inventori.e_parent_modul: ~4 rows (approximately)
 /*!40000 ALTER TABLE `e_parent_modul` DISABLE KEYS */;
@@ -266,8 +273,9 @@ INSERT INTO `e_parent_modul` (`id_parent_modul`, `class`, `nama_parent_modul`, `
 	(1, 'Dashboard', 'Dashboard', 1, 'fa fa-dashboard', '2021-06-10 07:57:29', 'N', 'panel/dashboard', 'Y'),
 	(2, 'MasterData', 'Master Data', 2, 'fa fa-desktop', '2021-06-10 07:57:59', 'Y', '#', 'Y'),
 	(3, 'Inventori', 'Inventori', 3, 'fa fa-list', '2021-06-10 07:58:18', 'Y', '#', 'Y'),
-	(4, 'Pengaturan', 'Pengaturan', 5, 'fa fa-cog', '2021-06-10 07:58:35', 'Y', '#', 'Y'),
-	(5, 'Scan', 'Scan', 4, 'fa fa-qrcode', '2021-10-05 08:20:41', 'Y', '#', 'Y');
+	(4, 'Pengaturan', 'Pengaturan', 6, 'fa fa-cog', '2021-06-10 07:58:35', 'Y', '#', 'Y'),
+	(5, 'Scan', 'Scan', 4, 'fa fa-qrcode', '2021-10-05 08:20:41', 'Y', '#', 'Y'),
+	(6, 'Tiket', 'Tiket', 5, 'fa fa-envelope', '2021-10-13 19:35:31', 'Y', '#', 'Y');
 /*!40000 ALTER TABLE `e_parent_modul` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_pengguna
@@ -300,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `e_pengguna` (
 -- Dumping data for table e-inventori.e_pengguna: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_pengguna` DISABLE KEYS */;
 INSERT INTO `e_pengguna` (`id_pengguna`, `username`, `password`, `email`, `hak_akses`, `nama_lengkap`, `foto_pengguna`, `no_wa`, `unit`, `sub_unit`, `jenkel`, `tgl_lahir`, `alamat`, `last_login`, `last_logout`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES
-	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', '', NULL, NULL, NULL, 'L', NULL, NULL, '2021-10-09 23:32:22', '2021-10-08 11:09:05', '2021-06-10 09:32:44', NULL, NULL, NULL);
+	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', '', NULL, NULL, NULL, 'L', NULL, NULL, '2021-10-13 19:36:02', '2021-10-08 11:09:05', '2021-06-10 09:32:44', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `e_pengguna` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_satuan_inventori
@@ -367,6 +375,29 @@ INSERT INTO `e_sumber_dana` (`id_sumber_dana`, `kode_sumber_dana`, `keterangan_s
 	(1, 'SA', 'Sumbangan Alumnni', 1, '2021-10-10 00:08:44', NULL, NULL);
 /*!40000 ALTER TABLE `e_sumber_dana` ENABLE KEYS */;
 
+-- Dumping structure for table e-inventori.e_ticketing
+CREATE TABLE IF NOT EXISTS `e_ticketing` (
+  `id_ticket` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_lengkap` varchar(50) NOT NULL,
+  `foto_laporan` varchar(250) NOT NULL,
+  `id_unit` int(11) DEFAULT NULL,
+  `id_sub_unit` int(11) DEFAULT NULL,
+  `detail_lokasi` varchar(250) NOT NULL,
+  `keterangan_laporan` varchar(250) NOT NULL,
+  `status_laporan` enum('Y','N') NOT NULL DEFAULT 'N',
+  `dibuat_pada` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ditanggapi_oleh` int(11) DEFAULT NULL,
+  `tanggapan_laporan` varchar(250) DEFAULT NULL,
+  `ditanggapi_pada` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_ticket`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table e-inventori.e_ticketing: ~0 rows (approximately)
+/*!40000 ALTER TABLE `e_ticketing` DISABLE KEYS */;
+INSERT INTO `e_ticketing` (`id_ticket`, `nama_lengkap`, `foto_laporan`, `id_unit`, `id_sub_unit`, `detail_lokasi`, `keterangan_laporan`, `status_laporan`, `dibuat_pada`, `ditanggapi_oleh`, `tanggapan_laporan`, `ditanggapi_pada`) VALUES
+	(1, 'Taufiq Rorkyendo', 'assets/img/fotoLaporan/ESP32-Pinout.jpg', 2, 1, 'Dekat Pojok ruang 1', 'Barangnya rusak parah', 'Y', '2021-10-13 18:54:18', 1, 'Oke akan segera kami proses, terimakasih atas laporannya', '2021-10-13 23:12:35');
+/*!40000 ALTER TABLE `e_ticketing` ENABLE KEYS */;
+
 -- Dumping structure for table e-inventori.e_unit
 CREATE TABLE IF NOT EXISTS `e_unit` (
   `id_unit` int(11) NOT NULL AUTO_INCREMENT,
@@ -402,6 +433,8 @@ CREATE TABLE `v_detail_inventori` (
 	`jumlah_inventori` INT(11) NULL,
 	`kategori_faktur` ENUM('in','out') NOT NULL COLLATE 'latin1_swedish_ci',
 	`status_keluar` ENUM('pinjam','rusak') NULL COLLATE 'latin1_swedish_ci',
+	`status_pengembalian` ENUM('belum','sudah') NULL COLLATE 'latin1_swedish_ci',
+	`status_approval` ENUM('pending','accept','reject') NOT NULL COLLATE 'latin1_swedish_ci',
 	`created_by` INT(11) NOT NULL,
 	`created_time` DATETIME NOT NULL,
 	`updated_by` INT(11) NULL,
@@ -420,17 +453,21 @@ CREATE TABLE `v_faktur` (
 	`catatan_faktur` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
 	`kategori_faktur` ENUM('in','out') NOT NULL COLLATE 'latin1_swedish_ci',
 	`status_keluar` ENUM('pinjam','rusak') NULL COLLATE 'latin1_swedish_ci',
+	`status_pengembalian` ENUM('belum','sudah') NULL COLLATE 'latin1_swedish_ci',
 	`status_approval` ENUM('pending','accept','reject') NOT NULL COLLATE 'latin1_swedish_ci',
 	`created_by` INT(11) NOT NULL,
 	`created_time` DATETIME NOT NULL,
 	`updated_by` INT(11) NULL,
 	`updated_time` DATETIME NULL,
 	`approval_time` DATETIME NULL,
+	`dikembalikan_oleh` INT(11) NULL,
+	`tgl_pengembalian` DATETIME NULL,
 	`qrcode_faktur` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci',
 	`barcode_faktur` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci',
 	`total_belanja` DECIMAL(42,0) NULL,
 	`pembuat_faktur` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
-	`pengaprove_faktur` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci'
+	`pengaprove_faktur` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci',
+	`pengembali_faktur` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view e-inventori.v_inventori
@@ -501,15 +538,35 @@ CREATE TABLE `v_sub_unit` (
 	`nama_unit` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
+-- Dumping structure for view e-inventori.v_ticketing
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_ticketing` (
+	`id_ticket` INT(11) NOT NULL,
+	`nama_lengkap` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`foto_laporan` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
+	`id_unit` INT(11) NULL,
+	`id_sub_unit` INT(11) NULL,
+	`detail_lokasi` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
+	`keterangan_laporan` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
+	`status_laporan` ENUM('Y','N') NOT NULL COLLATE 'latin1_swedish_ci',
+	`dibuat_pada` DATETIME NOT NULL,
+	`ditanggapi_oleh` INT(11) NULL,
+	`tanggapan_laporan` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci',
+	`ditanggapi_pada` DATETIME NULL,
+	`nama_unit` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci',
+	`nama_sub_unit` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci',
+	`nama_penanggap` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci'
+) ENGINE=MyISAM;
+
 -- Dumping structure for view e-inventori.v_detail_inventori
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `v_detail_inventori`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_detail_inventori` AS select `ei`.`id_inventori` AS `id_inventori`,`ei`.`kode_unit` AS `kode_unit`,`ei`.`kode_sub_unit` AS `kode_sub_unit`,`ei`.`kode_inventori` AS `kode_inventori`,`ei`.`nama_inventori` AS `nama_inventori`,`ei`.`satuan_inventori` AS `satuan_inventori`,`ei`.`harga_barang` AS `harga_barang`,`ei`.`kategori_inventori` AS `kategori_inventori`,`ei`.`jumlah_inventori` AS `jumlah_inventori`,`f`.`kategori_faktur` AS `kategori_faktur`,`f`.`status_keluar` AS `status_keluar`,`ei`.`created_by` AS `created_by`,`ei`.`created_time` AS `created_time`,`ei`.`updated_by` AS `updated_by`,`ei`.`updated_time` AS `updated_time`,`df`.`id_faktur` AS `id_faktur`,`df`.`jumlah_inventori` AS `jumlah_inventori_faktur`,`s`.`singkatan_satuan` AS `singkatan_satuan`,`df`.`harga_barang` AS `harga_barang_faktur` from (((`e_detail_faktur` `df` join `e_inventori` `ei` on((`df`.`id_inventori` = `ei`.`id_inventori`))) join `e_satuan_inventori` `s` on((`s`.`id_satuan` = `ei`.`satuan_inventori`))) join `e_faktur` `f` on((`f`.`id_faktur` = `df`.`id_faktur`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_detail_inventori` AS select `ei`.`id_inventori` AS `id_inventori`,`ei`.`kode_unit` AS `kode_unit`,`ei`.`kode_sub_unit` AS `kode_sub_unit`,`ei`.`kode_inventori` AS `kode_inventori`,`ei`.`nama_inventori` AS `nama_inventori`,`ei`.`satuan_inventori` AS `satuan_inventori`,`ei`.`harga_barang` AS `harga_barang`,`ei`.`kategori_inventori` AS `kategori_inventori`,`ei`.`jumlah_inventori` AS `jumlah_inventori`,`f`.`kategori_faktur` AS `kategori_faktur`,`f`.`status_keluar` AS `status_keluar`,`f`.`status_pengembalian` AS `status_pengembalian`,`f`.`status_approval` AS `status_approval`,`ei`.`created_by` AS `created_by`,`ei`.`created_time` AS `created_time`,`f`.`updated_by` AS `updated_by`,`f`.`updated_time` AS `updated_time`,`df`.`id_faktur` AS `id_faktur`,`df`.`jumlah_inventori` AS `jumlah_inventori_faktur`,`s`.`singkatan_satuan` AS `singkatan_satuan`,`df`.`harga_barang` AS `harga_barang_faktur` from (((`e_detail_faktur` `df` join `e_inventori` `ei` on((`df`.`id_inventori` = `ei`.`id_inventori`))) join `e_satuan_inventori` `s` on((`s`.`id_satuan` = `ei`.`satuan_inventori`))) join `e_faktur` `f` on((`f`.`id_faktur` = `df`.`id_faktur`)));
 
 -- Dumping structure for view e-inventori.v_faktur
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `v_faktur`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_faktur` AS select `f`.`id_faktur` AS `id_faktur`,`f`.`kode_faktur` AS `kode_faktur`,`f`.`catatan_faktur` AS `catatan_faktur`,`f`.`kategori_faktur` AS `kategori_faktur`,`f`.`status_keluar` AS `status_keluar`,`f`.`status_approval` AS `status_approval`,`f`.`created_by` AS `created_by`,`f`.`created_time` AS `created_time`,`f`.`updated_by` AS `updated_by`,`f`.`updated_time` AS `updated_time`,`f`.`approval_time` AS `approval_time`,`f`.`qrcode_faktur` AS `qrcode_faktur`,`f`.`barcode_faktur` AS `barcode_faktur`,sum((`df`.`harga_barang` * `df`.`jumlah_inventori`)) AS `total_belanja`,`p`.`nama_lengkap` AS `pembuat_faktur`,`p2`.`nama_lengkap` AS `pengaprove_faktur` from (((`e_faktur` `f` join `e_detail_faktur` `df` on((`f`.`id_faktur` = `df`.`id_faktur`))) join `e_pengguna` `p` on((`p`.`id_pengguna` = `f`.`created_by`))) left join `e_pengguna` `p2` on((`p2`.`id_pengguna` = `f`.`approval_by`))) group by `df`.`id_faktur`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_faktur` AS select `f`.`id_faktur` AS `id_faktur`,`f`.`kode_faktur` AS `kode_faktur`,`f`.`catatan_faktur` AS `catatan_faktur`,`f`.`kategori_faktur` AS `kategori_faktur`,`f`.`status_keluar` AS `status_keluar`,`f`.`status_pengembalian` AS `status_pengembalian`,`f`.`status_approval` AS `status_approval`,`f`.`created_by` AS `created_by`,`f`.`created_time` AS `created_time`,`f`.`updated_by` AS `updated_by`,`f`.`updated_time` AS `updated_time`,`f`.`approval_time` AS `approval_time`,`f`.`dikembalikan_oleh` AS `dikembalikan_oleh`,`f`.`tgl_pengembalian` AS `tgl_pengembalian`,`f`.`qrcode_faktur` AS `qrcode_faktur`,`f`.`barcode_faktur` AS `barcode_faktur`,sum((`df`.`harga_barang` * `df`.`jumlah_inventori`)) AS `total_belanja`,`p`.`nama_lengkap` AS `pembuat_faktur`,`p2`.`nama_lengkap` AS `pengaprove_faktur`,`p3`.`nama_lengkap` AS `pengembali_faktur` from ((((`e_faktur` `f` join `e_detail_faktur` `df` on((`f`.`id_faktur` = `df`.`id_faktur`))) join `e_pengguna` `p` on((`p`.`id_pengguna` = `f`.`created_by`))) left join `e_pengguna` `p2` on((`p2`.`id_pengguna` = `f`.`approval_by`))) left join `e_pengguna` `p3` on((`p3`.`id_pengguna` = `f`.`dikembalikan_oleh`))) group by `df`.`id_faktur`;
 
 -- Dumping structure for view e-inventori.v_inventori
 -- Removing temporary table and create final VIEW structure
@@ -525,6 +582,11 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `v_sub_unit`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_sub_unit` AS select `su`.`id_sub_unit` AS `id_sub_unit`,`su`.`unit` AS `unit`,`su`.`nama_sub_unit` AS `nama_sub_unit`,`su`.`kode_sub_unit` AS `kode_sub_unit`,`su`.`created_by` AS `created_by`,`su`.`created_time` AS `created_time`,`su`.`updated_by` AS `updated_by`,`su`.`updated_time` AS `updated_time`,`u`.`kode_unit` AS `kode_unit`,`u`.`nama_unit` AS `nama_unit` from (`e_sub_unit` `su` join `e_unit` `u` on((`su`.`unit` = `u`.`id_unit`)));
+
+-- Dumping structure for view e-inventori.v_ticketing
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_ticketing`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_ticketing` AS select `t`.`id_ticket` AS `id_ticket`,`t`.`nama_lengkap` AS `nama_lengkap`,`t`.`foto_laporan` AS `foto_laporan`,`t`.`id_unit` AS `id_unit`,`t`.`id_sub_unit` AS `id_sub_unit`,`t`.`detail_lokasi` AS `detail_lokasi`,`t`.`keterangan_laporan` AS `keterangan_laporan`,`t`.`status_laporan` AS `status_laporan`,`t`.`dibuat_pada` AS `dibuat_pada`,`t`.`ditanggapi_oleh` AS `ditanggapi_oleh`,`t`.`tanggapan_laporan` AS `tanggapan_laporan`,`t`.`ditanggapi_pada` AS `ditanggapi_pada`,`u`.`nama_unit` AS `nama_unit`,`su`.`nama_sub_unit` AS `nama_sub_unit`,`p`.`nama_lengkap` AS `nama_penanggap` from (((`e_ticketing` `t` left join `e_pengguna` `p` on((`t`.`ditanggapi_oleh` = `p`.`id_pengguna`))) left join `e_unit` `u` on((`t`.`id_unit` = `u`.`id_unit`))) left join `e_sub_unit` `su` on(((`t`.`id_sub_unit` = `su`.`id_sub_unit`) and (`u`.`id_unit` = `su`.`unit`))));
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
