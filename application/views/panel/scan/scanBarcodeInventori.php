@@ -29,12 +29,12 @@
         <div class="panel-body">
           <div class="col-md-12">
           <center>
-            <h3>Scan QR disini</h3>
+            <h3>Scan Barcode disini</h3>
             <br>
               <div hidden id="reader" class="img-fluid" style="width:280px"></div>
               <br>
               <br>
-              <button class="btn btn-xs btn-info" type="button" onclick="scan()"><i class="fa fa-camera"></i> Scan</button>
+              <button class="btn btn-xs btn-info" type="button" id="btn"><i class="fa fa-camera"></i> Scan</button>
               <br>
               <br>
             </center>
@@ -45,7 +45,7 @@
             <table class="table table-striped table-bordered" style="width:100%">
               <tbody>
                 <tr>
-                  <td id="qrCode" colspan="4" align="center"></td>
+                  <td id="barcode" colspan="4" align="center"></td>
                 </tr>
                 <tr>
                   <td>Nama Unit</td>
@@ -78,45 +78,102 @@
 </div>
 <!-- end #content -->
 <script>
-  const html5QrCode = new Html5Qrcode("reader");
-  var sound = new Audio("<?php echo base_url('assets/audio/');?>beep.mp3");
+    var _scannerIsRunning = false;
+    var sound = new Audio("<?php echo base_url('assets/audio/');?>beep.mp3");
 
-  function scan(){
-    $("#reader").removeAttr('hidden')
-    // This method will trigger user permissions
-    Html5Qrcode.getCameras().then(devices => {
-    /**
-     * devices would be an array of objects of type:
-     * { id: "id", label: "label" }
-     */
-    if (devices && devices.length) {
-      var cameraId = devices[0].id;
-      html5QrCode.start(
-      { facingMode: "environment" },
-      {
-        fps: 10,    // sets the framerate to 10 frame per second 
-        qrbox: 180  // sets only 250 X 250 region of viewfinder to
-              // scannable, rest shaded.
-      },
-      qrCodeMessage => {
-        // do something when code is read. For example:
-        sound.play();	
-        cariInventori(qrCodeMessage)
-      },
-      errorMessage => {
-        // parse error, ideally ignore it. For example:
-        // console.log(`QR Code no longer in front of camera.`);
-      })
-      .catch(err => {
-        // Start failed, handle it. For example, 
-        console.log(`Unable to start scanning, error: ${err}`);
-      });
+    function startScanner() {
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#reader'),
+                constraints: {
+                    width: 480,
+                    height: 240,
+                    facingMode: "environment"
+                },
+            },
+            decoder: {
+                readers: [
+                    "code_128_reader"
+                ],
+                debug: {
+                    showCanvas: true,
+                    showPatches: true,
+                    showFoundPatches: true,
+                    showSkeleton: true,
+                    showLabels: true,
+                    showPatchLabels: true,
+                    showRemainingPatchLabels: true,
+                    boxFromPatches: {
+                        showTransformed: true,
+                        showTransformedBox: true,
+                        showBB: true
+                    }
+                }
+            },
+
+        }, function (err) {
+            if (err) {
+                console.log(err);
+                return
+            }
+
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+
+            // Set flag to is running
+            _scannerIsRunning = true;
+        });
+
+        Quagga.onProcessed(function (result) {
+            var drawingCtx = Quagga.canvas.ctx.overlay,
+            drawingCanvas = Quagga.canvas.dom.overlay;
+
+            if (result) {
+                if (result.boxes) {
+                    drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                    result.boxes.filter(function (box) {
+                        return box !== result.box;
+                    }).forEach(function (box) {
+                        Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
+                    });
+                }
+
+                if (result.box) {
+                    Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
+                }
+
+                if (result.codeResult && result.codeResult.code) {
+                    Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
+                }
+            }
+            $('.drawingBuffer').attr('hidden',true);
+        });
+
+        Quagga.onDetected(function (result) {
+            sound.play();	
+            cariInventori(result.codeResult.code);
+            Quagga.offDetected();
+            Quagga.stop();
+            startScanner();
+        });
+
     }
-    }).catch(err => {
-    // handle err
-    });
-  }
+
+    // Start/stop scanner
+    $('#btn').on("click",function(){
+        if (_scannerIsRunning) {
+            Quagga.stop();
+            _scannerIsRunning = false;
+            $("#reader").attr('hidden',true);
+        } else {
+            $("#reader").removeAttr('hidden');
+            startScanner();
+        }
+    })
 </script>
+
 <script>
   function cariInventori(kode_inventori){
     $.ajax({
@@ -128,16 +185,14 @@
       success:function(resp){
         if (resp!='false') {          
           var data = JSON.parse(resp)
-          html5QrCode.stop().then((ignore) => {
-            // QR Code scanning is stopped.
-            $('#reader').attr('hidden',true);
-          }).catch((err) => {
-            // Stop failed, handle it.
-          });
+
+          Quagga.stop();
+          _scannerIsRunning = false;
+          $('#reader').attr('hidden',true);
           
           $.each(data,function(key,val){
             var kode = val.kode_unit+'/'+val.kode_sub_unit+'/'+val.kode_inventori;
-            $('#qrCode').html('<img src="<?php echo base_url();?>'+val.qrcode+'" class="img-responsive" style="width:220px;height:220px">')     
+            $('#barcode').html('<img src="<?php echo base_url();?>'+val.barcode+'" class="img-responsive" style="width:220px;height:220px">')     
             $('#unit').text(val.nama_unit)     
             $('#subUnit').text(val.nama_sub_unit)     
             $('#kodeInventori').text(kode)     

@@ -63,8 +63,7 @@
 	<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>plugins/summernote/summernote.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>plugins/printThis/printThis.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>js/quagga.min.js"></script>
 
 	<style media="screen">
 		.input-container input {
