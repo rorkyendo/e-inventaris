@@ -39,7 +39,7 @@
                 <?php if (!empty($pengguna[0]->foto_pengguna)) : ?>
                   <img src="<?php echo base_url() . $pengguna[0]->foto_pengguna; ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
                 <?php else : ?>
-                  <img src="<?php echo base_url('assets/img/avatar.jpg'); ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
+                  <img src="<?php echo base_url('assets/img/no-image.png'); ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
                 <?php endif; ?>
               </center>
               <br />

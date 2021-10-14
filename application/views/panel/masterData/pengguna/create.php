@@ -36,7 +36,7 @@
             <div class="col-md-12">
               <h4 class="text-center">Preview</h4>
               <center>
-                <img src="<?php echo base_url('assets/img/avatar.jpg'); ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
+                <img src="<?php echo base_url('assets/img/no-image.png'); ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
               </center>
               <br />
               <div class="form-group">
