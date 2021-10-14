@@ -95,6 +95,13 @@
                     <?php echo $faktur[0]->pengaprove_faktur; ?>
                   </td>
                 </tr>
+                <?php if($faktur[0]->status_keluar == 'pinjam'): ?>
+                <tr>
+                  <td>Durasi Peminjaman</td>
+                  <td> :
+                    <?php echo $faktur[0]->durasi; ?> Hari
+                  </td>
+                </tr>
                 <tr>
                   <td>Dikembalikan Pada</td>
                   <td> :
@@ -107,6 +114,7 @@
                     <?php echo $faktur[0]->pengembali_faktur; ?>
                   </td>
                 </tr>
+                <?php endif; ?>
               </table>
             </div>
             <div class="col-md-6">

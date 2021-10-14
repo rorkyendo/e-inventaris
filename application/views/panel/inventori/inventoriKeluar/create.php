@@ -61,6 +61,12 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Durasi Peminjaman (Hari)</label>
+                <div class="col-md-10">
+                  <input type="number" class="form-control" placeholder="Masukkan durasi peminjaman" name="durasi"/>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Status Keluar Faktur</label>
                 <div class="col-md-10">
                   <select name="status_keluar" id="status_keluar" class="form-control" required>

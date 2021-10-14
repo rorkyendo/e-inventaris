@@ -730,6 +730,7 @@ class Inventori extends CI_Controller
 				'nim_mahasiswa' => $this->input->post('nim_mahasiswa'),
 				'kode_faktur' => $this->input->post('kode_faktur'),
 				'catatan_faktur' => $this->input->post('catatan_faktur'),
+				'durasi' => $this->input->post('durasi'),
 				'status_keluar' => $this->input->post('status_keluar'),
 				'created_by' => $this->session->userdata('id_pengguna'),
 			);
@@ -851,7 +852,9 @@ class Inventori extends CI_Controller
 		if ($param1 == 'doUpdate') {
 			$dataFaktur = array(
 				'kode_faktur' => $this->input->post('kode_faktur'),
+				'nim_mahasiswa' => $this->input->post('nim_mahasiswa'),
 				'catatan_faktur' => $this->input->post('catatan_faktur'),
+				'durasi' => $this->input->post('durasi'),
 				'status_keluar' => $this->input->post('status_keluar'),
 				'updated_by' => $this->session->userdata('id_pengguna'),
 				'updated_time' => DATE('Y-m-d H:i:s'),
@@ -901,7 +904,7 @@ class Inventori extends CI_Controller
 			$data['content'] = 'panel/inventori/inventoriKeluar/update';
 			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
 			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param1);
-			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('e_detail_faktur', 'id_faktur', $param1);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param1);
 			if ($data['faktur'][0]->status_approval != 'pending') {
 				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf data faktur yang sudah dikonfirmasi tidak bisa kamu ubah!</div>');
 				redirect(changeLink('panel/inventori/inventoriKeluar'));

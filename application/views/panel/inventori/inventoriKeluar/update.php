@@ -62,6 +62,12 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Durasi Peminjaman (Hari)</label>
+                <div class="col-md-10">
+                  <input type="number" class="form-control" value="<?php echo $row->durasi;?>" placeholder="Masukkan durasi peminjaman" name="durasi"/>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Status Keluar Faktur</label>
                 <div class="col-md-10">
                   <select name="status_keluar" id="status_keluar" class="form-control" required>
@@ -72,7 +78,7 @@
                 </div>
               </div>
               <script>
-                $("#status_keluar").val('<?php echo $key->status_keluar;?>')
+                $("#status_keluar").val('<?php echo $row->status_keluar;?>')
               </script>
               <hr />
               <div class="panel panel-inverse">

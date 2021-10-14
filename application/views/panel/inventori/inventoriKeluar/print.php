@@ -134,6 +134,11 @@ $html.=           '</td>
                 <tr>
                   <td>Di approve/reject Oleh</td>
                   <td>'.$faktur[0]->pengaprove_faktur.'</td>
+                </tr>';
+                if($faktur[0]->status_keluar == 'pinjam'):
+$html.=         '<tr>
+                  <td>Durasi Peminjaman</td>
+                  <td>'.$faktur[0]->durasi.' Hari</td>
                 </tr>
                 <tr>
                   <td>Dikembalikan Pada</td>
@@ -142,8 +147,9 @@ $html.=           '</td>
                 <tr>
                   <td>Dikembalikan oleh</td>
                   <td>'.$faktur[0]->pengembali_faktur.'</td>
-                </tr>
-        </table>';
+                </tr>';
+                endif;
+        '</table>';
 
 // Print text using writeHTMLCell()
 $pdf->writeHTML($html, true, false, false, false, '');
