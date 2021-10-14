@@ -517,6 +517,15 @@ class Inventori extends CI_Controller
 					$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
 				}
 
+				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
+				foreach ($getStaff as $key) {
+					$message = "Halo ".$key->nama_lengkap." ada faktur untuk barang masuk dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+					try {
+						sendNotifWA($key->no_wa,$message);
+					} catch (\Throwable $th) {
+					}
+				}
+
 				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori masuk berhasil ditambahkan</div>');
 				redirect(changeLink('panel/inventori/inventoriMasuk'));
 			}else{
@@ -798,6 +807,16 @@ class Inventori extends CI_Controller
 				}else{
 					$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
 				}
+
+				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
+				foreach ($getStaff as $key) {
+					$message = "Halo ".$key->nama_lengkap." ada faktur untuk barang keluar dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+					try {
+						sendNotifWA($key->no_wa,$message);
+					} catch (\Throwable $th) {
+					}
+				}
+				
 				redirect(changeLink('panel/inventori/inventoriKeluar'));
 			} else {
 				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data inventori keluar gagal ditambahkan</div>');
