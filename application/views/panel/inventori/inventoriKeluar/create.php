@@ -55,6 +55,12 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">NIM Mahasiswa</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan NIM Mahasiswa apabila peminjaman dilakukan oleh mahasiswa" name="nim_mahasiswa"/>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Status Keluar Faktur</label>
                 <div class="col-md-10">
                   <select name="status_keluar" id="status_keluar" class="form-control" required>

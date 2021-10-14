@@ -613,20 +613,33 @@ class Inventori extends CI_Controller
 		}
 	}
 		
-	public function detailInventoriMasuk($param1 = '')
+	public function detailInventoriMasuk($param1 = '', $param2 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$data['title'] = $this->title;
-		$data['subtitle'] = 'Detail Inventori Masuk';
-		$data['content'] = 'panel/inventori/inventoriMasuk/detail';
-		$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
-		$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param1);
-		$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param1);
-		if ($data['faktur'][0]->kategori_faktur != 'in') {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));
+		if ($param1=='print') {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Detail Inventori Masuk';
+			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
+			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param2);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param2);
+			if ($data['faktur'][0]->kategori_faktur != 'in') {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
+			}
+			$this->load->view('panel/inventori/inventoriMasuk/print', $data);
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Detail Inventori Masuk';
+			$data['content'] = 'panel/inventori/inventoriMasuk/detail';
+			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
+			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param1);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param1);
+			if ($data['faktur'][0]->kategori_faktur != 'in') {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
+				redirect(changeLink('panel/inventori/inventoriMasuk'));
+			}
+			$this->load->view('panel/content', $data);
 		}
-		$this->load->view('panel/content', $data);
 	}
 
 	public function approveInventoriMasuk($param1 = '')
@@ -714,6 +727,7 @@ class Inventori extends CI_Controller
 		if ($param1 == 'doCreate') {
 			$dataFaktur = array(
 				'kategori_faktur' => 'out',
+				'nim_mahasiswa' => $this->input->post('nim_mahasiswa'),
 				'kode_faktur' => $this->input->post('kode_faktur'),
 				'catatan_faktur' => $this->input->post('catatan_faktur'),
 				'status_keluar' => $this->input->post('status_keluar'),
@@ -920,20 +934,33 @@ class Inventori extends CI_Controller
 		}
 	}
 
-	public function detailInventoriKeluar($param1 = '')
+	public function detailInventoriKeluar($param1 = '',$param2='')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$data['title'] = $this->title;
-		$data['subtitle'] = 'Detail Inventori Keluar';
-		$data['content'] = 'panel/inventori/inventoriKeluar/detail';
-		$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
-		$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param1);
-		$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param1);
-		if ($data['faktur'][0]->kategori_faktur!='out') {
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
-			redirect(changeLink('panel/inventori/inventoriKeluar'));
+		if ($param1=='print') {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Detail Inventori Keluar';
+			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
+			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param2);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param2);
+			if ($data['faktur'][0]->kategori_faktur!='out') {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
+				redirect(changeLink('panel/inventori/inventoriKeluar'));
+			}			
+			$this->load->view('panel/inventori/inventoriKeluar/print',$data);
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Detail Inventori Keluar';
+			$data['content'] = 'panel/inventori/inventoriKeluar/detail';
+			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
+			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param1);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param1);
+			if ($data['faktur'][0]->kategori_faktur!='out') {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
+				redirect(changeLink('panel/inventori/inventoriKeluar'));
+			}
+			$this->load->view('panel/content', $data);
 		}
-		$this->load->view('panel/content', $data);
 	}
 
 	public function approveInventoriKeluar($param1 = '')

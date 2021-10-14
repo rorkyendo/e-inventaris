@@ -19,10 +19,8 @@
       <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
         <div class="panel-heading">
           <div class="panel-heading-btn">
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            <a href="#" class="btn btn-warning btn-xs" onclick="cetak('<?php echo base_url().$faktur[0]->qrcode_faktur;?>','<?php echo base_url().$faktur[0]->barcode_faktur;?>','<?php echo $faktur[0]->id_faktur;?>')"><i class="fa fa-print"></i> Print Tiket Faktur</a>
+            <a target="_blank" href="<?php echo base_url('panel/inventori/detailInventoriMasuk/print/'.$faktur[0]->id_faktur);?>" class="btn btn-success btn-xs"><i class="fa fa-print"></i> Print Faktur</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>
@@ -139,3 +137,36 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
+
+<script>
+  function cetak(qrcode,barcode,faktur){
+    $('#idFaktur').text(faktur);
+    $('#print_qr').attr("src",qrcode);
+    $('#print_barcode').attr("src",barcode);
+    printCode($('<div/>').append($('#pre_print').clone()).html())
+  }
+
+  function printCode(data) {
+    var printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>CETAK FAKTUR</title>');
+    printWindow.document.write('<style>@media print{@page{size: 80mm auto} #pre_print {width: 80mm;font-size: 15px;}}</style></head><body>');
+    printWindow.document.write(data);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    setTimeout(() => { printWindow.print(); }, 1000);
+  }
+</script>
+
+<div id="pre_print" class="hidden">
+  <center>
+    <table border="1px" style="border-collapse: collapse;">
+      <tr>
+        <td colspan="2" align="center"><b id="idFaktur"></b></td>
+      </tr>
+      <tr>
+        <td><img src="" id="print_qr" style="width:80px;" alt="qrcode"></td>
+        <td><img src="" id="print_barcode" alt="barcode"></td>
+      </tr>
+    </table>
+  </center>
+</div>
