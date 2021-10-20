@@ -28,20 +28,55 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/createInventori/doCreate/')); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/createInventori/doCreate/')); ?>" enctype="multipart/form-data">
+            <div class="col-md-12">
+              <h4 class="text-center">Preview</h4>
+              <center>
+                <img src="<?php echo base_url().$logo; ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
+              </center>
+              <br />
+              <div class="form-group">
+                <label class="col-md-2 control-label">Foto Inventori</label>
+                <div class="col-md-10">
+                  <input type="file" name="foto_inventori" class="form-control" id="foto_inventori" accept="image/*" />
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+              function readURL(input) {
+                if (input.files && input.files[0]) {
+                  var reader = new FileReader();
+                  reader.onload = function(e) {
+                    $('#preview').attr('src', e.target.result);
+                  }
+                  reader.readAsDataURL(input.files[0]);
+                }
+              }
+              $("#foto_inventori").change(function() {
+                readURL(this);
+              });
+            </script>
             <div class="col-md-12">
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Unit</label>
                 <div class="col-md-10">
-                  <select name="kode_unit" id="kode_unit" class="form-control select2"  onchange="cariSubUnit(this.value)">
+                  <select name="kode_unit" id="kode_unit" class="form-control select2"  onchange="cariSubUnit(this.value)" required>
                     <option value="">.:Pilih Kode Unit:.</option>
                     <?php foreach($unit as $key):?>
                       <option value="<?php echo $key->kode_unit;?>"><?php echo $key->kode_unit;?> | <?php echo $key->nama_unit;?></option>
                     <?php endforeach;?>
                   </select>
+  								<?php echo form_error('kode_unit'); ?>
                 </div>
               </div>
               <script>
+                $('#kode_unit').val('<?php echo set_value('kode_unit'); ?>')
+                $(document).ready(function(){
+                  <?php if(!empty(set_value('kode_unit'))): ?>
+                  cariSubUnit('<?php echo set_value('kode_unit'); ?>')
+                  <?php endif; ?>
+                })
+
                 function cariSubUnit(val){
                   $('#kode_sub_unit').html('<option value="">.:Pilih Kode Sub Unit:.</option>');
                   $.ajax({
@@ -55,6 +90,7 @@
                         $.each(data,function(key,val){
                           $('#kode_sub_unit').append('<option value="'+val.kode_sub_unit+'">'+val.kode_sub_unit+' | '+val.nama_sub_unit+'</option>');
                         })
+                      $('#kode_sub_unit').val('<?php echo set_value('kode_sub_unit'); ?>')
                       }else{
                         Swal.fire({
                           type: 'error',
@@ -75,32 +111,39 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sub Unit</label>
                 <div class="col-md-10">
-                  <select name="kode_sub_unit" id="kode_sub_unit" class="form-control select2">
+                  <select name="kode_sub_unit" id="kode_sub_unit" class="form-control select2" required>
                     <option value="">.:Pilih Kode Sub Unit:.</option>
                   </select>
+  								<?php echo form_error('kode_sub_unit'); ?>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sumber Dana</label>
                 <div class="col-md-10">
-                  <select name="kode_sumber_dana" id="kode_sumber_dana" class="form-control select2">
+                  <select name="kode_sumber_dana" id="kode_sumber_dana" class="form-control select2" required>
                     <option value="">.:Pilih Kode Sumber Dana:.</option>
                     <?php foreach($sumberDana as $key):?>
                       <option value="<?php echo $key->kode_sumber_dana;?>"><?php echo $key->kode_sumber_dana;?> | <?php echo $key->keterangan_sumber_dana;?></option>
                     <?php endforeach;?>
                   </select>
+  								<?php echo form_error('kode_sumber_dana'); ?>
+                  <script>
+                    $('#kode_sumber_dana').val('<?php echo set_value('kode_sumber_dana'); ?>')
+                  </script>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" required />
+                  <input type="text" class="form-control" value="<?php echo set_value('kode_inventori'); ?>" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" required />
+  								<?php echo form_error('kode_inventori'); ?>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Nama Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Nama Inventori" name="nama_inventori" required />
+                  <input type="text" class="form-control" value="<?php echo set_value('nama_inventori'); ?>" placeholder="Masukkan Nama Inventori" name="nama_inventori" required />
+  								<?php echo form_error('nama_inventori'); ?>
                 </div>
               </div>
               <div class="form-group">
@@ -112,30 +155,16 @@
                       <option value="<?php echo $key->id_kategori; ?>"><?php echo $key->nama_kategori; ?></option>
                     <?php endforeach; ?>
                   </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Satuan Inventori</label>
-                <div class="col-md-10">
-                  <select name="id_satuan" id="id_satuan" class="form-control" required>
-                    <option value="">.:Pilih Satuan:.</option>
-                    <?php foreach ($satuan as $key) : ?>
-                      <option value="<?php echo $key->id_satuan; ?>"><?php echo $key->nama_satuan; ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Jumlah</label>
-                <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Jumlah Inventori" name="jumlah_inventori" />
-                  <font color="red">Jumlah inventori akan terupdate secara otomatis saat stock masuk</font>
+                  <script>
+                    $('#id_kategori').val('<?php echo set_value('id_kategori'); ?>')
+                  </script>
+  								<?php echo form_error('id_kategori'); ?>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Harga Barang (Satuan)</label>
                 <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Harga Barang" name="harga_barang" required />
+                  <input type="number" class="form-control" placeholder="Masukkan Harga Barang" value="<?php echo set_value('harga_barang'); ?>" name="harga_barang" />
                 </div>
               </div>
             </div>

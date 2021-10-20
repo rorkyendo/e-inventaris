@@ -52,6 +52,7 @@
                 <th>Nama Unit</th>
                 <th>Kode Sub Unit</th>
                 <th>Nama Sub Unit</th>
+                <th>Keterangan Sub Unit</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -111,6 +112,10 @@
         },
         {
           "data": "nama_sub_unit",
+          width: 100,
+        },
+        {
+          "data": "keterangan_sub_unit",
           width: 100,
         },
         {

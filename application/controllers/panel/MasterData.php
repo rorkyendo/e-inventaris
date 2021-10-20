@@ -423,6 +423,7 @@ class MasterData extends CI_Controller
 					'unit' => $this->input->post('unit'),
 					'nama_sub_unit' => $this->input->post('nama_sub_unit'),
 					'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+					'keterangan_sub_unit' => $this->input->post('keterangan_sub_unit'),
 					'created_by' => $this->session->userdata('id_pengguna')
 				);
 				if ($this->GeneralModel->create_general('e_sub_unit',$dataSubUnit) == TRUE) {
@@ -451,6 +452,7 @@ class MasterData extends CI_Controller
 					'unit' => $this->input->post('unit'),
 					'nama_sub_unit' => $this->input->post('nama_sub_unit'),
 					'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+					'keterangan_sub_unit' => $this->input->post('keterangan_sub_unit'),
 					'updated_by' => $this->session->userdata('id_pengguna'),
 					'updated_time' => DATE('Y-m-d H:i:s')
 				);

@@ -8,7 +8,7 @@ class InventoriModel extends CI_Model {
     parent::__construct();
   }
 
-  public function getDataInventori($id_kategori = '')
+  public function getDataInventori($id_kategori = '', $kode_unit = '', $kode_sub_unit = '')
   {
     $this->datatables->select('*,v_inventori.id_inventori as id_inventori');
     $this->datatables->from('v_inventori');
@@ -21,6 +21,12 @@ class InventoriModel extends CI_Model {
     );
     if (!empty($id_kategori)) {
       $this->datatables->where("kategori_inventori = '$id_kategori'");
+    }
+    if (!empty($kode_unit)) {
+      $this->datatables->where("kategori_inventori = '$kode_unit'");
+    }
+    if (!empty($id_kategori)) {
+      $this->datatables->where("kode_sub_unit = '$kode_sub_unit'");
     }
     return print_r($this->datatables->generate('json'));
   }

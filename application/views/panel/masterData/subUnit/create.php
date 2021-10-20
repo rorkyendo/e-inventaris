@@ -50,7 +50,13 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Nama Sub Unit</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Nama Unit" name="nama_sub_unit" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Sub Unit" name="nama_sub_unit" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Keterangan Sub Unit</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Keterangan Sub Unit" name="keterangan_sub_unit"/>
                 </div>
               </div>
             <hr />

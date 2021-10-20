@@ -66,7 +66,6 @@
 					<th>Kode Inventori</th>
 					<th>Nama Barang</th>
 					<th>Status</th>
-					<th>Jumlah</th>
 					<th>Status Approval</th>
 					<th>Tgl Pembuatan</th>
 					<th>Status Keluar</th>
@@ -138,20 +137,13 @@
 			{
 			"data": "kategori_faktur",
 			width: 100,
-			render: function(data, type, row) {
-				if (row.kategori_faktur == 'in') {
-					return '<b class="text-success">Masuk</b>';
-				}else if(row.kategori_faktur == 'out'){
-					return '<b class="text-danger">Keluar</b>';
+				render: function(data, type, row) {
+					if (row.kategori_faktur == 'in') {
+						return '<b class="text-success">Masuk</b>';
+					}else if(row.kategori_faktur == 'out'){
+						return '<b class="text-danger">Keluar</b>';
+					}
 				}
-			}
-			},
-			{
-			"data": "jumlah_inventori_faktur",
-			width: 100,
-			render: function(data, type, row, meta) {
-				return new Intl.NumberFormat().format(row.jumlah_inventori_faktur) + ' ' + row.singkatan_satuan
-			}
 			},
 			{
 			"data": "status_approval",

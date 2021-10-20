@@ -1,3 +1,4 @@
+<?php foreach($inventori as $row):?>
 <!-- begin #content -->
 <div id="content" class="content">
   <!-- begin breadcrumb -->
@@ -28,23 +29,55 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/updateInventori/doUpdate/'. $inventori[0]->id_inventori)); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/inventori/updateInventori/doUpdate/'.$row->id_inventori)); ?>" enctype="multipart/form-data">
+            <div class="col-md-12">
+              <h4 class="text-center">Preview</h4>
+              <center>
+                <?php if(!empty($row->foto_inventori)): ?>
+                  <img src="<?php echo base_url().$row->foto_inventori; ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
+                <?php else: ?>
+                  <img src="<?php echo base_url().$logo; ?>" class="img-responsive" alt="preview" id="preview" style="height:150px">
+                <?php endif; ?>
+              </center>
+              <br />
+              <div class="form-group">
+                <label class="col-md-2 control-label">Foto Inventori</label>
+                <div class="col-md-10">
+                  <input type="file" name="foto_inventori" class="form-control" id="foto_inventori" accept="image/*" />
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+              function readURL(input) {
+                if (input.files && input.files[0]) {
+                  var reader = new FileReader();
+                  reader.onload = function(e) {
+                    $('#preview').attr('src', e.target.result);
+                  }
+                  reader.readAsDataURL(input.files[0]);
+                }
+              }
+              $("#foto_inventori").change(function() {
+                readURL(this);
+              });
+            </script>
             <div class="col-md-12">
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Unit</label>
                 <div class="col-md-10">
-                  <select name="kode_unit" id="kode_unit" class="form-control select2"  onchange="cariSubUnit(this.value)">
+                  <select name="kode_unit" id="kode_unit" class="form-control select2"  onchange="cariSubUnit(this.value)" required>
                     <option value="">.:Pilih Kode Unit:.</option>
                     <?php foreach($unit as $key):?>
                       <option value="<?php echo $key->kode_unit;?>"><?php echo $key->kode_unit;?> | <?php echo $key->nama_unit;?></option>
                     <?php endforeach;?>
                   </select>
+  								<?php echo form_error('kode_unit'); ?>
                 </div>
               </div>
               <script>
-                $('#kode_unit').val('<?php echo $inventori[0]->kode_unit;?>')
+                $('#kode_unit').val('<?php echo $row->kode_unit; ?>')
                 $(document).ready(function(){
-                  cariSubUnit('<?php echo $inventori[0]->kode_unit;?>')
+                  cariSubUnit('<?php echo $row->kode_unit; ?>')
                 })
 
                 function cariSubUnit(val){
@@ -60,9 +93,7 @@
                         $.each(data,function(key,val){
                           $('#kode_sub_unit').append('<option value="'+val.kode_sub_unit+'">'+val.kode_sub_unit+' | '+val.nama_sub_unit+'</option>');
                         })
-                        <?php if(!empty($inventori[0]->kode_sub_unit)): ?>
-                          $('#kode_sub_unit').val('<?php echo $inventori[0]->kode_sub_unit;?>')
-                        <?php endif; ?>
+                      $('#kode_sub_unit').val('<?php echo $row->kode_sub_unit; ?>')
                       }else{
                         Swal.fire({
                           type: 'error',
@@ -83,35 +114,39 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sub Unit</label>
                 <div class="col-md-10">
-                  <select name="kode_sub_unit" id="kode_sub_unit" class="form-control select2">
+                  <select name="kode_sub_unit" id="kode_sub_unit" class="form-control select2" required>
                     <option value="">.:Pilih Kode Sub Unit:.</option>
                   </select>
+  								<?php echo form_error('kode_sub_unit'); ?>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sumber Dana</label>
                 <div class="col-md-10">
-                  <select name="kode_sumber_dana" id="kode_sumber_dana" class="form-control select2">
+                  <select name="kode_sumber_dana" id="kode_sumber_dana" class="form-control select2" required>
                     <option value="">.:Pilih Kode Sumber Dana:.</option>
                     <?php foreach($sumberDana as $key):?>
                       <option value="<?php echo $key->kode_sumber_dana;?>"><?php echo $key->kode_sumber_dana;?> | <?php echo $key->keterangan_sumber_dana;?></option>
                     <?php endforeach;?>
                   </select>
+  								<?php echo form_error('kode_sumber_dana'); ?>
+                  <script>
+                    $('#kode_sumber_dana').val('<?php echo $row->kode_sumber_dana; ?>')
+                  </script>
                 </div>
               </div>
-              <script>
-                $('#kode_sumber_dana').val('<?php echo $inventori[0]->kode_sumber_dana;?>')
-              </script>
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Kode Inventori" name="kode_inventori" value="<?php echo $inventori[0]->kode_inventori;?>" required />
+                  <input type="text" class="form-control" value="<?php echo $row->kode_inventori; ?>" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" required />
+  								<?php echo form_error('kode_inventori'); ?>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Nama Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Nama Inventori" name="nama_inventori" value="<?php echo $inventori[0]->nama_inventori;?>" required />
+                  <input type="text" class="form-control" value="<?php echo $row->nama_inventori; ?>" placeholder="Masukkan Nama Inventori" name="nama_inventori" required />
+  								<?php echo form_error('nama_inventori'); ?>
                 </div>
               </div>
               <div class="form-group">
@@ -123,36 +158,16 @@
                       <option value="<?php echo $key->id_kategori; ?>"><?php echo $key->nama_kategori; ?></option>
                     <?php endforeach; ?>
                   </select>
-                </div>
-              </div>
-              <script>
-                $('#id_kategori').val('<?php echo $inventori[0]->kategori_inventori;?>');
-              </script>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Satuan Inventori</label>
-                <div class="col-md-10">
-                  <select name="id_satuan" id="id_satuan" class="form-control" required>
-                    <option value="">.:Pilih Satuan:.</option>
-                    <?php foreach ($satuan as $key) : ?>
-                      <option value="<?php echo $key->id_satuan; ?>"><?php echo $key->nama_satuan; ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-              <script>
-                $('#id_satuan').val('<?php echo $inventori[0]->satuan_inventori;?>')
-              </script>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Jumlah</label>
-                <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Jumlah Inventori" name="jumlah_inventori" value="<?php echo $inventori[0]->jumlah_inventori;?>"/>
-                  <font color="red">Jumlah inventori akan terupdate secara otomatis saat stock masuk</font>
+                  <script>
+                    $('#id_kategori').val('<?php echo $row->kategori_inventori; ?>')
+                  </script>
+  								<?php echo form_error('id_kategori'); ?>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Harga Barang (Satuan)</label>
                 <div class="col-md-10">
-                  <input type="number" class="form-control" placeholder="Masukkan Harga Barang" name="harga_barang" value="<?php echo $inventori[0]->harga_barang;?>" required />
+                  <input type="number" class="form-control" placeholder="Masukkan Harga Barang" value="<?php echo $row->harga_barang; ?>" name="harga_barang" />
                 </div>
               </div>
             </div>
@@ -173,3 +188,4 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
+<?php endforeach;?>

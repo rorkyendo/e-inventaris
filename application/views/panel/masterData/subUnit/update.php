@@ -57,6 +57,12 @@
                   <input type="text" class="form-control" value="<?php echo $row->nama_sub_unit;?>" placeholder="Masukkan Nama Unit" name="nama_sub_unit" required />
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Keterangan Sub Unit</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="<?php echo $row->keterangan_sub_unit;?>" placeholder="Keterangan Sub Unit" name="keterangan_sub_unit"/>
+                </div>
+              </div>
             <hr />
             <div class="form-group">
               <div class="col-md-12">

@@ -19,43 +19,55 @@
       <div class="panel panel-inverse">
         <div class="panel-heading">
           <div class="panel-heading-btn">
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            <a href="<?php echo base_url(changeLink('panel/inventori/createInventori/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Inventori</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
+          <form action="<?php echo base_url('panel/inventori/listInventori');?>" method="GET">
           <div class="col-md-4">
-            <select class="form-control select2" id="id_kategori" onchange="carikategori(this.value)">
+            <select class="form-control select2" id="id_kategori">
               <option value="">.:Pilih Kategori Inventori:.</option>
               <?php foreach ($getKategori as $key) : ?>
                 <option value="<?php echo $key->id_kategori; ?>"><?php echo $key->nama_kategori; ?></option>
               <?php endforeach; ?>
             </select>
           </div>
-          <script type="text/javascript">
-            $('#id_kategori').val('<?php echo $id_kategori; ?>')
-
-            function cariKategori(val) {
-              location.replace('<?php echo base_url(changeLink('panel/inventori/listInventori?id_kategori=')); ?>' + val)
-            }
-          </script>
-          <a href="<?php echo base_url(changeLink('panel/inventori/createInventori/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Inventori</a>
-          <br />
-          <br />
-          <br />
+          <div class="col-md-4">
+            <div class="form-group">
+                <select name="kode_unit" id="kode_unit" class="form-control select2"  onchange="cariSubUnit(this.value)" required>
+                  <option value="">.:Pilih Kode Unit:.</option>
+                  <?php foreach($unit as $key):?>
+                    <option value="<?php echo $key->kode_unit;?>"><?php echo $key->kode_unit;?> | <?php echo $key->nama_unit;?></option>
+                  <?php endforeach;?>
+                </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+                <select name="kode_sub_unit" id="kode_sub_unit" class="form-control select2" required>
+                  <option value="">.:Pilih Kode Sub Unit:.</option>
+                </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-primary btn-xs btn-block" type="submit">Cari Inventori</button>
+            <br />
+            <br />
+          </div>
+          </form>
           <table id="table" class="table table-striped table-bordered" width="100%">
             <thead>
               <tr>
                 <th>NO</th>
+                <th>Unit</th>
+                <th>Sub Unit</th>
                 <th>Keterangan Sumber Dana</th>
+                <th>Foto Inventori</th>
                 <th>Kode Inventori</th>
                 <th>Nama Barang</th>
                 <th>Kategori</th>
-                <th>Jumlah</th>
                 <th>Harga Barang</th>
                 <th>QR CODE</th>
                 <th>Barcode</th>
@@ -96,7 +108,9 @@
         "url": '<?php echo site_url(changeLink('panel/inventori/listInventori/cari')); ?>',
         "type": "POST",
         "data": {
-          "id_kategori": "<?php echo $id_kategori; ?>"
+          "id_kategori": "<?php echo $id_kategori; ?>",
+          "kode_unit":"<?php echo $kode_unit;?>",
+          "kode_sub_unit":"<?php echo $kode_sub_unit;?>"
         }
       },
       //Set column definition initialisation properties.
@@ -109,14 +123,33 @@
           }
         },
         {
+          "data": "nama_unit",
+          width: 100,
+        },
+        {
+          "data": "nama_sub_unit",
+          width: 100,
+        },
+        {
           "data": "keterangan_sumber_dana",
           width: 100,
         },
         {
-          "data": "nama_inventori",
+          "data": "foto_inventori",
+          width: 100,
+          render: function(data, type, row, meta) {
+            if (row.foto_inventori == '') {
+              return "<b class='text-danger'>Tidak ada foto</b>";              
+            }else{
+              return "<img src='<?php echo base_url(); ?>" + row.foto_inventori + "' class='img-responsive' style='width:250px'>"
+            }
+          }
+        },
+        {
+          "data": "kode_inventori",
           width: 100,
           render: function(data, type, row) {
-            return row.kode_unit+'/'+row.kode_sub_unit+'/'+row.kode_inventori
+            return row.kode_inventori
           }
         },
         {
@@ -126,13 +159,6 @@
         {
           "data": "nama_kategori",
           width: 100
-        },
-        {
-          "data": "jumlah_inventori",
-          width: 100,
-          render: function(data, type, row, meta) {
-            return new Intl.NumberFormat().format(row.jumlah_inventori) + ' ' + row.singkatan_satuan
-          }
         },
         {
           "data": "harga_barang",
@@ -200,3 +226,43 @@
     </table>
   </center>
 </div>
+
+<script>
+  $('#kode_unit').val('<?php echo set_value('kode_unit'); ?>')
+  $(document).ready(function(){
+    <?php if(!empty(set_value('kode_unit'))): ?>
+    cariSubUnit('<?php echo set_value('kode_unit'); ?>')
+    <?php endif; ?>
+  })
+
+  function cariSubUnit(val){
+    $('#kode_sub_unit').html('<option value="">.:Pilih Kode Sub Unit:.</option>');
+    $.ajax({
+      url:"<?php echo base_url('panel/inventori/getSubUnit');?>",
+      type:"GET",
+      data:{
+        "kode_unit":val
+      },success:function(resp){
+        if (resp!='false') {
+          var data = JSON.parse(resp)
+          $.each(data,function(key,val){
+            $('#kode_sub_unit').append('<option value="'+val.kode_sub_unit+'">'+val.kode_sub_unit+' | '+val.nama_sub_unit+'</option>');
+          })
+        $('#kode_sub_unit').val('<?php echo set_value('kode_sub_unit'); ?>')
+        }else{
+          Swal.fire({
+            type: 'error',
+            title: 'Gagal',
+            text: 'Sub unit tidak ditemukan',
+          })
+        }
+      },error:function(){
+        Swal.fire({
+          type: 'error',
+          title: 'Oopps..',
+          text: 'Terjadi kesalahan',
+        })
+      }
+    })
+  }
+</script>
