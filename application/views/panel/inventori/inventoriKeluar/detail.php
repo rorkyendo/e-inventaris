@@ -139,8 +139,9 @@
               <thead>
                 <tr>
                   <th>No</th>
+                  <th>Nama Unit</th>
+                  <th>Nama Sub Unit</th>
                   <th>Nama Inventori</th>
-                  <th>Jumlah</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,8 +149,9 @@
                 foreach ($detailFaktur as $row) : ?>
                   <tr>
                     <td><?php echo $no++; ?></td>
+                    <td><?php echo $row->nama_unit; ?></td>
+                    <td><?php echo $row->nama_sub_unit; ?></td>
                     <td><?php echo $row->nama_inventori; ?></td>
-                    <td><?php echo number_format($row->jumlah_inventori_faktur, 0, '.', '.'); ?> <?php echo $row->singkatan_satuan; ?></td>
                   </tr>
               </tbody>
             <?php endforeach; ?>

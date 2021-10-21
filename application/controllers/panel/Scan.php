@@ -32,11 +32,7 @@ class Scan extends CI_Controller
 	public function cariInventori(){
 		$kode_inventori = $this->input->get('kode_inventori');
 		if (!empty($kode_inventori)) {
-			$kode_inventori = explode('/',$kode_inventori);
-			$kode_unit = $kode_inventori[0];
-			$kode_sub_unit = $kode_inventori[1];
-			$kode_inventori = $kode_inventori[2];
-			$getDataInventori = $this->GeneralModel->get_by_triple_id_general('v_inventori','kode_unit',$kode_unit,'kode_sub_unit',$kode_sub_unit,'kode_inventori',$kode_inventori);
+			$getDataInventori = $this->GeneralModel->get_by_triple_id_general('v_inventori','kode_inventori',$kode_inventori);
 			if ($getDataInventori == TRUE) {
 				echo json_encode($getDataInventori,JSON_PRETTY_PRINT);
 			}else{

@@ -87,10 +87,18 @@
                 </div>
                 <div class="panel-body" id="groupInvent">
                   <?php foreach($detailFaktur as $key):?>
-                    <?php $kode_inventori = $key->kode_unit.'/'.$key->kode_sub_unit.'/'.$key->kode_inventori;?>
+                    <?php $kode_inventori = $key->kode_inventori;?>
                     <div class="col-md-12" id="inventori<?php echo $key->id_inventori;?>">
                       <div class="col-md-12">
                         <button class="btn btn-xs btn-danger" type="button" onclick="hapus('<?php echo $key->id_inventori;?>')"><i class="fa fa-times"></i> Hapus</button>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="">Nama Unit</label>
+                        <input type="text" class="form-control" value="<?php echo $key->nama_unit;?>" readonly>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="">Nama Sub Unit</label>
+                        <input type="text" class="form-control" value="<?php echo $key->nama_sub_unit;?>" readonly>
                       </div>
                       <div class="col-md-3">
                         <label for="">Kode inventori</label>
@@ -99,11 +107,7 @@
                       <div class="col-md-3">
                         <label for="">Nama inventori</label>
                         <input type="text" class="form-control" value="<?php echo $key->nama_inventori;?> (<?php echo $key->singkatan_satuan;?>)" readonly>
-                      </div>
-                      <div class="col-md-3">
                         <input type="hidden" name="id_inventori[]" class="form-control" value="<?php echo $key->id_inventori;?>" required>
-                        <label for="">Jumlah Inventori</label>
-                        <input type="number" name="jumlah[]" class="form-control" value="<?php echo $key->jumlah_inventori_faktur;?>" required>
                       </div>
                     </div>
                   <?php endforeach;?>
@@ -178,7 +182,7 @@
           console.log(data)
           $.each(data,function(key,val){
             hapus(val.id_inventori);
-            var kode = val.kode_unit+'/'+val.kode_sub_unit+'/'+val.kode_inventori;
+            var kode = val.kode_inventori;
             var onclick = "hapus('"+val.id_inventori+"')";
             html5QrCode.stop().then((ignore) => {
               // QR Code scanning is stopped.
@@ -189,18 +193,22 @@
             $('#groupInvent').appendPolyfill('<div class="col-md-12" id="inventori'+val.id_inventori+'"><div class="col-md-12">'+
             '<button class="btn btn-xs btn-danger" type="button" onclick="'+onclick+'"><i class="fa fa-times"></i> Hapus</button>'+
             '</div><div class="col-md-3">'+
+                '<label>Nama Unit</label>'+
+                '<input type="text" value="'+val.nama_unit+'" class="form-control" readonly>'+
+              '</div>'+
+              '<div class="col-md-3">'+
+                '<label>Nama Sub Unit</label>'+
+                '<input type="text" value="'+val.nama_sub_unit+'" class="form-control" readonly>'+
+              '</div>'+
+              '<div class="col-md-3">'+
                 '<label>Kode Inventori</label>'+
                 '<input type="text" value="'+kode+'" class="form-control" readonly>'+
               '</div>'+
               '<div class="col-md-3">'+
                 '<label>Nama Inventori</label>'+
-                  '<input type="text" value="'+val.nama_inventori+' ('+val.singkatan_satuan+')" class="form-control" readonly>'+
-                '</div>'+
-                '<div class="col-md-3">'+
                   '<input type="hidden" name="id_inventori[]" value="'+val.id_inventori+'">'+
-                  '<label>Jumlah Inventori</label>'+
-                  '<input type="number" name="jumlah[]" id="jumlah" class="form-control" placeholder="Masukkan Jumlah" required>'+
-                '</div></div>');          
+                  '<input type="text" value="'+val.nama_inventori+'" class="form-control" readonly>'+
+                '</div></div>');       
                 Swal.fire({
                   type: 'success',
                   title: val.nama_inventori+' (kode:'+kode+')',

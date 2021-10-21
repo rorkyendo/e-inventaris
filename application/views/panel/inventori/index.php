@@ -27,7 +27,7 @@
           <?php echo $this->session->flashdata('notif'); ?>
           <form action="<?php echo base_url('panel/inventori/listInventori');?>" method="GET">
           <div class="col-md-4">
-            <select class="form-control select2" id="id_kategori">
+            <select class="form-control select2" id="id_kategori" name="id_kategori">
               <option value="">.:Pilih Kategori Inventori:.</option>
               <?php foreach ($getKategori as $key) : ?>
                 <option value="<?php echo $key->id_kategori; ?>"><?php echo $key->nama_kategori; ?></option>
@@ -36,7 +36,7 @@
           </div>
           <div class="col-md-4">
             <div class="form-group">
-                <select name="kode_unit" id="kode_unit" class="form-control select2"  onchange="cariSubUnit(this.value)" required>
+                <select name="kode_unit" id="kode_unit" class="form-control select2"  onchange="cariSubUnit(this.value)">
                   <option value="">.:Pilih Kode Unit:.</option>
                   <?php foreach($unit as $key):?>
                     <option value="<?php echo $key->kode_unit;?>"><?php echo $key->kode_unit;?> | <?php echo $key->nama_unit;?></option>
@@ -46,11 +46,16 @@
           </div>
           <div class="col-md-4">
             <div class="form-group">
-                <select name="kode_sub_unit" id="kode_sub_unit" class="form-control select2" required>
+                <select name="kode_sub_unit" id="kode_sub_unit" class="form-control select2">
                   <option value="">.:Pilih Kode Sub Unit:.</option>
                 </select>
             </div>
           </div>
+          <script>
+            $('#id_kategori').val('<?php echo $id_kategori;?>');
+            $('#kode_unit').val('<?php echo $kode_unit;?>');
+            $('#kode_sub_unit').val('<?php echo $kode_sub_unit;?>');
+          </script>
           <div class="col-md-12">
             <button class="btn btn-primary btn-xs btn-block" type="submit">Cari Inventori</button>
             <br />

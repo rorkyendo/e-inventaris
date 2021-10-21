@@ -558,13 +558,18 @@ class Inventori extends CI_Controller
 		}
 	}
 
-	public function detailInventori($param1=''){
+	public function detailInventori($param1='',$param2=''){
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$data['title'] = $this->title;
-		$data['subtitle'] = 'Detail Inventori';
-		$data['content'] = 'panel/inventori/detail';
-		$data['inventori'] = $this->GeneralModel->get_by_id_general('v_inventori', 'id_inventori', $param1);
-		$this->load->view('panel/content', $data);
+		if ($param1=='print') {
+			$data['inventori'] = $this->GeneralModel->get_by_id_general('v_inventori', 'id_inventori', $param2);
+			$this->load->view('panel/inventori/print', $data);
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Detail Inventori';
+			$data['content'] = 'panel/inventori/detail';
+			$data['inventori'] = $this->GeneralModel->get_by_id_general('v_inventori', 'id_inventori', $param1);
+			$this->load->view('panel/content', $data);
+		}
 	}
 
 	//------------------------ LOGISTIK MASUK BEGIN ------------------------//
@@ -584,268 +589,6 @@ class Inventori extends CI_Controller
 			$data['end_date'] = $this->input->get('end_date');
 			$data['status_approval'] = $this->input->get('status_approval');
 			$this->load->view('panel/content', $data);
-		}
-	}
-
-	public function createInventoriMasuk($param1=''){
-		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		if ($param1=='doCreate') {
-			$dataFaktur = array(
-				'kode_faktur' => $this->input->post('kode_faktur'),
-				'catatan_faktur' => $this->input->post('catatan_faktur'),
-				'created_by' => $this->session->userdata('id_pengguna'),
-			);
-			$tempdir = "assets/img/qrfaktur/";
-			if (!file_exists($tempdir))
-				mkdir($tempdir);
-
-			$logopath = 'assets/img/Fasilkom-TI.png';
-			if ($this->GeneralModel->create_general('e_faktur',$dataFaktur) == TRUE) {
-				$id_faktur = $this->db->insert_id();
-				//------------------ Pembuatan Barcode ----------------------------//
-				$this->zend->load('Zend/Barcode.php'); 
-				$barcode = $id_faktur;
-				$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$barcode), array())->draw($barcode,'image', array('text'=>$barcode), array());
-				$imageName = $barcode.'.png';
-				$imagePath = 'assets/img/barcodefaktur/';
-				imagejpeg($imageResource, $imagePath.$imageName); 
-				$pathBarcode = $imagePath.$imageName; 				
-				$dataFaktur2 = array(
-					'barcode_faktur' => $pathBarcode
-				);
-				$namaQrcode = 'Faktur-'.$id_faktur.'.png';
-				//isi qrcode jika di scan
-				$codeContents = $id_faktur;
-				//simpan file qrcode
-				QRcode::png($codeContents, $tempdir . $namaQrcode, QR_ECLEVEL_H, 10, 4);
-
-				// ambil file qrcode
-				$QR = imagecreatefrompng($tempdir . $namaQrcode);
-
-				$dataFaktur2 += array(
-					'qrcode_faktur' => 'assets/img/qrfaktur/' . $namaQrcode
-				);
-
-				$this->GeneralModel->update_general('e_faktur', 'id_faktur', $id_faktur, $dataFaktur2);
-
-				// memulai menggambar logo dalam file qrcode
-				$logo = imagecreatefrompng($logopath);
-
-				imagecolortransparent($logo, imagecolorallocatealpha($logo, 0, 0, 0, 127));
-				imagealphablending($logo, false);
-				imagesavealpha($logo, true);
-
-				$QR_width = imagesx($QR);
-				$QR_height = imagesy($QR);
-
-				$logo_width = imagesx($logo);
-				$logo_height = imagesy($logo);
-
-				// Scale logo to fit in the QR Code
-				$logo_qr_width = $QR_width / 5;
-				$scale = $logo_width / $logo_qr_width;
-				$logo_qr_height = $logo_height / $scale;
-
-				imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
-
-				// Simpan kode QR lagi, dengan logo di atasnya
-				imagepng($QR, $tempdir . $namaQrcode);
-
-				$id_inventori[] = $this->input->post('id_inventori');
-				$jumlah[] = $this->input->post('jumlah');
-				$harga_barang[] = $this->input->post('harga_barang');
-
-				for ($i = 0; $i < count($id_inventori[0]); $i++) {
-					$dataInventori = array(
-						'id_faktur' => $id_faktur,
-						'id_inventori' => $id_inventori[0][$i],
-						'jumlah_inventori' => $jumlah[0][$i],
-						'harga_barang' => $harga_barang[0][$i],
-					);
-					$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
-				}
-
-				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
-				foreach ($getStaff as $key) {
-					$message = "Halo ".$key->nama_lengkap." ada faktur untuk barang masuk dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
-					try {
-						sendNotifWA($key->no_wa,$message);
-					} catch (\Throwable $th) {
-					}
-				}
-
-				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori masuk berhasil ditambahkan</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}else{
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data inventori masuk gagal ditambahkan</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));	
-			}
-		}else{
-			$data['title'] = $this->title;
-			$data['subtitle'] = 'Tambah Inventori Masuk';
-			$data['content'] = 'panel/inventori/inventoriMasuk/create';
-			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
-			$this->load->view('panel/content', $data);
-		}
-	}
-
-	public function updateInventoriMasuk($param1 = '',$param2 = '')
-	{
-		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		if ($param1 == 'doUpdate') {
-			$dataFaktur = array(
-				'kode_faktur' => $this->input->post('kode_faktur'),
-				'catatan_faktur' => $this->input->post('catatan_faktur'),
-				'updated_by' => $this->session->userdata('id_pengguna'),
-				'updated_time' => DATE('Y-m-d H:i:s'),
-			);
-
-			if ($this->GeneralModel->update_general('e_faktur','id_faktur',$param2,$dataFaktur) == TRUE) {
-				$id_inventori[] = $this->input->post('id_inventori');
-				$jumlah[] = $this->input->post('jumlah');
-				$harga_barang[] = $this->input->post('harga_barang');
-
-				$this->GeneralModel->delete_general('e_detail_faktur','id_faktur',$param2);
-
-				for ($i = 0; $i < count($id_inventori[0]); $i++) {
-					$dataInventori = array(
-						'id_faktur' => $param2,
-						'id_inventori' => $id_inventori[0][$i],
-						'jumlah_inventori' => $jumlah[0][$i],
-						'harga_barang' => $harga_barang[0][$i],
-					);
-					$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
-				}
-
-				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori masuk berhasil diupdate</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			} else {
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data inventori masuk gagal diupdate</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}
-		} else {
-			$data['title'] = $this->title;
-			$data['subtitle'] = 'Update Inventori Masuk';
-			$data['content'] = 'panel/inventori/inventoriMasuk/update';
-			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
-			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur','id_faktur',$param1);
-			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param1);
-			if ($data['faktur'][0]->status_approval != 'pending') {
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf data faktur yang sudah dikonfirmasi tidak bisa kamu ubah!</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}
-			$this->load->view('panel/content', $data);
-		}
-	}
-
-	public function deleteInventoriMasuk($param1=''){
-		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$faktur = $this->GeneralModel->get_by_id_general('e_faktur', 'id_faktur', $param1);
-		if ($faktur[0]->status_approval == 'pending') {
-			if (!empty($faktur[0]->qrcode_faktur)) {
-				try {
-					unlink($faktur[0]->qrcode_faktur);
-				} catch (\Exception $e) {
-				}
-			}
-			if ($this->GeneralModel->delete_general('e_faktur', 'id_faktur', $param1) == TRUE) {
-				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil dihapus</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			} else {
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal dihapus</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}
-		}else{
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));
-		}
-	}
-		
-	public function detailInventoriMasuk($param1 = '', $param2 = '')
-	{
-		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		if ($param1=='print') {
-			$data['title'] = $this->title;
-			$data['subtitle'] = 'Detail Inventori Masuk';
-			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
-			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param2);
-			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param2);
-			if ($data['faktur'][0]->kategori_faktur != 'in') {
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}
-			$this->load->view('panel/inventori/inventoriMasuk/print', $data);
-		}else{
-			$data['title'] = $this->title;
-			$data['subtitle'] = 'Detail Inventori Masuk';
-			$data['content'] = 'panel/inventori/inventoriMasuk/detail';
-			$data['inventori'] = $this->GeneralModel->get_general('v_inventori');
-			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur', 'id_faktur', $param1);
-			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori', 'id_faktur', $param1);
-			if ($data['faktur'][0]->kategori_faktur != 'in') {
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur tidak tersedia</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}
-			$this->load->view('panel/content', $data);
-		}
-	}
-
-	public function approveInventoriMasuk($param1 = '')
-	{
-		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$detailFaktur = $this->GeneralModel->get_by_id_general('e_detail_faktur', 'id_faktur', $param1);
-		$faktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
-		if ($faktur[0]->status_approval == 'pending') {
-			$dataFaktur = array(
-					'status_approval' => 'accept',
-					'approval_by' => $this->session->userdata('id_pengguna'),
-					'updated_by' => $this->session->userdata('id_pengguna'),
-					'approval_time' => DATE('Y-m-d H:i:s'),
-					'updated_time' => DATE('Y-m-d H:i:s'),
-			);
-			 if ($this->GeneralModel->update_general('e_faktur','id_faktur', $param1, $dataFaktur) == TRUE) {
-				foreach ($detailFaktur as $key) {
-					$oldStock = $this->GeneralModel->get_by_id_general('e_inventori','id_inventori',$key->id_inventori);
-					$dataInventori = array(
-						'jumlah_inventori' => $oldStock[0]->jumlah_inventori+$key->jumlah_inventori,
-						'harga_barang' => $key->harga_barang,
-					);
-					$this->GeneralModel->update_general('e_inventori', 'id_inventori', $key->id_inventori, $dataInventori);
-				}
-				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil diapprove</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			} else {
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal diapprove</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}
-		}else{
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));			
-		}
-	}
-
-	public function rejectInventoriMasuk($param1 = '')
-	{
-		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$faktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
-		if ($faktur[0]->status_approval == 'pending') {
-			$dataFaktur = array(
-				'status_approval' => 'reject',
-				'approval_by' => $this->session->userdata('id_pengguna'),
-				'updated_by' => $this->session->userdata('id_pengguna'),
-				'approval_time' => DATE('Y-m-d H:i:s'),
-				'updated_time' => DATE('Y-m-d H:i:s'),
-			);
-			if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
-				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil direject</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			} else {
-				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data faktur gagal direject</div>');
-				redirect(changeLink('panel/inventori/inventoriMasuk'));
-			}
-		}else{
-			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Mohon maaf faktur yang sudah dikonfirmasi tidak dapat dihapus atau diubah</div>');
-			redirect(changeLink('panel/inventori/inventoriMasuk'));
 		}
 	}
 
@@ -940,35 +683,13 @@ class Inventori extends CI_Controller
 				imagepng($QR, $tempdir . $namaQrcode);
 
 				$id_inventori[] = $this->input->post('id_inventori');
-				$jumlah[] = $this->input->post('jumlah');
-				$harga_barang[] = $this->input->post('harga_barang');
-
 				
 				for ($i = 0; $i < count($id_inventori[0]); $i++) {
-					$cekInventori = $this->GeneralModel->get_by_id_general('e_inventori','id_inventori', $id_inventori[0][$i]);
-					if ($cekInventori[0]->jumlah_inventori <= 0) {
-						$dataInventoriKosong[$i] = array(
-							"nama_inventori" => $cekInventori[0]->nama_inventori
-						);
-					}else{
 						$dataInventori = array(
 							'id_faktur' => $id_faktur,
 							'id_inventori' => $id_inventori[0][$i],
-							'jumlah_inventori' => $jumlah[0][$i],
-							'harga_barang' => $harga_barang[0][$i],
 						);
 						$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
-					}
-				}
-
-				if (count($dataInventoriKosong) > 0) {
-					$text = "Data inventori keluar berhasil ditambahkan tetapi untuk beberapa stock berikut tidak tersedia ";
-					for ($i=0; $i < count($dataInventoriKosong); $i++) { 
-						$text .= $dataInventoriKosong[$i]['nama_inventori'].", ";
- 					}
-					$this->session->set_flashdata('notif', '<div class="alert alert-success">'.$text.'</div>');
-				}else{
-					$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
 				}
 
 				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
@@ -980,6 +701,7 @@ class Inventori extends CI_Controller
 					}
 				}
 				
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
 				redirect(changeLink('panel/inventori/inventoriKeluar'));
 			} else {
 				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data inventori keluar gagal ditambahkan</div>');
@@ -1016,12 +738,6 @@ class Inventori extends CI_Controller
 				$this->GeneralModel->delete_general('e_detail_faktur', 'id_faktur', $param2);
 
 				for ($i = 0; $i < count($id_inventori[0]); $i++) {
-					$cekInventori = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $id_inventori[0][$i]);
-					if ($cekInventori[0]->jumlah_inventori <= 0) {
-						$dataInventoriKosong[$i] = array(
-							"nama_inventori" => $cekInventori[0]->nama_inventori
-						);
-					} else {
 						$dataInventori = array(
 							'id_faktur' => $param2,
 							'id_inventori' => $id_inventori[0][$i],
@@ -1029,18 +745,9 @@ class Inventori extends CI_Controller
 							'harga_barang' => $harga_barang[0][$i],
 						);
 						$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
-					}
 				}
 
-				if (count($dataInventoriKosong) > 0) {
-					$text = "Data inventori keluar berhasil ditambahkan tetapi untuk beberapa stock berikut tidak tersedia ";
-					for ($i = 0; $i < count($dataInventoriKosong); $i++) {
-						$text .= $dataInventoriKosong[$i]['nama_inventori'] . ", ";
-					}
-					$this->session->set_flashdata('notif', '<div class="alert alert-success">' . $text . '</div>');
-				} else {
-					$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
-				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
 				redirect(changeLink('panel/inventori/inventoriKeluar'));
 			} else {
 				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data inventori masuk gagal ditambahkan</div>');
@@ -1117,16 +824,8 @@ class Inventori extends CI_Controller
 	public function approveInventoriKeluar($param1 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
-		$detailFaktur = $this->GeneralModel->get_by_id_general('e_detail_faktur', 'id_faktur', $param1);
 		$faktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
 		if ($faktur[0]->status_approval == 'pending') {
-			foreach ($detailFaktur as $key) {
-				$oldStock = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $key->id_inventori);
-				if ($oldStock[0]->jumlah_inventori - $key->jumlah_inventori <= 0) {
-					$this->session->set_flashdata('notif', '<div class="alert alert-success">Mohon maaf stock tidak bisa dikeluarkan karena ada beberapa stock yang tidak mencukupi</div>');
-					redirect(changeLink('panel/inventori/inventoriKeluar'));
-				}
-			}
 			$dataFaktur = array(
 				'status_approval' => 'accept',
 				'approval_by' => $this->session->userdata('id_pengguna'),
@@ -1135,14 +834,6 @@ class Inventori extends CI_Controller
 				'updated_time' => DATE('Y-m-d H:i:s'),
 			);
 			if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param1, $dataFaktur) == TRUE) {
-				foreach ($detailFaktur as $key) {
-				$oldStock = $this->GeneralModel->get_by_id_general('e_inventori', 'id_inventori', $key->id_inventori);
-						$dataInventori = array(
-							'jumlah_inventori' => $oldStock[0]->jumlah_inventori - $key->jumlah_inventori,
-							'harga_barang' => $key->harga_barang,
-						);
-						$this->GeneralModel->update_general('e_inventori', 'id_inventori', $key->id_inventori, $dataInventori);
-				}
 				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data faktur berhasil diapprove</div>');
 				redirect(changeLink('panel/inventori/inventoriKeluar'));
 			} else {
@@ -1183,11 +874,7 @@ class Inventori extends CI_Controller
 	public function cariInventori(){
 		$kode_inventori = $this->input->get('kode_inventori');
 		if (!empty($kode_inventori)) {
-			$kode_inventori = explode('/',$kode_inventori);
-			$kode_unit = $kode_inventori[0];
-			$kode_sub_unit = $kode_inventori[1];
-			$kode_inventori = $kode_inventori[2];
-			$getDataInventori = $this->GeneralModel->get_by_triple_id_general('v_inventori','kode_unit',$kode_unit,'kode_sub_unit',$kode_sub_unit,'kode_inventori',$kode_inventori);
+			$getDataInventori = $this->GeneralModel->get_by_triple_id_general('v_inventori','kode_inventori',$kode_inventori);
 			if ($getDataInventori == TRUE) {
 				echo json_encode($getDataInventori,JSON_PRETTY_PRINT);
 			}else{
@@ -1240,14 +927,8 @@ class Inventori extends CI_Controller
 		} else {
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Laporan Inventori';
-			if ($param1 == 'out') {
-				$data['content'] = 'panel/inventori/laporanKeluar';
-				$data['kategori_faktur'] = 'out';
-			}else{
-				$data['content'] = 'panel/inventori/laporanMasuk';
-				$data['kategori_faktur'] = 'in';
-			}
-
+			$data['content'] = 'panel/inventori/laporanKeluar';
+			$data['kategori_faktur'] = 'out';
 			if (!empty($this->input->get('start_date'))) {
 				$data['start_date']  = $this->input->get('start_date');
 			}else{
@@ -1259,7 +940,6 @@ class Inventori extends CI_Controller
 			}else{
 				$data['end_date'] = DATE('Y-m-t');
 			}
-
 			$data['status_keluar'] = $this->input->get('status_keluar');
 			$data['status_pengembalian'] = $this->input->get('status_pengembalian');
 			$data['status_approval'] = $this->input->get('status_approval');

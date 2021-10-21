@@ -51,7 +51,7 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Catatan Faktur</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Nama Catatan Faktur (Misal : Inventori Masuk dari Supplier A)" name="catatan_faktur" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Catatan Faktur" name="catatan_faktur" required />
                 </div>
               </div>
               <div class="form-group">
@@ -153,7 +153,7 @@
           console.log(data)
           $.each(data,function(key,val){
             hapus(val.id_inventori);
-            var kode = val.kode_unit+'/'+val.kode_sub_unit+'/'+val.kode_inventori;
+            var kode = val.kode_inventori;
             var onclick = "hapus('"+val.id_inventori+"')";
             html5QrCode.stop().then((ignore) => {
               // QR Code scanning is stopped.
@@ -164,17 +164,21 @@
             $('#groupInvent').appendPolyfill('<div class="col-md-12" id="inventori'+val.id_inventori+'"><div class="col-md-12">'+
             '<button class="btn btn-xs btn-danger" type="button" onclick="'+onclick+'"><i class="fa fa-times"></i> Hapus</button>'+
             '</div><div class="col-md-3">'+
+                '<label>Nama Unit</label>'+
+                '<input type="text" value="'+val.nama_unit+'" class="form-control" readonly>'+
+              '</div>'+
+              '<div class="col-md-3">'+
+                '<label>Nama Sub Unit</label>'+
+                '<input type="text" value="'+val.nama_sub_unit+'" class="form-control" readonly>'+
+              '</div>'+
+              '<div class="col-md-3">'+
                 '<label>Kode Inventori</label>'+
                 '<input type="text" value="'+kode+'" class="form-control" readonly>'+
               '</div>'+
               '<div class="col-md-3">'+
                 '<label>Nama Inventori</label>'+
-                  '<input type="text" value="'+val.nama_inventori+' ('+val.singkatan_satuan+')" class="form-control" readonly>'+
-                '</div>'+
-                '<div class="col-md-3">'+
                   '<input type="hidden" name="id_inventori[]" value="'+val.id_inventori+'">'+
-                  '<label>Jumlah Inventori</label>'+
-                  '<input type="number" name="jumlah[]" id="jumlah" class="form-control" placeholder="Masukkan Jumlah" required>'+
+                  '<input type="text" value="'+val.nama_inventori+'" class="form-control" readonly>'+
                 '</div></div>');          
                 Swal.fire({
                   type: 'success',

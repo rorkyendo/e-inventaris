@@ -19,7 +19,6 @@
       <div class="panel panel-inverse">
         <div class="panel-heading">
           <div class="panel-heading-btn">
-            <a href="<?php echo base_url('panel/inventori/laporanInventori');?>" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Masuk</a>
             <a href="<?php echo base_url('panel/inventori/laporanInventori/out');?>" class="btn btn-xs btn-danger"><i class="fa fa-upload"></i> Keluar</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
@@ -91,8 +90,6 @@
                 <th>ID Faktur</th>
                 <th>Kode Inventori</th>
                 <th>Nama Barang</th>
-                <th>Status</th>
-                <th>Jumlah</th>
                 <th>Status Approval</th>
                 <th>Tgl Pembuatan</th>
                 <th>Status Keluar</th>
@@ -153,30 +150,12 @@
           "data": "kode_inventori",
           width: 100,
           render: function(data, type, row) {
-            return row.kode_unit+'/'+row.kode_sub_unit+'/'+row.kode_inventori
+            return row.kode_inventori
           }
         },
         {
           "data": "nama_inventori",
           width: 100,
-        },
-        {
-          "data": "kategori_faktur",
-          width: 100,
-          render: function(data, type, row) {
-            if (row.kategori_faktur == 'in') {
-              return '<b class="text-success">Masuk</b>';
-            }else if(row.kategori_faktur == 'out'){
-              return '<b class="text-danger">Keluar</b>';
-            }
-          }
-        },
-        {
-          "data": "jumlah_inventori_faktur",
-          width: 100,
-          render: function(data, type, row, meta) {
-            return new Intl.NumberFormat().format(row.jumlah_inventori_faktur) + ' ' + row.singkatan_satuan
-          }
         },
         {
           "data": "status_approval",

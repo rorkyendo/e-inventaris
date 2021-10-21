@@ -31,10 +31,10 @@
 		<!-- end col-3 -->
 		<!-- begin col-3 -->
 		<div class="col-md-3 col-sm-6">
-			<div class="widget widget-stats bg-orange">
-				<div class="stats-icon stats-icon-lg"><i class="fa fa-download"></i></div>
-				<div class="stats-title">Jumlah Faktur Masuk (Pending)</div>
-				<div class="stats-number"><a style="cursor:pointer;color:white;"><?php echo number_format($jmlFakturMasukPending->jumlah, 0, '.', '.'); ?></a></div>
+			<div class="widget widget-stats bg-red">
+				<div class="stats-icon stats-icon-lg"><i class="fa fa-recycle"></i></div>
+				<div class="stats-title">Jumlah Faktur Mutasi (Pending)</div>
+				<div class="stats-number"><a style="cursor:pointer;color:white;"><?php echo number_format($jmlFakturMutasiPending->jumlah, 0, '.', '.'); ?></a></div>
 			</div>
 		</div>
 		<!-- end col-3 -->
@@ -127,7 +127,7 @@
 			"data": "kode_inventori",
 			width: 100,
 			render: function(data, type, row) {
-				return row.kode_unit+'/'+row.kode_sub_unit+'/'+row.kode_inventori
+				return row.kode_inventori
 			}
 			},
 			{
@@ -138,8 +138,8 @@
 			"data": "kategori_faktur",
 			width: 100,
 				render: function(data, type, row) {
-					if (row.kategori_faktur == 'in') {
-						return '<b class="text-success">Masuk</b>';
+					if (row.kategori_faktur == 'mutasi') {
+						return '<b class="text-success">Mutasi</b>';
 					}else if(row.kategori_faktur == 'out'){
 						return '<b class="text-danger">Keluar</b>';
 					}

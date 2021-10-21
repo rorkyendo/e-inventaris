@@ -20,21 +20,29 @@
       <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
         <div class="panel-heading">
           <div class="panel-heading-btn">
-            <button type="button" onclick="cetak('<?php echo base_url() . $key->qrcode; ?>','<?php echo base_url() . $key->barcode; ?>','<?php echo $key->keterangan_sumber_dana;?>')" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Print</a>
+            <button type="button" onclick="cetak('<?php echo base_url() . $key->qrcode; ?>','<?php echo base_url() . $key->barcode; ?>','<?php echo $key->keterangan_sumber_dana;?>')" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Print Barcode</button>
+            <a target="_blank" href="<?php echo base_url('panel/inventori/detailInventori/print/'.$key->id_inventori);?>" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Print</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
           <form class="form-horizontal">
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <h4 class="text-center">Foto Inventori</h4>
+              <center>
+                  <img src="<?php echo base_url() . $key->foto_inventori; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
+              </center>
+              <br />
+            </div>
+            <div class="col-md-4">
               <h4 class="text-center">QR CODE</h4>
               <center>
                   <img src="<?php echo base_url() . $key->qrcode; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
               </center>
               <br />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <h4 class="text-center">BARCODE</h4>
               <center>
                   <img src="<?php echo base_url() . $key->barcode; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
@@ -57,14 +65,14 @@
                     <td><?php echo $key->nama_sub_unit;?></td>
                   </tr>
                   <tr>
+                    <td>Keterangan Sub Unit</td>
+                    <td><?php echo $key->keterangan_sub_unit;?></td>
                     <td>Kode Inventori</td>
                     <td><?php echo $key->kode_inventori;?></td>
-                    <td>Nama Inventori</td>
-                    <td><?php echo $key->nama_inventori;?></td>
                   </tr>
                   <tr>
-                    <td>Jumlah Inventori</td>
-                    <td><?php echo number_format($key->jumlah_inventori,0,'.','.');?></td>
+                    <td>Nama Inventori</td>
+                    <td><?php echo $key->nama_inventori;?></td>
                     <td>Harga Inventori</td>
                     <td>Rp <?php echo number_format($key->harga_barang,0,'.','.');?></td>
                   </tr>
@@ -74,8 +82,7 @@
             <hr />
             <div class="form-group">
               <div class="col-md-12">
-                <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
-                <a href="<?php echo base_url(changeLink('panel/inventori/listInventori/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
+                <a href="<?php echo base_url(changeLink('panel/inventori/listInventori/')); ?>" class="btn btn-sm btn-danger pull-right"><i class="fa fa-backward"></i> Kembali</a>
               </div>
             </div>
         </div>

@@ -18,8 +18,8 @@ class Dashboard extends CI_Controller {
 		$data['content'] = 'panel/dashboard/index';
 		$data['jmlPengguna'] = $this->GeneralModel->count_general('e_pengguna');
 		$data['jmlInventori'] = $this->GeneralModel->count_general('e_inventori');
-		$data['jmlFakturMasukPending'] = $this->GeneralModel->count_general('e_faktur','kategori_faktur','in','status_approval','pending');
-		$data['jmlFakturKeluarPending'] = $this->GeneralModel->count_general('e_faktur','kategori_faktur','out','status_approval','pending');
+		$data['jmlFakturMutasiPending'] = $this->GeneralModel->count_by_multi_id_general('e_faktur','kategori_faktur','mutasi','status_approval','pending');
+		$data['jmlFakturKeluarPending'] = $this->GeneralModel->count_by_multi_id_general('e_faktur','kategori_faktur','out','status_approval','pending');
 		$this->load->view('panel/content', $data);
 	}
 

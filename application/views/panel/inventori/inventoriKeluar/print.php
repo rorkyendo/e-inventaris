@@ -82,7 +82,31 @@ $pdf->AddPage();
 // set text shadow effect
 // $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
 
-$html = '<hr/><table border="1px" style="collapse:collapse;">
+$dataBarang = '';
+$dataBarang .= '<table border="1px" style="collapse:collapse;" style="width:100%">
+                <thead>
+                  <tr>
+                    <th width="8%">No</th>
+                    <th width="22%">Nama Unit</th>
+                    <th width="20%">Nama Sub Unit</th>
+                    <th width="25%">Kode Inventori</th>
+                    <th width="25%">Nama Inventori</th>
+                  </tr>
+                </thead><tbody>';
+$no = 1; foreach ($detailFaktur as $key) {
+    $dataBarang .= '<tr>
+    <td width="8%">'.$no++.'</td>
+    <td width="22%">'.$key->nama_unit.'</td>
+    <td width="20%">'.$key->nama_sub_unit.'</td>
+    <td width="25%">'.$key->kode_inventori.'</td>
+    <td width="25%">'.$key->nama_inventori.'</td>
+    </tr>';
+}
+  $dataBarang .= '</tbody>';
+$dataBarang .= '</table>';
+
+
+$html = '<hr/><br/><table border="1px" style="collapse:collapse;">
                 <tr>
                   <td>Kode Faktur</td>
                   <td>'.$faktur[0]->kode_faktur.'</td>
@@ -149,8 +173,8 @@ $html.=         '<tr>
                   <td>'.$faktur[0]->pengembali_faktur.'</td>
                 </tr>';
                 endif;
-        '</table>';
-
+$html.=     '</table>
+              <br/><h3>Data Inventori</h3>'.$dataBarang;
 // Print text using writeHTMLCell()
 $pdf->writeHTML($html, true, false, false, false, '');
 

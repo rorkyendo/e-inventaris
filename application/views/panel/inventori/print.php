@@ -24,19 +24,19 @@ $headerTxt = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <table sytle="width:100%" border="1px" style="collapse:collapse;" cellspacing="0" cellpadding="0">
         <tr>
           <td style="width:60%;" align="center" colspan="2">
-            ID FAKTUR '.$faktur[0]->id_faktur.'
+            '.$inventori[0]->keterangan_sumber_dana.'
           </td>
         </tr>
         <tr>
           <td align="center" style="width:20%;">
           <br/>
           <br/>
-            <img src="@'.base64_encode(file_get_contents(FCPATH . $faktur[0]->qrcode_faktur)).'" style="width:60px;">
+            <img src="@'.base64_encode(file_get_contents(FCPATH . $inventori[0]->qrcode)).'" style="width:70px;">
           </td>
           <td align="center" style="width:40%;">
           <br/>
           <br/>
-            <img src="@'.base64_encode(file_get_contents(FCPATH . $faktur[0]->barcode_faktur)).'" style="width:80px;">
+            <img src="@'.base64_encode(file_get_contents(FCPATH . $inventori[0]->barcode)).'" style="width:160px;">
           </td>
         </tr>
 </table>';
@@ -84,40 +84,31 @@ $pdf->AddPage();
 
 $html = '<hr/><table border="1px" style="collapse:collapse;">
                 <tr>
-                  <td>Kode Faktur</td>
-                  <td>'.$faktur[0]->kode_faktur.'</td>
+                  <td align="center" colspan="2">
+                    <br/>
+                    <br/>
+                    <img src="@'.base64_encode(file_get_contents(FCPATH . $inventori[0]->foto_inventori)).'" style="width:160px;">
+                  </td>
                 </tr>
                 <tr>
-                  <td>Dibuat Oleh</td>
-                  <td>'.$faktur[0]->pembuat_faktur.'</td>
+                  <td>Nama Unit</td>
+                  <td>'.$inventori[0]->nama_unit.'</td>
                 </tr>
                 <tr>
-                  <td>Dibuat Pada</td>
-                  <td>'.$faktur[0]->created_time.'</td>
-                </tr>';
-$html.=         '<tr>
-                  <td>Catatan Faktur</td>
-                  <td>'.$faktur[0]->catatan_faktur.'</td>
+                  <td>Nama Sub Unit</td>
+                  <td>'.$inventori[0]->nama_sub_unit.'</td>
                 </tr>
                 <tr>
-                  <td>Status Approval</td>
-                  <td>';
-                    if ($faktur[0]->status_approval == 'pending') :
-$html.=               '<b class="text-warning">Pending</b>';
-                    elseif ($faktur[0]->status_approval == 'rejected') :
-$html.=               '<b class="text-danger">Rejected</b>';
-                    else :
-$html.=               '<b class="text-success">Success</b>';
-                    endif;
-$html.=           '</td>
+                  <td>Keterangan Sub Unit</td>
+                  <td>'.$inventori[0]->keterangan_sub_unit.'</td>
                 </tr>
                 <tr>
-                  <td>Tgl Approval</td>
-                  <td>'.$faktur[0]->approval_time.'</td>
+                  <td>Nama Inventori</td>
+                  <td>'.$inventori[0]->nama_inventori.'</td>
                 </tr>
                 <tr>
-                  <td>Di approve/reject Oleh</td>
-                  <td>'.$faktur[0]->pengaprove_faktur.'</td>
+                  <td>Harga Inventori</td>
+                  <td>Rp '.number_format($inventori[0]->harga_barang,0,'.','.').'</td>
                 </tr>
         </table>';
 
@@ -129,7 +120,7 @@ $pdf->writeHTML($html, true, false, false, false, '');
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
 ob_end_clean();
-$pdf->Output('Detail_Faktur_Masuk_'.$faktur[0]->id_faktur.'.pdf', 'I');
+$pdf->Output('Inventori '.$inventori[0]->kode_inventori.'.pdf', 'I');
 
 //============================================================+
 // END OF FILE
