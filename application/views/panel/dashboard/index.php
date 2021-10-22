@@ -116,8 +116,8 @@
 			"data": "id_faktur",
 			width: 100,
 			render: function(data, type, row) {
-				if (row.kategori_faktur=='in') {
-					return '<a href="<?php echo base_url('panel/inventori/detailInventoriMasuk/');?>'+row.id_faktur+'" class="btn btn-xs btn-primary">'+row.id_faktur+'</a>';
+				if (row.kategori_faktur=='mutasi') {
+					return '<a href="<?php echo base_url('panel/inventori/detailMutasi/');?>'+row.id_faktur+'" class="btn btn-xs btn-primary">'+row.id_faktur+'</a>';
 				}else if(row.kategori_faktur=='out'){
 					return '<a href="<?php echo base_url('panel/inventori/detailInventoriKeluar/');?>'+row.id_faktur+'" class="btn btn-xs btn-primary">'+row.id_faktur+'</a>';
 				}

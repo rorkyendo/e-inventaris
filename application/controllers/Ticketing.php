@@ -41,7 +41,7 @@ class Ticketing extends CI_Controller {
 			$id_tiket = $this->db->insert_id();
 			$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
 			foreach ($getStaff as $key) {
-				$message = "Halo ".$key->nama_lengkap." ada tiket masuk dengan *ID ".$id_tiket."* harap segera memberikan tanggapan pada aplikasi, Terimakasih.";
+				$message = "Halo *".$key->nama_lengkap."* ada tiket masuk dengan *ID ".$id_tiket."* harap segera memberikan tanggapan pada aplikasi, Terimakasih.";
 				try {
 					sendNotifWA($key->no_wa,$message);
 				} catch (\Throwable $th) {

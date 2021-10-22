@@ -35,13 +35,23 @@ class InventoriModel extends CI_Model {
   {
     $this->datatables->select('*,v_faktur.id_faktur as id_faktur');
     $this->datatables->from('v_faktur');
-    $this->datatables->add_column(
-      'action',
-        anchor(changeLink('panel/inventori/detailInventoriKeluar/$1'), '<i class="fa fa-info"></i> Detail', array('class' => 'btn btn-info btn-xs')) . ' '
-        . anchor(changeLink('panel/inventori/updateInventoriKeluar/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
-        . anchor(changeLink('panel/inventori/deleteInventoriKeluar/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
-      'id_faktur'
-    );
+    if ($kategori_faktur == 'out') {
+      $this->datatables->add_column(
+        'action',
+          anchor(changeLink('panel/inventori/detailInventoriKeluar/$1'), '<i class="fa fa-info"></i> Detail', array('class' => 'btn btn-info btn-xs')) . ' '
+          . anchor(changeLink('panel/inventori/updateInventoriKeluar/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+          . anchor(changeLink('panel/inventori/deleteInventoriKeluar/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
+        'id_faktur'
+      );
+    }else{
+      $this->datatables->add_column(
+        'action',
+          anchor(changeLink('panel/inventori/detailMutasi/$1'), '<i class="fa fa-info"></i> Detail', array('class' => 'btn btn-info btn-xs')) . ' '
+          . anchor(changeLink('panel/inventori/updateMutasi/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+          . anchor(changeLink('panel/inventori/deleteMutasi/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus inventori?')")),
+        'id_faktur'
+      );
+    }
     if (!empty($kategori_faktur)) {
       $this->datatables->where("kategori_faktur = '$kategori_faktur'");
     }

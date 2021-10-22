@@ -54,14 +54,14 @@
                   <td id='subUnit'></td>
                 </tr>
                 <tr>
+                  <td>Keterangan Sub Unit</td>
+                  <td id='keteranganSubUnit'></td>
                   <td>Kode Inventori</td>
                   <td id='kodeInventori'></td>
-                  <td>Nama Inventori</td>
-                  <td id='namaInventori'></td>
                 </tr>
                 <tr>
-                  <td>Jumlah Inventori</td>
-                  <td id='jumlahInventori'></td>
+                  <td>Nama Inventori</td>
+                  <td id='namaInventori'></td>
                   <td>Harga Inventori</td>
                   <td id='hargaInventori'></td>
                 </tr>
@@ -195,9 +195,9 @@
             $('#barcode').html('<img src="<?php echo base_url();?>'+val.barcode+'" class="img-responsive" style="width:220px;height:220px">')     
             $('#unit').text(val.nama_unit)     
             $('#subUnit').text(val.nama_sub_unit)     
+            $('#keteranganSubUnit').text(val.keterangan_sub_unit)     
             $('#kodeInventori').text(kode)     
             $('#namaInventori').text(val.nama_inventori)     
-            $('#jumlahInventori').text(new Intl.NumberFormat(['bal','ID']).format(val.jumlah_inventori))     
             $('#hargaInventori').text('Rp ' + new Intl.NumberFormat(['bal','ID']).format(val.harga_barang))     
           })
         }else{

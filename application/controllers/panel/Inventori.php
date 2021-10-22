@@ -175,6 +175,15 @@ class Inventori extends CI_Controller
 		}
 	}
 
+	public function getSubUnitId(){
+			$getUnit = $this->GeneralModel->get_by_id_general('e_sub_unit','unit',$this->input->get('unit'));
+			if ($getUnit) {
+				echo json_encode($getUnit,JSON_PRETTY_PRINT);
+			}else{
+				echo 'false';
+			}
+	}
+
 	public function listInventori($param1='')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
@@ -694,7 +703,7 @@ class Inventori extends CI_Controller
 
 				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
 				foreach ($getStaff as $key) {
-					$message = "Halo ".$key->nama_lengkap." ada faktur untuk barang keluar dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+					$message = "Halo *".$key->nama_lengkap."* ada faktur untuk barang keluar dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
 					try {
 						sendNotifWA($key->no_wa,$message);
 					} catch (\Throwable $th) {
@@ -943,6 +952,215 @@ class Inventori extends CI_Controller
 			$data['status_keluar'] = $this->input->get('status_keluar');
 			$data['status_pengembalian'] = $this->input->get('status_pengembalian');
 			$data['status_approval'] = $this->input->get('status_approval');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	//------------------------ MUTASI BEGIN ------------------------//
+	public function daftarMutasi($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1 == 'cari') {
+			$start_date = $this->input->post('start_date');
+			$end_date = $this->input->post('end_date');
+			$status_approval = $this->input->post('status_approval');
+			return $this->InventoriModel->getFaktur('mutasi', $status_approval, $start_date, $end_date);
+		} else {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Mutasi Barang';
+			$data['content'] = 'panel/inventori/mutasi/index';
+			$data['start_date'] = $this->input->get('start_date');
+			$data['end_date'] = $this->input->get('end_date');
+			$data['status_approval'] = $this->input->get('status_approval');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function tambahMutasi($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1 == 'doCreate') {
+			$dataFaktur = array(
+				'kategori_faktur' => 'mutasi',
+				'kode_faktur' => $this->input->post('kode_faktur'),
+				'catatan_faktur' => $this->input->post('catatan_faktur'),
+				'created_by' => $this->session->userdata('id_pengguna'),
+			);
+			$tempdir = "assets/img/qrfaktur/";
+			if (!file_exists($tempdir))
+				mkdir($tempdir);
+
+			$logopath = 'assets/img/Fasilkom-TI.png';
+
+			if ($this->GeneralModel->create_general('e_faktur', $dataFaktur) == TRUE) {
+				$id_faktur = $this->db->insert_id();
+				//------------------ Pembuatan Barcode ----------------------------//
+				$this->zend->load('Zend/Barcode.php'); 
+				$barcode = $id_faktur;
+				$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$barcode), array())->draw($barcode,'image', array('text'=>$barcode), array());
+				$imageName = $barcode.'.png';
+				$imagePath = 'assets/img/barcodefaktur/';
+				imagejpeg($imageResource, $imagePath.$imageName); 
+				$pathBarcode = $imagePath.$imageName; 				
+				$dataFaktur2 = array(
+					'barcode_faktur' => $pathBarcode
+				);
+				$namaQrcode = 'Faktur-' . $id_faktur . '.png';
+				//isi qrcode jika di scan
+				$codeContents = $id_faktur;
+				//simpan file qrcode
+				QRcode::png($codeContents, $tempdir . $namaQrcode, QR_ECLEVEL_H, 10, 4);
+
+				// ambil file qrcode
+				$QR = imagecreatefrompng($tempdir . $namaQrcode);
+
+				$dataFaktur2 += array(
+					'qrcode_faktur' => 'assets/img/qrfaktur/' . $namaQrcode
+				);
+
+				$this->GeneralModel->update_general('e_faktur', 'id_faktur', $id_faktur, $dataFaktur2);
+
+				// memulai menggambar logo dalam file qrcode
+				$logo = imagecreatefrompng($logopath);
+
+				imagecolortransparent($logo, imagecolorallocatealpha($logo, 0, 0, 0, 127));
+				imagealphablending($logo, false);
+				imagesavealpha($logo, true);
+
+				$QR_width = imagesx($QR);
+				$QR_height = imagesy($QR);
+
+				$logo_width = imagesx($logo);
+				$logo_height = imagesy($logo);
+
+				// Scale logo to fit in the QR Code
+				$logo_qr_width = $QR_width / 5;
+				$scale = $logo_width / $logo_qr_width;
+				$logo_qr_height = $logo_height / $scale;
+
+				imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+
+				// Simpan kode QR lagi, dengan logo di atasnya
+				imagepng($QR, $tempdir . $namaQrcode);
+
+				$id_inventori[] = $this->input->post('id_inventori');
+				$unit_awal[] = $this->input->post('unit_awal');
+				$sub_unit_awal[] = $this->input->post('sub_unit_awal');
+				$unit_pindah[] = $this->input->post('unit_pindah');
+				$sub_unit_pindah[] = $this->input->post('sub_unit_pindah');
+				
+				for ($i = 0; $i < count($id_inventori[0]); $i++) {
+						$dataInventori = array(
+							'id_faktur' => $id_faktur,
+							'id_inventori' => $id_inventori[0][$i],
+							'unit_awal' => $unit_awal[0][$i],
+							'sub_unit_awal' => $sub_unit_awal[0][$i],
+							'unit_pindah' => $unit_pindah[0][$i],
+							'sub_unit_pindah' => $sub_unit_pindah[0][$i],
+						);
+						$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
+				}
+
+				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
+				foreach ($getStaff as $key) {
+					$message = "Halo ".$key->nama_lengkap." ada faktur untuk mutasi barang dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+					try {
+						sendNotifWA($key->no_wa,$message);
+					} catch (\Throwable $th) {
+					}
+				}
+				
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data mutasi barang berhasil ditambahkan</div>');
+				redirect(changeLink('panel/inventori/daftarMutasi'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data mutasi barang gagal ditambahkan</div>');
+				redirect(changeLink('panel/inventori/daftarMutasi'));
+			}
+		} else {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Mutasi';
+			$data['content'] = 'panel/inventori/mutasi/create';
+			$data['unit'] = $this->GeneralModel->get_general('e_unit');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateMutasi($param1 = '',$param2 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1 == 'doUpdate') {
+			$dataFaktur = array(
+				'kategori_faktur' => 'mutasi',
+				'kode_faktur' => $this->input->post('kode_faktur'),
+				'catatan_faktur' => $this->input->post('catatan_faktur'),
+				'updated_by' => $this->session->userdata('id_pengguna'),
+				'updated_time' => DATE('Y-m-d H:i:s'),
+			);
+
+			if ($this->GeneralModel->update_general('e_faktur','id_faktur',$param2,$dataFaktur) == TRUE) {
+				$id_faktur = $param2;
+				
+				$id_inventori[] = $this->input->post('id_inventori');
+				$unit_awal[] = $this->input->post('unit_awal');
+				$sub_unit_awal[] = $this->input->post('sub_unit_awal');
+				$unit_pindah[] = $this->input->post('unit_pindah');
+				$sub_unit_pindah[] = $this->input->post('sub_unit_pindah');
+				
+				//Delete Old Detail Faktur
+				$this->GeneralModel->delete_general('e_detail_faktur','id_faktur',$param2);
+
+				for ($i = 0; $i < count($id_inventori[0]); $i++) {
+						$dataInventori = array(
+							'id_faktur' => $id_faktur,
+							'id_inventori' => $id_inventori[0][$i],
+							'unit_awal' => $unit_awal[0][$i],
+							'sub_unit_awal' => $sub_unit_awal[0][$i],
+							'unit_pindah' => $unit_pindah[0][$i],
+							'sub_unit_pindah' => $sub_unit_pindah[0][$i],
+						);
+						$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
+				}
+
+				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
+				foreach ($getStaff as $key) {
+					$message = "Halo *".$key->nama_lengkap."* ada faktur untuk mutasi barang dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+					try {
+						sendNotifWA($key->no_wa,$message);
+					} catch (\Throwable $th) {
+					}
+				}
+				
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data mutasi barang berhasil ditambahkan</div>');
+				redirect(changeLink('panel/inventori/daftarMutasi'));
+			} else {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data mutasi barang gagal ditambahkan</div>');
+				redirect(changeLink('panel/inventori/daftarMutasi'));
+			}
+		} else {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Mutasi';
+			$data['content'] = 'panel/inventori/mutasi/update';
+			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur','id_faktur',$param1);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori','id_faktur',$param1);
+			$data['unit'] = $this->GeneralModel->get_general('e_unit');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function detailMutasi($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='print') {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Detail Mutasi';
+			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur','id_faktur',$param2);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori','id_faktur',$param2);
+			$this->load->view('panel/inventori/mutasi/print', $data);
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Detail Mutasi';
+			$data['content'] = 'panel/inventori/mutasi/detail';
+			$data['faktur'] = $this->GeneralModel->get_by_id_general('v_faktur','id_faktur',$param1);
+			$data['detailFaktur'] = $this->GeneralModel->get_by_id_general('v_detail_inventori','id_faktur',$param1);
 			$this->load->view('panel/content', $data);
 		}
 	}
