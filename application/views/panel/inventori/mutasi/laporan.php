@@ -26,7 +26,7 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form action="<?php echo base_url('panel/inventori/laporanInventori/out');?>" method="GET">
+          <form action="<?php echo base_url('panel/inventori/laporanInventori/mutasi');?>" method="GET">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="">Dari tgl</label>
@@ -39,32 +39,6 @@
                 <input type="date" class="form-control" name="end_date" value="<?php echo $end_date;?>">
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="">Status Keluar</label>
-                <select name="status_keluar" class="form-control" id="status_keluar">
-                  <option value="">.:Pilih Status Keluar:.</option>
-                  <option value="pinjam">Dipinjam</option>
-                  <option value="rusak">Rusak</option>
-                </select>
-              </div>
-            </div>
-            <script>
-              $('#status_keluar').val('<?php echo $status_keluar;?>');
-            </script>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="">Status Pengembalian</label>
-                <select name="status_pengembalian" class="form-control" id="status_pengembalian">
-                  <option value="">.:Pilih Status Pengembalian:.</option>
-                  <option value="sudah">Sudah dikembalikan</option>
-                  <option value="belum">Belum dikembalikan</option>
-                </select>
-              </div>
-            </div>
-            <script>
-              $('#status_pengembalian').val('<?php echo $status_pengembalian;?>');
-            </script>
             <div class="col-md-12">
               <div class="form-group">
                 <label for="">Status Approval</label>
@@ -93,8 +67,10 @@
                 <th>Nama Barang</th>
                 <th>Status Approval</th>
                 <th>Tgl Pembuatan</th>
-                <th>Status Keluar</th>
-                <th>Status Pengembalian</th>
+                <th>Unit Awal</th>
+                <th>Sub Unit Awal</th>
+                <th>Unit Pindah</th>
+                <th>Sub Unit Pindah</th>
               </tr>
             </thead>
             <tbody>
@@ -128,12 +104,10 @@
       "lengthChange": true,
       // Load data for the table's content from an Ajax source
       "ajax": {
-        "url": '<?php echo site_url(changeLink('panel/inventori/laporanInventori/cari')); ?>',
+        "url": '<?php echo site_url(changeLink('panel/inventori/laporanMutasi/cari')); ?>',
         "type": "POST",
         "data": {
           'kategori_faktur' : '<?php echo $kategori_faktur;?>',
-          'status_keluar' : '<?php echo $status_keluar;?>',
-          'status_pengembalian' : '<?php echo $status_pengembalian;?>',
           'status_approval' : '<?php echo $status_approval;?>',
           'start_date' : '<?php echo $start_date;?>',
           'end_date' : '<?php echo $end_date;?>'
@@ -144,7 +118,7 @@
           "data": "id_faktur",
           width: 100,
           render: function(data, type, row) {
-            return '<a href="<?php echo base_url('panel/inventori/detailInventoriKeluar/');?>'+row.id_faktur+'" class="btn btn-xs btn-primary">'+row.id_faktur+'</a>';
+            return '<a href="<?php echo base_url('panel/inventori/detailMutasi/');?>'+row.id_faktur+'" class="btn btn-xs btn-primary">'+row.id_faktur+'</a>';
           }
         },
         {
@@ -176,28 +150,20 @@
           width: 100,
         },
         {
-          "data": "status_keluar",
+          "data": "nama_unit_awal",
           width: 100,
-          render: function(data, type, row) {
-            if (row.status_keluar == 'pinjam') {
-              return '<b class="text-warning">Dipinjam</b>';
-            }else if(row.status_keluar == 'rusak'){
-              return '<b class="text-danger">Rusak</b>';
-            }
-          }
         },
         {
-          "data": "status_pengembalian",
+          "data": "nama_sub_unit_awal",
           width: 100,
-          render: function(data, type, row) {
-            if (row.status_pengembalian == 'sudah') {
-              return '<b class="text-success">Sudah dikembalikan</b>';
-            }else if(row.kategori_faktur == 'belum'){
-              return '<b class="text-danger">Belum dikembalikan</b>';
-            }else{
-              return '-';
-            }
-          }
+        },
+        {
+          "data": "nama_unit_pindah",
+          width: 100,
+        },
+        {
+          "data": "nama_sub_unit_pindah",
+          width: 100,
         },
       ],
     });

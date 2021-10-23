@@ -1165,4 +1165,92 @@ class Inventori extends CI_Controller
 		}
 	}
 
+	public function rejectMutasi($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		$getFaktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
+		if ($getFaktur) {
+			if ($getFaktur[0]->status_approval == 'pending') {
+				$dataFaktur = array(
+					'status_approval' => 'rejected'
+				);
+				$this->GeneralModel->update_general('e_faktur','id_faktur',$param1,$dataFaktur);
+				$this->session->set_flashdata('notif','<div class="alert alert-success">Faktur berhasil ditolak</div>');
+				redirect('panel/inventori/detailMutasi/'.$param1);
+			}else{
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Mohon maaf faktur ini telah dikonfirmasi</div>');
+				redirect('panel/inventori/detailMutasi/'.$param1);
+			}
+		}else{
+			$this->session->set_flashdata('notif','<div class="alert alert-danger">Mohon maaf faktur tidak ditemukan</div>');
+			redirect('panel/inventori/daftarMutasi');
+		}
+	}
+
+	public function approveMutasi($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		$getFaktur = $this->GeneralModel->get_by_id_general('e_faktur','id_faktur',$param1);
+		if ($getFaktur) {
+			if ($getFaktur[0]->status_approval == 'pending') {
+				$dataFaktur = array(
+					'status_approval' => 'accept',
+					'approval_time' => DATE('Y-m-d H:i:s'),
+					'approval_by' => $this->session->userdata('id_pengguna')
+				);
+				$this->GeneralModel->update_general('e_faktur','id_faktur',$param1,$dataFaktur);
+
+				$getDetailFaktur = $this->GeneralModel->get_by_id_general('v_detail_inventori','id_faktur',$param1);
+				foreach ($getDetailFaktur as $key) {
+					$dataDetailFaktur = array(
+						'kode_unit' => $key->kode_unit_pindah,
+						'kode_sub_unit' => $key->kode_sub_unit_pindah,
+						'updated_by' => $this->session->userdata('id_pengguna'),
+						'updated_time' => DATE('Y-m-d H:i:s')
+					);
+					$this->GeneralModel->update_general('e_inventori','id_inventori',$key->id_inventori,$dataDetailFaktur);
+				}
+
+				$this->session->set_flashdata('notif','<div class="alert alert-success">Faktur berhasil ditolak</div>');
+				redirect('panel/inventori/detailMutasi/'.$param1);
+			}else{
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Mohon maaf faktur ini telah dikonfirmasi</div>');
+				redirect('panel/inventori/detailMutasi/'.$param1);
+			}
+		}else{
+			$this->session->set_flashdata('notif','<div class="alert alert-danger">Mohon maaf faktur tidak ditemukan</div>');
+			redirect('panel/inventori/daftarMutasi');
+		}
+	}
+
+		public function laporanMutasi($param1='')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			$kategori_faktur = $this->input->post('kategori_faktur');
+			$status_keluar = '';
+			$status_pengembalian = '';
+			$status_approval = $this->input->post('status_approval');
+			$start_date = $this->input->post('start_date');
+			$end_date = $this->input->post('end_date');
+			return $this->InventoriModel->getLaporanInventori($kategori_faktur,$status_keluar,$status_pengembalian,$status_approval,$start_date,$end_date);
+		} else {
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Laporan Mutasi Barang';
+			$data['content'] = 'panel/inventori/mutasi/laporan';
+			$data['kategori_faktur'] = 'mutasi';
+			if (!empty($this->input->get('start_date'))) {
+				$data['start_date']  = $this->input->get('start_date');
+			}else{
+				$data['start_date'] = DATE('Y-m-01');
+			}
+
+			if (!empty($this->input->get('end_date'))) {
+				$data['end_date']  = $this->input->get('end_date');
+			}else{
+				$data['end_date'] = DATE('Y-m-t');
+			}
+			$data['status_approval'] = $this->input->get('status_approval');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
 }

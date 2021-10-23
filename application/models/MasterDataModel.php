@@ -10,8 +10,8 @@ class MasterDataModel extends CI_Model {
 
   public function getUnit()
   {
-    $this->datatables->select('*,e_unit.id_unit as id_unit');
-    $this->datatables->from('e_unit');
+    $this->datatables->select('*,v_unit.id_unit as id_unit');
+    $this->datatables->from('v_unit');
     $this->datatables->add_column(
       'action',
        anchor(changeLink('panel/masterData/updateUnit/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '

@@ -53,6 +53,7 @@
                 <th>Kode Sub Unit</th>
                 <th>Nama Sub Unit</th>
                 <th>Keterangan Sub Unit</th>
+                <th>Jumlah Inventori</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -117,6 +118,13 @@
         {
           "data": "keterangan_sub_unit",
           width: 100,
+        },
+        {
+          "data": "jmlInventori",
+          width: 100,
+          render: function(data, type, row) {
+            return '<a href="<?php echo base_url('panel/inventori/listInventori?kode_unit=');?>'+row.kode_unit+'&kode_sub_unit='+row.kode_sub_unit+'" class="btn btn-xs btn-primary">'+row.jmlInventori+'</a>';
+          }
         },
         {
           "data": "action",

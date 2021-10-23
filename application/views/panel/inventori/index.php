@@ -233,10 +233,9 @@
 </div>
 
 <script>
-  $('#kode_unit').val('<?php echo set_value('kode_unit'); ?>')
   $(document).ready(function(){
-    <?php if(!empty(set_value('kode_unit'))): ?>
-    cariSubUnit('<?php echo set_value('kode_unit'); ?>')
+    <?php if(!empty($kode_unit)): ?>
+      cariSubUnit('<?php echo $kode_unit; ?>')
     <?php endif; ?>
   })
 
@@ -253,7 +252,7 @@
           $.each(data,function(key,val){
             $('#kode_sub_unit').append('<option value="'+val.kode_sub_unit+'">'+val.kode_sub_unit+' | '+val.nama_sub_unit+'</option>');
           })
-        $('#kode_sub_unit').val('<?php echo set_value('kode_sub_unit'); ?>')
+        $('#kode_sub_unit').val('<?php echo $kode_sub_unit; ?>')
         }else{
           Swal.fire({
             type: 'error',
