@@ -82,7 +82,9 @@ class GeneralModel extends CI_Model
 
     function get_by_triple_id_general($table, $id, $val, $id2='', $val2='', $id3='', $val3='')
   {
-    $this->db->where($id, $val);
+    if (!empty($id) && !empty($val)) {
+      $this->db->where($id, $val);
+    }
     if (!empty($id2) && !empty($val2)) {
       $this->db->where($id2, $val2);
     }

@@ -20,6 +20,7 @@
         <div class="panel-heading">
           <div class="panel-heading-btn">
             <a href="<?php echo base_url(changeLink('panel/inventori/createInventori/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Inventori</a>
+            <a target="_blank" href="<?php echo base_url(changeLink('panel/inventori/listInventori/print?id_kategori='.$id_kategori.'&kode_unit='.$kode_unit.'&kode_sub_unit='.$kode_sub_unit)); ?>" class="btn btn-xs btn-success pull-right">Print</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>

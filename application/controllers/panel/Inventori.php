@@ -192,6 +192,17 @@ class Inventori extends CI_Controller
 			$kode_unit = $this->input->post('kode_unit');
 			$kode_sub_unit = $this->input->post('kode_sub_unit');
 			return $this->InventoriModel->getDataInventori($id_kategori,$kode_unit,$kode_sub_unit);
+		}else if($param1=='print'){
+			$data['id_kategori'] = $this->input->get('id_kategori');
+			$data['kode_unit'] = $this->input->get('kode_unit');
+			$data['kode_sub_unit'] = $this->input->get('kode_sub_unit');
+			$data['inventori'] = $this->GeneralModel->get_by_triple_id_general('v_inventori','kategori_inventori',$data['id_kategori'],'kode_unit',$data['kode_unit'],'kode_sub_unit',$data['kode_sub_unit']);
+			if ($data['inventori']) {
+				$this->load->view('panel/inventori/printDaftarInventori', $data);
+			}else{
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Mohon maaf daftar inventori tidak ditemukan</div>');
+				redirect('panel/inventori/listInventori?id_kategori='.$data['id_kategori'].'&kode_unit='.$data['kode_unit'].'&kode_sub_unit='.$data['kode_sub_unit']);
+			}
 		} else {
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Daftar Inventori';
