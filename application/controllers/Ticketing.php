@@ -31,8 +31,7 @@ class Ticketing extends CI_Controller {
 		$this->upload->initialize($config);
 
 		if (! $this->upload->do_upload('foto_laporan')) {
-			$this->session->set_flashdata('notif','<div class="alert alert-danger">Mohon maaf kamu harus menyertakan foto untuk bukti laporan</div>');
-			redirect('ticketing/lapor');
+			echo  $this->upload->display_errors();die;
 		} else {
 				$dataTicekting += array('foto_laporan' => $config['upload_path'].$this->upload->data('file_name'));
 		}

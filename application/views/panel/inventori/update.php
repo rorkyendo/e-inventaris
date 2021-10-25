@@ -43,7 +43,7 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Foto Inventori</label>
                 <div class="col-md-10">
-                  <input type="file" name="foto_inventori" class="form-control" id="foto_inventori" accept="image/*" />
+                  <input type="file" name="foto_inventori" class="form-control" id="foto_inventori" accept="image/*" capture/>
                 </div>
               </div>
             </div>

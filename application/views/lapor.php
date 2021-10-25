@@ -34,6 +34,7 @@
 	<script src="<?php echo base_url('assets/');?>plugins/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url('assets/');?>js/main.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>plugins/sweetalert/sweetalert2.all.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>js/qrscanner.js"></script>
 	<!-- ================== END BASE JS ================== -->
 	<script>
 	if ('serviceWorker' in navigator) {
@@ -45,6 +46,25 @@
 			console.log("'SERVICE WORKER -> REGISTER -> Registration failed! This happened: ", err)
 		});
 	}
+	const html5QrCode = new Html5Qrcode("reader");
+	function scan(){
+		Html5Qrcode.getCameras().then(devices => {
+		if (devices && devices.length) {
+		var cameraId = devices[0].id;
+		html5QrCode.start(
+		{ facingMode: "environment" },
+		errorMessage => {
+		})
+		.catch(err => {
+			console.log(`Unable to start scanning, error: ${err}`);
+		});
+		}
+		}).catch(err => {
+		});
+	}
+	$(document).ready(function(){
+		scan();
+	})
 	</script>
 	<style type="text/css">
 		.login-page .form-box .univ-identity-box {
@@ -81,7 +101,7 @@
 												<img src="<?php echo base_url('assets/img/no-image.png');?>" class="img-responsive" style="width:300px" id="preview" alt="Preview">
 												<br>
 												<div class="form-group">
-														<input type="file" name="foto_laporan" id="foto_laporan" class="form-control" placeholder="Masukkan Foto Laporan" accept="image/*" required/>
+														<input type="file" name="foto_laporan" id="foto_laporan" class="form-control" placeholder="Masukkan Foto Laporan" accept="image/*" required capture/>
 												</div>
 												<script type="text/javascript">
 												function readURL(input) {
@@ -165,6 +185,8 @@
 					</div>
 			</div>
 	</div>
+	<div hidden id="reader" class="img-fluid" style="width:280px"></div>
+
 	<!-- ================== BEGIN BASE JS ================== -->
 	<!--[if lt IE 9]>
 		<script src="<?php echo base_url('assets/');?>crossbrowserjs/html5shiv.js"></script>
