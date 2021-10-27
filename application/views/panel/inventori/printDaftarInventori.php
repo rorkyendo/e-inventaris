@@ -93,10 +93,11 @@ $daftarInventori = '';
 foreach ($inventori as $key) {
   $daftarInventori .= '<tr>';
     $daftarInventori .= '<td width="20%" style="font-size:12px;">'.$key->kode_inventori.'</td>';
-    $daftarInventori .= '<td width="20%" style="font-size:12px;">'.$key->nama_inventori.'</td>';
-    $daftarInventori .= '<td width="20%" style="font-size:12px;">'.$key->nama_unit.'</td>';
+    $daftarInventori .= '<td width="15%" style="font-size:12px;">'.$key->nama_inventori.'</td>';
+    $daftarInventori .= '<td width="15%" style="font-size:12px;">'.$key->nama_unit.'</td>';
     $daftarInventori .= '<td width="20%" style="font-size:12px;">'.$key->nama_sub_unit.'</td>';
     $daftarInventori .= '<td width="20%" style="font-size:12px;">'.$key->nama_kategori.'</td>';
+    $daftarInventori .= '<td width="10%" style="font-size:12px;">'.$key->status_inventori.'</td>';
   $daftarInventori .= '</tr>';
 }
 
@@ -109,9 +110,10 @@ $html = '<hr/><table border="1px" style="collapse:collapse;">
           <tr>
             <th width="20%">Kode Inventori</th>
             <th width="20%">Nama Inventori</th>
-            <th width="20%">Nama Unit</th>
-            <th width="20%">Nama Sub Unit</th>
+            <th width="15%">Nama Unit</th>
+            <th width="15%">Nama Sub Unit</th>
             <th width="20%">Kategori Inventori</th>
+            <th width="10%">Status</th>
           </tr>
         </thead>
         <tbody>

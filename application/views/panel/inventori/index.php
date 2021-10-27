@@ -73,6 +73,7 @@
                 <th>Foto Inventori</th>
                 <th>Kode Inventori</th>
                 <th>Nama Barang</th>
+                <th>Status</th>
                 <th>Kategori</th>
                 <th>Harga Barang</th>
                 <th>QR CODE</th>
@@ -161,6 +162,19 @@
         {
           "data": "nama_inventori",
           width: 100,
+        },
+        {
+          "data": "status_inventori",
+          width: 100,
+          render: function(data, type, row) {
+            if (row.status_inventori == 'Tersedia') {
+              return "<b class='text-success'>Tersedia</b>";
+            }else if(row.status_inventori == 'Dipinjam'){
+              return "<b class='text-warning'>Dipinjam</b>";
+            }else{
+              return "<b class='text-danger'>Rusak</b>";
+            }
+          }
         },
         {
           "data": "nama_kategori",

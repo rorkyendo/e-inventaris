@@ -704,12 +704,24 @@ class Inventori extends CI_Controller
 
 				$id_inventori[] = $this->input->post('id_inventori');
 				
+				if($dataFaktur['status_keluar'] == 'pinjam'){
+					$statusInventori = 'Dipinjam';
+				}else if($dataFaktur['status_keluar'] == 'rusak'){
+					$statusInventori = 'Rusak';
+				}
+
 				for ($i = 0; $i < count($id_inventori[0]); $i++) {
-						$dataInventori = array(
+						$dataDetailFaktur = array(
 							'id_faktur' => $id_faktur,
 							'id_inventori' => $id_inventori[0][$i],
 						);
-						$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
+						$this->GeneralModel->create_general('e_detail_faktur', $dataDetailFaktur);
+
+						$dataInventori = array(
+							'status_inventori' => $statusInventori
+						);
+
+						$this->GeneralModel->update_general('e_inventori','id_inventori',$id_inventori[0][$i],$dataInventori);
 				}
 
 				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
@@ -752,19 +764,27 @@ class Inventori extends CI_Controller
 
 			if ($this->GeneralModel->update_general('e_faktur', 'id_faktur', $param2, $dataFaktur) == TRUE) {
 				$id_inventori[] = $this->input->post('id_inventori');
-				$jumlah[] = $this->input->post('jumlah');
-				$harga_barang[] = $this->input->post('harga_barang');
 
 				$this->GeneralModel->delete_general('e_detail_faktur', 'id_faktur', $param2);
+				
+				if($dataFaktur['status_keluar'] == 'pinjam'){
+					$statusInventori = 'Dipinjam';
+				}else if($dataFaktur['status_keluar'] == 'rusak'){
+					$statusInventori = 'Rusak';
+				}
 
 				for ($i = 0; $i < count($id_inventori[0]); $i++) {
 						$dataInventori = array(
 							'id_faktur' => $param2,
 							'id_inventori' => $id_inventori[0][$i],
-							'jumlah_inventori' => $jumlah[0][$i],
-							'harga_barang' => $harga_barang[0][$i],
 						);
 						$this->GeneralModel->create_general('e_detail_faktur', $dataInventori);
+
+						$dataInventori = array(
+							'status_inventori' => $statusInventori
+						);
+
+						$this->GeneralModel->update_general('e_inventori','id_inventori',$id_inventori[0][$i],$dataInventori);
 				}
 
 				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
@@ -910,9 +930,8 @@ class Inventori extends CI_Controller
 		if ($getFaktur[0]->status_approval == 'accept' && $getFaktur[0]->status_keluar == 'pinjam' && $getFaktur[0]->status_pengembalian == 'belum') {
 			$getDetailFaktur = $this->GeneralModel->get_by_id_general('e_detail_faktur','id_faktur',$id_faktur);
 			foreach ($getDetailFaktur as $key) {
-				$getInventori = $this->GeneralModel->get_by_id_general('e_inventori','id_inventori',$key->id_inventori);
 				$dataInventori = array(
-					'jumlah_inventori' => $getInventori[0]->jumlah_inventori + $key->jumlah_inventori
+					'status_inventori' => 'Tersedia'
 				);
 				$this->GeneralModel->update_general('e_inventori','id_inventori',$key->id_inventori,$dataInventori);
 			}

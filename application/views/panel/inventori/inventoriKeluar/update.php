@@ -181,6 +181,7 @@
           var data = JSON.parse(resp)
           console.log(data)
           $.each(data,function(key,val){
+            if (val.status_inventori == 'Tersedia') {
             hapus(val.id_inventori);
             var kode = val.kode_inventori;
             var onclick = "hapus('"+val.id_inventori+"')";
@@ -214,6 +215,13 @@
                   title: val.nama_inventori+' (kode:'+kode+')',
                   text: 'berhasil di tambahkan',
                 })
+            }else{
+              Swal.fire({
+                type: 'error',
+                title: 'Oopps..',
+                text: 'Inventori tidak tersedia untuk dikeluarkan',
+              })              
+            }
           })
         }else{
           Swal.fire({
