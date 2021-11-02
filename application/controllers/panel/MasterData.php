@@ -774,6 +774,103 @@ class MasterData extends CI_Controller
 			redirect(changeLink('panel/masterData/daftarBidang/'));
 		}
 	}
-	//--------------- END OF SUMBER DANA------------------//
+	//--------------- END OF BIDANG------------------//
+	//--------------- KELOMPOK BEGIN------------------//
+	public function daftarKelompok($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			$kodeBidang = $this->input->post('kode_bidang');
+			return $this->MasterDataModel->getKelompok($kodeBidang);		
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Kelompok';
+			$data['content'] = 'panel/masterData/kelompok/index';
+			$data['kode_bidang'] = $this->input->get('kode_bidang');
+			$data['bidang'] = $this->GeneralModel->get_general('v_bidang');
+			$this->load->view('panel/content', $data);
+		}
+	}
 
+	public function createKelompok($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doCreate') {
+			$cekKodeKelompok = $this->GeneralModel->get_by_id_general('e_kelompok','kd_kel',$this->input->post('kd_kel'));
+			if ($cekKodeKelompok) {
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode kelompok sudah ada</div>');
+				redirect('panel/masterData/createKelompok');
+			}else{
+				$dataKelompok = array(
+					'kd_kel' => $this->input->post('kd_kel'),
+					'ur_kel' => $this->input->post('ur_kel'),
+					'bid' => $this->input->post('bid'),
+					'created_by' => $this->session->userdata('id_pengguna')
+				);
+				if ($this->GeneralModel->create_general('e_kelompok',$dataKelompok) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data Kelompok berhasil ditambahkan</div>');
+					redirect('panel/masterData/daftarKelompok');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data kelompok gagal ditambahkan</div>');
+					redirect('panel/masterData/daftarKelompok');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Kelompok';
+			$data['content'] = 'panel/masterData/kelompok/create';
+			$data['bidang'] = $this->GeneralModel->get_general('v_bidang');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateKelompok($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$cekKodeKelompok = $this->GeneralModel->get_by_multi_id_general('e_kelompok','id_kel',$param2,'kd_kel',$this->input->post('kd_kel'));
+			if ($cekKodeKelompok) {
+				$dataKelompok = array(
+					'kd_kel' => $this->input->post('kd_kel'),
+					'ur_kel' => $this->input->post('ur_kel'),
+					'bid' => $this->input->post('bid'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'updated_time' => DATE('Y-m-d H:i:s')
+				);
+				if ($this->GeneralModel->update_general('e_kelompok','id_kel',$param2,$dataKelompok) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data kelompok berhasil diupdate</div>');
+					redirect('panel/masterData/daftarKelompok');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data kelompok gagal diupdate</div>');
+					redirect('panel/masterData/daftarKelompok');
+				}
+			}else{
+				$cekKodeKelompok = $this->GeneralModel->get_by_id_general('e_kelompok','kd_kel',$this->input->post('kd_kel'));
+				if ($cekKodeKelompok) {
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode kelompok yang sama sudah ada</div>');
+					redirect('panel/masterData/daftarKelompok');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, kode kelompok gagal diupdate</div>');
+					redirect('panel/masterData/daftarKelompok');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Kelompok';
+			$data['content'] = 'panel/masterData/kelompok/update';
+			$data['kelompok'] = $this->GeneralModel->get_by_id_general('e_kelompok','id_kel',$param1);
+			$data['bidang'] = $this->GeneralModel->get_general('v_bidang');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function deleteKelompok($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($this->GeneralModel->delete_general('e_kelompok', 'id_kel', $param1) == TRUE) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data Kelompok berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarKelompok/'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data Kelompok gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarKelompok/'));
+		}
+	}
+	//--------------- END OF KELOMPOK------------------//
 }

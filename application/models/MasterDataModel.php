@@ -70,7 +70,7 @@ class MasterDataModel extends CI_Model {
     $this->datatables->add_column(
       'action',
        anchor(changeLink('panel/masterData/updateBidang/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
-      . anchor(changeLink('panel/masterData/deleteBidang/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus golongan?')")),
+      . anchor(changeLink('panel/masterData/deleteBidang/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus bidang?')")),
       'id_bid'
     );
     if (!empty($kd_gol)) {
@@ -79,5 +79,20 @@ class MasterDataModel extends CI_Model {
     return print_r($this->datatables->generate('json'));
   }
 
+    public function getKelompok($kd_bid)
+  {
+    $this->datatables->select('*,v_kelompok.id_kel as id_kel');
+    $this->datatables->from('v_kelompok');
+    $this->datatables->add_column(
+      'action',
+       anchor(changeLink('panel/masterData/updateKelompok/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+      . anchor(changeLink('panel/masterData/deleteKelompok/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus kelompok?')")),
+      'id_kel'
+    );
+    if (!empty($kd_bid)) {
+      $this->datatables->where('bid',$kd_bid);
+    }
+    return print_r($this->datatables->generate('json'));
+  }
 
 }
