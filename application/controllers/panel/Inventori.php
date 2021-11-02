@@ -725,13 +725,13 @@ class Inventori extends CI_Controller
 				}
 
 				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
-				foreach ($getStaff as $key) {
-					$message = "Halo *".$key->nama_lengkap."* ada faktur untuk barang keluar dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
-					try {
-						sendNotifWA($key->no_wa,$message);
-					} catch (\Throwable $th) {
-					}
-				}
+				// foreach ($getStaff as $key) {
+				// 	$message = "Halo *".$key->nama_lengkap."* ada faktur untuk barang keluar dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+				// 	try {
+				// 		sendNotifWA($key->no_wa,$message);
+				// 	} catch (\Throwable $th) {
+				// 	}
+				// }
 				
 				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
 				redirect(changeLink('panel/inventori/inventoriKeluar'));
@@ -1092,13 +1092,13 @@ class Inventori extends CI_Controller
 				}
 
 				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
-				foreach ($getStaff as $key) {
-					$message = "Halo ".$key->nama_lengkap." ada faktur untuk mutasi barang dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
-					try {
-						sendNotifWA($key->no_wa,$message);
-					} catch (\Throwable $th) {
-					}
-				}
+				// foreach ($getStaff as $key) {
+				// 	$message = "Halo ".$key->nama_lengkap." ada faktur untuk mutasi barang dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+				// 	try {
+				// 		sendNotifWA($key->no_wa,$message);
+				// 	} catch (\Throwable $th) {
+				// 	}
+				// }
 				
 				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data mutasi barang berhasil ditambahkan</div>');
 				redirect(changeLink('panel/inventori/daftarMutasi'));
@@ -1152,13 +1152,13 @@ class Inventori extends CI_Controller
 				}
 
 				$getStaff = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
-				foreach ($getStaff as $key) {
-					$message = "Halo *".$key->nama_lengkap."* ada faktur untuk mutasi barang dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
-					try {
-						sendNotifWA($key->no_wa,$message);
-					} catch (\Throwable $th) {
-					}
-				}
+				// foreach ($getStaff as $key) {
+				// 	$message = "Halo *".$key->nama_lengkap."* ada faktur untuk mutasi barang dengan *ID ".$id_faktur."* harap segera melakukan konfirmasi pada aplikasi, Terimakasih.";
+				// 	try {
+				// 		sendNotifWA($key->no_wa,$message);
+				// 	} catch (\Throwable $th) {
+				// 	}
+				// }
 				
 				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data mutasi barang berhasil ditambahkan</div>');
 				redirect(changeLink('panel/inventori/daftarMutasi'));
