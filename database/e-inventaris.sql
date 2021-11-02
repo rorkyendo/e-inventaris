@@ -234,10 +234,12 @@ CREATE TABLE IF NOT EXISTS `e_kelompok` (
   UNIQUE KEY `kd_kel` (`kd_kel`,`bid`),
   KEY `FK_e_kelompok_e_bidang` (`bid`),
   CONSTRAINT `FK_e_kelompok_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table e-inventori.e_kelompok: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_kelompok` DISABLE KEYS */;
+INSERT INTO `e_kelompok` (`id_kel`, `kd_kel`, `ur_kel`, `bid`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
+	(1, 01, 'Test', 01, 1, '2021-11-03 01:21:20', 1, '2021-11-03 01:23:31');
 /*!40000 ALTER TABLE `e_kelompok` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_modul
@@ -661,6 +663,21 @@ CREATE TABLE `v_inventori` (
 	`nama_kategori` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
+-- Dumping structure for view e-inventori.v_kelompok
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_kelompok` (
+	`id_kel` INT(11) NOT NULL,
+	`kd_kel` INT(2) UNSIGNED ZEROFILL NOT NULL,
+	`ur_kel` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
+	`bid` INT(2) UNSIGNED ZEROFILL NOT NULL,
+	`created_by` INT(11) NOT NULL,
+	`created_time` DATETIME NOT NULL,
+	`updated_by` INT(11) NULL,
+	`updated_time` DATETIME NULL,
+	`gol` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`kd_bid` INT(2) UNSIGNED ZEROFILL NULL
+) ENGINE=MyISAM;
+
 -- Dumping structure for view e-inventori.v_pengguna
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `v_pengguna` (
@@ -757,6 +774,11 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `v_inventori`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_inventori` AS select `i`.`id_inventori` AS `id_inventori`,`u`.`id_unit` AS `id_unit`,`i`.`kode_unit` AS `kode_unit`,`u`.`nama_unit` AS `nama_unit`,`su`.`id_sub_unit` AS `id_sub_unit`,`i`.`kode_sub_unit` AS `kode_sub_unit`,`su`.`nama_sub_unit` AS `nama_sub_unit`,`su`.`keterangan_sub_unit` AS `keterangan_sub_unit`,`es`.`kode_sumber_dana` AS `kode_sumber_dana`,`es`.`keterangan_sumber_dana` AS `keterangan_sumber_dana`,`i`.`foto_inventori` AS `foto_inventori`,`i`.`kode_inventori` AS `kode_inventori`,`i`.`nama_inventori` AS `nama_inventori`,`i`.`harga_barang` AS `harga_barang`,`i`.`kategori_inventori` AS `kategori_inventori`,`i`.`qrcode` AS `qrcode`,`i`.`barcode` AS `barcode`,`i`.`created_by` AS `created_by`,`i`.`created_time` AS `created_time`,`i`.`updated_by` AS `updated_by`,`i`.`updated_time` AS `updated_time`,`i`.`status_inventori` AS `status_inventori`,`ki`.`nama_kategori` AS `nama_kategori` from ((((`e_inventori` `i` join `e_unit` `u` on((`i`.`kode_unit` = `u`.`kode_unit`))) join `e_sub_unit` `su` on(((`i`.`kode_sub_unit` = `su`.`kode_sub_unit`) and (`su`.`unit` = `u`.`id_unit`)))) join `e_kategori_inventori` `ki` on((`i`.`kategori_inventori` = `ki`.`id_kategori`))) left join `e_sumber_dana` `es` on((`i`.`kode_sumber_dana` = `es`.`kode_sumber_dana`)));
+
+-- Dumping structure for view e-inventori.v_kelompok
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_kelompok`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_kelompok` AS select `k`.`id_kel` AS `id_kel`,`k`.`kd_kel` AS `kd_kel`,`k`.`ur_kel` AS `ur_kel`,`k`.`bid` AS `bid`,`k`.`created_by` AS `created_by`,`k`.`created_time` AS `created_time`,`k`.`updated_by` AS `updated_by`,`k`.`updated_time` AS `updated_time`,`b`.`gol` AS `gol`,`b`.`kd_bid` AS `kd_bid` from (`e_kelompok` `k` left join `v_bidang` `b` on((`k`.`bid` = `b`.`kd_bid`)));
 
 -- Dumping structure for view e-inventori.v_pengguna
 -- Removing temporary table and create final VIEW structure
