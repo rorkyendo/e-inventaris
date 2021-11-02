@@ -590,7 +590,7 @@ class MasterData extends CI_Controller
 	public function daftarGolongan($param1=''){
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1=='cari') {
-			return $this->MasterDataModel->getGologan();		
+			return $this->MasterDataModel->getGolongan();		
 		}else{
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Daftar Golongan';
@@ -686,8 +686,8 @@ class MasterData extends CI_Controller
 		}else{
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Daftar Bidang';
-			$data['content'] = 'panel/masterData/golongan/index';
-			$data['kodeGolongan'] = $this->input->get('kode_golongan');
+			$data['content'] = 'panel/masterData/bidang/index';
+			$data['kode_golongan'] = $this->input->get('kode_golongan');
 			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
 			$this->load->view('panel/content', $data);
 		}

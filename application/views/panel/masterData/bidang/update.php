@@ -1,4 +1,4 @@
-<?php foreach($sumberDana as $key):?>
+<?php foreach($bidang as $key):?>
 <!-- begin #content -->
 <div id="content" class="content">
   <!-- begin breadcrumb -->
@@ -29,25 +29,39 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/updateSumberDana/doUpdate/'.$key->id_sumber_dana)); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/updateBidang/doUpdate/'.$key->id_bid)); ?>">
             <div class="col-md-12">
               <div class="form-group">
-                <label class="col-md-2 control-label">Kode Sumber Dana</label>
+                <label class="col-md-2 control-label">Kode Bidang</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Kode Sumber Dana" name="kode_sumber_dana" value="<?php echo $key->kode_sumber_dana;?>" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Bidang" value="<?php echo $key->kd_bid;?>" name="kd_bid" required />
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label">Keterangan Sumber Dana</label>
+                <label class="col-md-2 control-label">Uraian Bidang</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Keterangan Sumber Dana" name="keterangan_sumber_dana" value="<?php echo $key->keterangan_sumber_dana;?>" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Urain Bidang" value="<?php echo $key->ur_bid;?>" name="ur_bid" required />
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Golongan</label>
+                <div class="col-md-10">
+                  <select name="gol" id="gol" class="form-control select2">
+                    <option value="">.:Pilih Kode Golongan:.</option>
+                    <?php foreach($golongan as $row):?>
+                      <option value="<?php echo $row->kd_gol;?>"><?php echo $row->kd_gol;?>|<?php echo $row->ur_gol;?></option>
+                    <?php endforeach;?>
+                  </select>
+                </div>
+              </div>
+              <script>
+                $('#gol').val('<?php echo $key->gol;?>')
+              </script>
             <hr />
             <div class="form-group">
               <div class="col-md-12">
                 <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
-                <a href="<?php echo base_url(changeLink('panel/masterData/daftarSumberDana/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
+                <a href="<?php echo base_url(changeLink('panel/masterData/daftarBidang/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
               </div>
             </div>
           </div>

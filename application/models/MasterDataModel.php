@@ -50,4 +50,34 @@ class MasterDataModel extends CI_Model {
     return print_r($this->datatables->generate('json'));
   }
 
+    public function getGolongan()
+  {
+    $this->datatables->select('*,e_golongan.id_gol as id_gol');
+    $this->datatables->from('e_golongan');
+    $this->datatables->add_column(
+      'action',
+       anchor(changeLink('panel/masterData/updateGolongan/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+      . anchor(changeLink('panel/masterData/deleteGolongan/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus golongan?')")),
+      'id_gol'
+    );
+    return print_r($this->datatables->generate('json'));
+  }
+
+    public function getBidang($kd_gol)
+  {
+    $this->datatables->select('*,v_bidang.id_bid as id_bid');
+    $this->datatables->from('v_bidang');
+    $this->datatables->add_column(
+      'action',
+       anchor(changeLink('panel/masterData/updateBidang/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+      . anchor(changeLink('panel/masterData/deleteBidang/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus golongan?')")),
+      'id_bid'
+    );
+    if (!empty($kd_gol)) {
+      $this->datatables->where('gol',$kd_gol);
+    }
+    return print_r($this->datatables->generate('json'));
+  }
+
+
 }
