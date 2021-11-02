@@ -79,7 +79,7 @@ class MasterDataModel extends CI_Model {
     return print_r($this->datatables->generate('json'));
   }
 
-    public function getKelompok($kd_bid)
+    public function getKelompok($kd_gol,$kd_bid)
   {
     $this->datatables->select('*,v_kelompok.id_kel as id_kel');
     $this->datatables->from('v_kelompok');
@@ -89,6 +89,9 @@ class MasterDataModel extends CI_Model {
       . anchor(changeLink('panel/masterData/deleteKelompok/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus kelompok?')")),
       'id_kel'
     );
+    if (!empty($kd_gol)) {
+      $this->datatables->where('gol',$kd_gol);
+    }
     if (!empty($kd_bid)) {
       $this->datatables->where('bid',$kd_bid);
     }

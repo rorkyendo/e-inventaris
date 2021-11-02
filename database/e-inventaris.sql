@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `e_bidang` (
   `id_bid` int(11) NOT NULL AUTO_INCREMENT,
   `kd_bid` int(2) unsigned zerofill NOT NULL,
   `ur_bid` varchar(250) NOT NULL,
-  `gol` varchar(50) NOT NULL,
+  `gol` int(1) unsigned zerofill NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
@@ -24,14 +24,14 @@ CREATE TABLE IF NOT EXISTS `e_bidang` (
   PRIMARY KEY (`id_bid`),
   UNIQUE KEY `kd_bid` (`kd_bid`,`gol`),
   KEY `FK_e_bidang_e_golongan` (`gol`),
-  CONSTRAINT `FK_e_bidang_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `FK_e_bidang_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table e-inventori.e_bidang: ~2 rows (approximately)
 /*!40000 ALTER TABLE `e_bidang` DISABLE KEYS */;
 INSERT INTO `e_bidang` (`id_bid`, `kd_bid`, `ur_bid`, `gol`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
-	(1, 01, 'TANAH', '1', 1, '2021-11-02 20:59:46', NULL, NULL),
-	(2, 02, 'BANGUNAN', '1', 1, '2021-11-02 21:34:04', NULL, NULL);
+	(1, 01, 'TANAH', 1, 1, '2021-11-02 20:59:46', NULL, NULL),
+	(2, 02, 'BANGUNAN', 1, 1, '2021-11-02 21:34:04', NULL, NULL);
 /*!40000 ALTER TABLE `e_bidang` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_detail_faktur
@@ -98,7 +98,7 @@ INSERT INTO `e_faktur` (`id_faktur`, `kode_faktur`, `nim_mahasiswa`, `catatan_fa
 -- Dumping structure for table e-inventori.e_golongan
 CREATE TABLE IF NOT EXISTS `e_golongan` (
   `id_gol` int(11) NOT NULL AUTO_INCREMENT,
-  `kd_gol` varchar(50) NOT NULL,
+  `kd_gol` int(1) unsigned zerofill NOT NULL,
   `ur_gol` varchar(250) NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `e_golongan` (
 -- Dumping data for table e-inventori.e_golongan: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_golongan` DISABLE KEYS */;
 INSERT INTO `e_golongan` (`id_gol`, `kd_gol`, `ur_gol`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
-	(1, '1', 'TANAH', 1, '2021-11-02 20:59:29', 1, '2021-11-03 00:47:25');
+	(1, 1, 'TANAH', 1, '2021-11-02 20:59:29', 1, '2021-11-03 00:47:25');
 /*!40000 ALTER TABLE `e_golongan` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_hak_akses
@@ -226,20 +226,23 @@ CREATE TABLE IF NOT EXISTS `e_kelompok` (
   `kd_kel` int(2) unsigned zerofill NOT NULL,
   `ur_kel` varchar(250) NOT NULL,
   `bid` int(2) unsigned zerofill NOT NULL,
+  `gol` int(1) unsigned zerofill NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id_kel`),
-  UNIQUE KEY `kd_kel` (`kd_kel`,`bid`),
+  UNIQUE KEY `kd_kel` (`kd_kel`,`bid`,`gol`),
+  KEY `FK_e_kelompok_e_golongan` (`gol`),
   KEY `FK_e_kelompok_e_bidang` (`bid`),
-  CONSTRAINT `FK_e_kelompok_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK_e_kelompok_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_kelompok_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_kelompok: ~0 rows (approximately)
+-- Dumping data for table e-inventori.e_kelompok: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_kelompok` DISABLE KEYS */;
-INSERT INTO `e_kelompok` (`id_kel`, `kd_kel`, `ur_kel`, `bid`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
-	(1, 01, 'Test', 01, 1, '2021-11-03 01:21:20', 1, '2021-11-03 01:23:31');
+INSERT INTO `e_kelompok` (`id_kel`, `kd_kel`, `ur_kel`, `bid`, `gol`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
+	(2, 01, 'Coba', 01, 1, 1, '2021-11-03 01:48:04', 1, '2021-11-03 01:58:27');
 /*!40000 ALTER TABLE `e_kelompok` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_modul
@@ -430,14 +433,20 @@ CREATE TABLE IF NOT EXISTS `e_sub_kelompok` (
   `kd_skel` int(2) unsigned zerofill NOT NULL,
   `ur_skel` varchar(250) NOT NULL,
   `kel` int(2) unsigned zerofill NOT NULL,
+  `bid` int(2) unsigned NOT NULL,
+  `gol` int(1) unsigned NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id_sub_kel`),
-  UNIQUE KEY `kd_skel` (`kd_skel`,`kel`),
+  UNIQUE KEY `kd_skel` (`kd_skel`,`kel`,`bid`,`gol`),
   KEY `FK_e_sub_kelompok_e_kelompok` (`kel`),
-  CONSTRAINT `FK_e_sub_kelompok_e_kelompok` FOREIGN KEY (`kel`) REFERENCES `e_kelompok` (`kd_kel`) ON DELETE NO ACTION ON UPDATE CASCADE
+  KEY `FK_e_sub_kelompok_e_bidang` (`bid`),
+  KEY `FK_e_sub_kelompok_e_golongan` (`gol`),
+  CONSTRAINT `FK_e_sub_kelompok_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_sub_kelompok_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_sub_kelompok_e_kelompok` FOREIGN KEY (`kel`) REFERENCES `e_kelompok` (`kd_kel`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table e-inventori.e_sub_kelompok: ~0 rows (approximately)
@@ -564,12 +573,12 @@ CREATE TABLE `v_bidang` (
 	`id_bid` INT(11) NOT NULL,
 	`kd_bid` INT(2) UNSIGNED ZEROFILL NOT NULL,
 	`ur_bid` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
-	`gol` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`gol` INT(1) UNSIGNED ZEROFILL NOT NULL,
 	`created_by` INT(11) NOT NULL,
 	`created_time` DATETIME NOT NULL,
 	`updated_by` INT(11) NULL,
 	`updated_time` DATETIME NULL,
-	`kd_gol` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`kd_gol` INT(1) UNSIGNED ZEROFILL NULL,
 	`ur_gol` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
@@ -670,12 +679,11 @@ CREATE TABLE `v_kelompok` (
 	`kd_kel` INT(2) UNSIGNED ZEROFILL NOT NULL,
 	`ur_kel` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
 	`bid` INT(2) UNSIGNED ZEROFILL NOT NULL,
+	`gol` INT(1) UNSIGNED ZEROFILL NOT NULL,
 	`created_by` INT(11) NOT NULL,
 	`created_time` DATETIME NOT NULL,
 	`updated_by` INT(11) NULL,
-	`updated_time` DATETIME NULL,
-	`gol` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
-	`kd_bid` INT(2) UNSIGNED ZEROFILL NULL
+	`updated_time` DATETIME NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view e-inventori.v_pengguna
@@ -778,7 +786,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Dumping structure for view e-inventori.v_kelompok
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `v_kelompok`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_kelompok` AS select `k`.`id_kel` AS `id_kel`,`k`.`kd_kel` AS `kd_kel`,`k`.`ur_kel` AS `ur_kel`,`k`.`bid` AS `bid`,`k`.`created_by` AS `created_by`,`k`.`created_time` AS `created_time`,`k`.`updated_by` AS `updated_by`,`k`.`updated_time` AS `updated_time`,`b`.`gol` AS `gol`,`b`.`kd_bid` AS `kd_bid` from (`e_kelompok` `k` left join `v_bidang` `b` on((`k`.`bid` = `b`.`kd_bid`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_kelompok` AS select `k`.`id_kel` AS `id_kel`,`k`.`kd_kel` AS `kd_kel`,`k`.`ur_kel` AS `ur_kel`,`k`.`bid` AS `bid`,`k`.`gol` AS `gol`,`k`.`created_by` AS `created_by`,`k`.`created_time` AS `created_time`,`k`.`updated_by` AS `updated_by`,`k`.`updated_time` AS `updated_time` from ((`e_kelompok` `k` left join `e_bidang` `b` on((`k`.`bid` = `b`.`kd_bid`))) left join `e_golongan` `g` on(((`k`.`gol` = `g`.`kd_gol`) and (`b`.`gol` = `g`.`kd_gol`))));
 
 -- Dumping structure for view e-inventori.v_pengguna
 -- Removing temporary table and create final VIEW structure

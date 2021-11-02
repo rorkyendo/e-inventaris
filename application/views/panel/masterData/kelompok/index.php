@@ -25,18 +25,34 @@
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
           <div class="col-md-4">
-            <select class="form-control select2" id="kode_bidang" onchange="cariBidang(this.value)">
-              <option value="">.:Pilih Bidang:.</option>
-              <?php foreach ($bidang as $key) : ?>
-                <option value="<?php echo $key->kd_bid; ?>"><?php echo $key->kd_gol;?>.<?php echo $key->kd_bid;?> | <?php echo $key->ur_bid; ?></option>
+            <select class="form-control select2" id="kode_golongan" onchange="cariGolongan(this.value)">
+              <option value="">.:Pilih Golongan:.</option>
+              <?php foreach ($golongan as $key) : ?>
+                <option value="<?php echo $key->kd_gol; ?>"><?php echo $key->kd_gol;?> | <?php echo $key->ur_gol; ?></option>
               <?php endforeach; ?>
             </select>
+            <br/>
+            <br/>
+          </div>
+          <script type="text/javascript">
+            $('#kode_golongan').val('<?php echo $kode_golongan; ?>')
+
+            function cariGolongan(val) {
+              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarKelompok?kode_golongan=')); ?>' + val)
+            }
+          </script>
+          <div class="col-md-4">
+            <select class="form-control select2" id="kode_bidang" onchange="cariBidang(this.value)">
+              <option value="">.:Pilih Bidang:.</option>
+            </select>
+            <br/>
+            <br/>
           </div>
           <script type="text/javascript">
             $('#kode_bidang').val('<?php echo $kode_bidang; ?>')
 
             function cariBidang(val) {
-              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarKelompok?kode_bidang=')); ?>' + val)
+              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarKelompok?kode_golongan='.$kode_golongan.'&kode_bidang=')); ?>' + val)
             }
           </script>
           <?php if(cekModul('createKelompok') == TRUE): ?>
@@ -90,6 +106,7 @@
         "url": '<?php echo site_url(changeLink('panel/masterData/daftarKelompok/cari')); ?>',
         "type": "POST",
         "data":{
+          "kode_golongan":"<?php echo $kode_golongan;?>",
           "kode_bidang":"<?php echo $kode_bidang;?>"
         }
       },
@@ -107,7 +124,7 @@
           width: 100,
         },
         {
-          "data": "kd_bid",
+          "data": "bid",
           width: 100
         },
         {

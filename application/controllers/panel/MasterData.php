@@ -774,19 +774,31 @@ class MasterData extends CI_Controller
 			redirect(changeLink('panel/masterData/daftarBidang/'));
 		}
 	}
+
+	public function getBidang(){
+		$gol = $this->input->get('gol');
+		$getBidang = $this->GeneralModel->get_by_id_general('v_bidang','gol',$gol);
+		if ($getBidang) {
+			echo json_encode($getBidang,JSON_PRETTY_PRINT);
+		}else{
+			echo 'false';
+		}
+	}
 	//--------------- END OF BIDANG------------------//
 	//--------------- KELOMPOK BEGIN------------------//
 	public function daftarKelompok($param1=''){
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1=='cari') {
+			$kodeGolongan = $this->input->post('kode_golongan');
 			$kodeBidang = $this->input->post('kode_bidang');
-			return $this->MasterDataModel->getKelompok($kodeBidang);		
+			return $this->MasterDataModel->getKelompok($kodeGolongan,$kodeBidang);		
 		}else{
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Daftar Kelompok';
 			$data['content'] = 'panel/masterData/kelompok/index';
+			$data['kode_golongan'] = $this->input->get('kode_golongan');
 			$data['kode_bidang'] = $this->input->get('kode_bidang');
-			$data['bidang'] = $this->GeneralModel->get_general('v_bidang');
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
 			$this->load->view('panel/content', $data);
 		}
 	}
@@ -803,6 +815,7 @@ class MasterData extends CI_Controller
 					'kd_kel' => $this->input->post('kd_kel'),
 					'ur_kel' => $this->input->post('ur_kel'),
 					'bid' => $this->input->post('bid'),
+					'gol' => $this->input->post('gol'),
 					'created_by' => $this->session->userdata('id_pengguna')
 				);
 				if ($this->GeneralModel->create_general('e_kelompok',$dataKelompok) == TRUE) {
@@ -817,7 +830,7 @@ class MasterData extends CI_Controller
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Tambah Kelompok';
 			$data['content'] = 'panel/masterData/kelompok/create';
-			$data['bidang'] = $this->GeneralModel->get_general('v_bidang');
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
 			$this->load->view('panel/content', $data);
 		}
 	}
@@ -831,6 +844,7 @@ class MasterData extends CI_Controller
 					'kd_kel' => $this->input->post('kd_kel'),
 					'ur_kel' => $this->input->post('ur_kel'),
 					'bid' => $this->input->post('bid'),
+					'gol' => $this->input->post('gol'),
 					'updated_by' => $this->session->userdata('id_pengguna'),
 					'updated_time' => DATE('Y-m-d H:i:s')
 				);
@@ -856,7 +870,7 @@ class MasterData extends CI_Controller
 			$data['subtitle'] = 'Update Kelompok';
 			$data['content'] = 'panel/masterData/kelompok/update';
 			$data['kelompok'] = $this->GeneralModel->get_by_id_general('e_kelompok','id_kel',$param1);
-			$data['bidang'] = $this->GeneralModel->get_general('v_bidang');
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
 			$this->load->view('panel/content', $data);
 		}
 	}

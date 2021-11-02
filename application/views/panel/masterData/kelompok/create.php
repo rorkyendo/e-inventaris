@@ -43,13 +43,44 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Kode Golongan</label>
+                <div class="col-md-10">
+                  <select name="gol" id="gol" class="form-control select2" onchange="cariBidang(this.value)" required>
+                    <option value="">.:Pilih Kode Golongan:.</option>
+                    <?php foreach($golongan as $key):?>
+                      <option value="<?php echo $key->kd_gol;?>"><?php echo $key->kd_gol;?>|<?php echo $key->ur_gol;?></option>
+                    <?php endforeach;?>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function cariBidang(val){
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getBidang');?>',
+                    type:'GET',
+                    data:{
+                      'gol':val
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#bid').html('<option value="">.:Pilih Kode Bidang:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#bid').append('<option value="'+val.kd_bid+'">'+val.kd_bid+'|'+val.ur_bid+'</option>');
+                        })
+                      }else{
+                        $('#bid').html('<option value="">.:Pilih Kode Bidang:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Kode Bidang</label>
                 <div class="col-md-10">
                   <select name="bid" id="bid" class="form-control select2">
                     <option value="">.:Pilih Kode Bidang:.</option>
-                    <?php foreach($bidang as $key):?>
-                      <option value="<?php echo $key->kd_bid;?>"><?php echo $key->kd_gol;?>.<?php echo $key->kd_bid;?>|<?php echo $key->ur_bid;?></option>
-                    <?php endforeach;?>
                   </select>
                 </div>
               </div>
