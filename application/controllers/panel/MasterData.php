@@ -677,6 +677,103 @@ class MasterData extends CI_Controller
 		}
 	}
 	//--------------- END OF GOLONGAN------------------//
+	//--------------- BIDANG BEGIN------------------//
+	public function daftarBidang($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			$kodeGolongan = $this->input->post('kode_golongan');
+			return $this->MasterDataModel->getBidang($kodeGolongan);		
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Bidang';
+			$data['content'] = 'panel/masterData/golongan/index';
+			$data['kodeGolongan'] = $this->input->get('kode_golongan');
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
+			$this->load->view('panel/content', $data);
+		}
+	}
 
+	public function createBidang($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doCreate') {
+			$cekKodeBidang = $this->GeneralModel->get_by_id_general('e_bidang','kd_bid',$this->input->post('kd_bid'));
+			if ($cekKodeBidang) {
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode bidang sudah ada</div>');
+				redirect('panel/masterData/createBidang');
+			}else{
+				$dataBidang = array(
+					'kd_bid' => $this->input->post('kd_bid'),
+					'ur_bid' => $this->input->post('ur_bid'),
+					'gol' => $this->input->post('gol'),
+					'created_by' => $this->session->userdata('id_pengguna')
+				);
+				if ($this->GeneralModel->create_general('e_bidang',$dataBidang) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data Bidang berhasil ditambahkan</div>');
+					redirect('panel/masterData/daftarBidang');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data bidang gagal ditambahkan</div>');
+					redirect('panel/masterData/daftarBidang');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Bidang';
+			$data['content'] = 'panel/masterData/bidang/create';
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateBidang($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$cekKodeBidang = $this->GeneralModel->get_by_multi_id_general('e_bidang','id_bid',$param2,'kd_bid',$this->input->post('kd_bid'));
+			if ($cekKodeBidang) {
+				$dataBidang = array(
+					'kd_bid' => $this->input->post('kd_bid'),
+					'ur_bid' => $this->input->post('ur_bid'),
+					'gol' => $this->input->post('gol'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'updated_time' => DATE('Y-m-d H:i:s')
+				);
+				if ($this->GeneralModel->update_general('e_bidang','id_bid',$param2,$dataBidang) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data bidang berhasil diupdate</div>');
+					redirect('panel/masterData/daftarBidang');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data bidang gagal diupdate</div>');
+					redirect('panel/masterData/daftarBidang');
+				}
+			}else{
+				$cekKodeBidang = $this->GeneralModel->get_by_id_general('e_bidang','kd_bidang',$this->input->post('kd_bidang'));
+				if ($cekKodeBidang) {
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode bidang yang sama sudah ada</div>');
+					redirect('panel/masterData/daftarBidang');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, kode bidang gagal diupdate</div>');
+					redirect('panel/masterData/daftarBidang');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Bidang';
+			$data['content'] = 'panel/masterData/bidang/update';
+			$data['bidang'] = $this->GeneralModel->get_by_id_general('e_bidang','id_bid',$param1);
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function deleteBidang($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($this->GeneralModel->delete_general('e_bidang', 'id_bid', $param1) == TRUE) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data Bidang berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarBidang/'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data Bidang gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarBidang/'));
+		}
+	}
+	//--------------- END OF SUMBER DANA------------------//
 
 }
