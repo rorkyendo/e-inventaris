@@ -168,6 +168,7 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
   `kode_sub_unit` varchar(20) DEFAULT NULL,
   `kode_sumber_dana` varchar(20) DEFAULT NULL,
   `kode_inventori` varchar(50) NOT NULL,
+  `no_inventori` int(4) unsigned zerofill NOT NULL,
   `nama_inventori` varchar(250) NOT NULL,
   `foto_inventori` varchar(250) DEFAULT NULL,
   `keterangan_inventori` varchar(250) DEFAULT NULL,
@@ -192,8 +193,8 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
 
 -- Dumping data for table e-inventori.e_inventori: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_inventori` DISABLE KEYS */;
-INSERT INTO `e_inventori` (`id_inventori`, `kode_unit`, `kode_sub_unit`, `kode_sumber_dana`, `kode_inventori`, `nama_inventori`, `foto_inventori`, `keterangan_inventori`, `harga_barang`, `kategori_inventori`, `qrcode`, `barcode`, `created_by`, `created_time`, `updated_by`, `updated_time`, `status_inventori`) VALUES
-	(16, 'GF1', 'RA1', 'APBN', '3.03.01.03.001.0001', 'Kursi 0001', 'assets/img/fotoInventori/no-image-icon-234851.png', NULL, 25000, 3, 'assets/img/qrbarang/3.03.01.03.001.0001.png', 'assets/img/barcodebarang/3.03.01.03.001.0001.png', 1, '2021-10-20 08:34:05', 1, '2021-10-23 08:30:50', 'Dipinjam');
+INSERT INTO `e_inventori` (`id_inventori`, `kode_unit`, `kode_sub_unit`, `kode_sumber_dana`, `kode_inventori`, `no_inventori`, `nama_inventori`, `foto_inventori`, `keterangan_inventori`, `harga_barang`, `kategori_inventori`, `qrcode`, `barcode`, `created_by`, `created_time`, `updated_by`, `updated_time`, `status_inventori`) VALUES
+	(16, 'GF1', 'RA1', 'APBN', '3.03.01.03.001.0001', 0000, 'Kursi 0001', 'assets/img/fotoInventori/no-image-icon-234851.png', NULL, 25000, 3, 'assets/img/qrbarang/3.03.01.03.001.0001.png', 'assets/img/barcodebarang/3.03.01.03.001.0001.png', 1, '2021-10-20 08:34:05', 1, '2021-10-23 08:30:50', 'Dipinjam');
 /*!40000 ALTER TABLE `e_inventori` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_kategori_inventori
@@ -259,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `e_modul` (
   CONSTRAINT `induk_child_modul` FOREIGN KEY (`induk_child_modul`) REFERENCES `e_modul` (`controller_modul`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_modul: ~54 rows (approximately)
+-- Dumping data for table e-inventori.e_modul: ~72 rows (approximately)
 /*!40000 ALTER TABLE `e_modul` DISABLE KEYS */;
 INSERT INTO `e_modul` (`id_modul`, `controller_modul`, `nama_modul`, `link_modul`, `type_modul`, `class_parent_modul`, `created_time`, `tampil_sidebar`, `child_module`, `induk_child_modul`) VALUES
 	(1, 'pengguna', 'Daftar Pengguna', 'panel/masterdata/pengguna', 'R', 'MasterData', '2021-06-10 07:59:17', 'Y', 'N', NULL),
