@@ -495,7 +495,7 @@ class MasterData extends CI_Controller
 		}
 	}
 	//--------------- END OF SUB UNIT------------------//
-	//--------------- UNIT BEGIN------------------//
+	//--------------- SUMBER DANA BEGIN------------------//
 	public function daftarSumberDana($param1=''){
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1=='cari') {
@@ -516,12 +516,12 @@ class MasterData extends CI_Controller
 				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode sumber dana sudah ada</div>');
 				redirect('panel/masterData/tambahSumberDana');
 			}else{
-				$dataUnit = array(
+				$dataSumberDana = array(
 					'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
 					'keterangan_sumber_dana' => $this->input->post('keterangan_sumber_dana'),
 					'created_by' => $this->session->userdata('id_pengguna')
 				);
-				if ($this->GeneralModel->create_general('e_sumber_dana',$dataUnit) == TRUE) {
+				if ($this->GeneralModel->create_general('e_sumber_dana',$dataSumberDana) == TRUE) {
 					$this->session->set_flashdata('notif','<div class="alert alert-success">Sumber dana berhasil ditambahkan</div>');
 					redirect('panel/masterData/daftarSumberDana');
 				}else{
@@ -548,7 +548,7 @@ class MasterData extends CI_Controller
 					'updated_by' => $this->session->userdata('id_pengguna'),
 					'updated_time' => DATE('Y-m-d H:i:s')
 				);
-				if ($this->GeneralModel->update_general('e_unit','id_unit',$param2,$dataSumberDana) == TRUE) {
+				if ($this->GeneralModel->update_general('e_sumber_dana','id_sumber_dana',$param2,$dataSumberDana) == TRUE) {
 					$this->session->set_flashdata('notif','<div class="alert alert-success">Sumber dana berhasil diupdate</div>');
 					redirect('panel/masterData/daftarSumberDana');
 				}else{
@@ -586,6 +586,97 @@ class MasterData extends CI_Controller
 		}
 	}
 	//--------------- END OF SUMBER DANA------------------//
+	//--------------- GOLONGAN BEGIN------------------//
+	public function daftarGolongan($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			return $this->MasterDataModel->getGologan();		
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Golongan';
+			$data['content'] = 'panel/masterData/golongan/index';
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function createGolongan($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doCreate') {
+			$cekKodeGolongan = $this->GeneralModel->get_by_id_general('e_golongan','kd_gol',$this->input->post('kd_gol'));
+			if ($cekKodeGolongan) {
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode golongan sudah ada</div>');
+				redirect('panel/masterData/createGolongan');
+			}else{
+				$dataGolongan = array(
+					'kd_gol' => $this->input->post('kd_gol'),
+					'ur_gol' => $this->input->post('ur_gol'),
+					'created_by' => $this->session->userdata('id_pengguna')
+				);
+				if ($this->GeneralModel->create_general('e_golongan',$dataGolongan) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data Golongan berhasil ditambahkan</div>');
+					redirect('panel/masterData/daftarGolongan');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data golongan gagal ditambahkan</div>');
+					redirect('panel/masterData/daftarGolongan');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Golongan';
+			$data['content'] = 'panel/masterData/golongan/create';
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateGolongan($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$cekKodeGolongan = $this->GeneralModel->get_by_multi_id_general('e_golongan','id_gol',$param2,'kd_gol',$this->input->post('kd_gol'));
+			if ($cekKodeGolongan) {
+				$dataGolongan = array(
+					'kd_gol' => $this->input->post('kd_gol'),
+					'ur_gol' => $this->input->post('ur_gol'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'updated_time' => DATE('Y-m-d H:i:s')
+				);
+				if ($this->GeneralModel->update_general('e_golongan','id_gol',$param2,$dataGolongan) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data golongan berhasil diupdate</div>');
+					redirect('panel/masterData/daftarGolongan');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data golongan gagal diupdate</div>');
+					redirect('panel/masterData/daftarGolongan');
+				}
+			}else{
+				$cekKodeGolongan = $this->GeneralModel->get_by_id_general('e_golongan','kd_golongan',$this->input->post('kd_golongan'));
+				if ($cekKodeGolongan) {
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode golongan yang sama sudah ada</div>');
+					redirect('panel/masterData/daftarGolongan');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, kode golongan gagal diupdate</div>');
+					redirect('panel/masterData/daftarGolongan');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Golongan';
+			$data['content'] = 'panel/masterData/golongan/update';
+			$data['golongan'] = $this->GeneralModel->get_by_id_general('e_golongan','id_gol',$param1);
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function deleteGolongan($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($this->GeneralModel->delete_general('e_golongan', 'id_gol', $param1) == TRUE) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data Golongan berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarGolongan/'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data Golongan gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarGolongan/'));
+		}
+	}
+	//--------------- END OF GOLONGAN------------------//
 
 
 }
