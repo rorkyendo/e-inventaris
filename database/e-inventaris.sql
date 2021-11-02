@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `e_bidang` (
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id_bid`),
-  UNIQUE KEY `kd_bid` (`kd_bid`),
+  UNIQUE KEY `kd_bid` (`kd_bid`,`gol`),
   KEY `FK_e_bidang_e_golongan` (`gol`),
   CONSTRAINT `FK_e_bidang_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `e_golongan` (
 -- Dumping data for table e-inventori.e_golongan: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_golongan` DISABLE KEYS */;
 INSERT INTO `e_golongan` (`id_gol`, `kd_gol`, `ur_gol`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
-	(1, '1', 'TANAH', 1, '2021-11-02 20:59:29', NULL, NULL);
+	(1, '1', 'TANAH', 1, '2021-11-02 20:59:29', 1, '2021-11-03 00:47:25');
 /*!40000 ALTER TABLE `e_golongan` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_hak_akses
@@ -128,8 +128,8 @@ CREATE TABLE IF NOT EXISTS `e_hak_akses` (
 -- Dumping data for table e-inventori.e_hak_akses: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_hak_akses` DISABLE KEYS */;
 INSERT INTO `e_hak_akses` (`id_hak_akses`, `nama_hak_akses`, `modul_akses`, `parent_modul_akses`, `created_time`) VALUES
-	(1, 'superuser', '{\n    "modul": [\n        "pengguna",\n        "createPengguna",\n        "updatePengguna",\n        "deletePengguna",\n        "hakAkses",\n        "createHakAkses",\n        "updateHakAkses",\n        "deleteHakAkses",\n        "daftarUnit",\n        "tambahUnit",\n        "updateUnit",\n        "deleteUnit",\n        "daftarSubUnit",\n        "tambahSubUnit",\n        "updateSubUnit",\n        "deleteSubUnit",\n        "daftarSumberDana",\n        "tambahSumberDana",\n        "updateSumberDana",\n        "deleteSumberDana",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "inventoriKeluar",\n        "createInventoriKeluar",\n        "updateInventoriKeluar",\n        "deleteInventoriKeluar",\n        "approveInventoriKeluar",\n        "detailInventori",\n        "detailInventoriKeluar",\n        "rejectInventoriKeluar",\n        "laporanInventori",\n        "daftarMutasi",\n        "tambahMutasi",\n        "updateMutasi",\n        "deleteMutasi",\n        "approveMutasi",\n        "rejectMutasi",\n        "detailMutasi",\n        "laporanMutasi",\n        "scanInventori",\n        "scanFaktur",\n        "scanBarcodeInventori",\n        "scanBarcodeFaktur",\n        "daftarTiket",\n        "detailTiket",\n        "tanggapanTiket",\n        "hapusTiket",\n        "identitasAplikasi",\n        "daftarModul"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Scan",\n        "Tiket",\n        "Pengaturan"\n    ]\n}', '2021-06-10 09:21:01'),
-	(2, 'staff', '{\n    "modul": [\n        "daftarUnit",\n        "tambahUnit",\n        "updateUnit",\n        "deleteUnit",\n        "daftarSubUnit",\n        "tambahSubUnit",\n        "updateSubUnit",\n        "deleteSubUnit",\n        "daftarSumberDana",\n        "tambahSumberDana",\n        "updateSumberDana",\n        "deleteSumberDana",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "inventoriKeluar",\n        "createInventoriKeluar",\n        "updateInventoriKeluar",\n        "deleteInventoriKeluar",\n        "approveInventoriKeluar",\n        "detailInventori",\n        "detailInventoriKeluar",\n        "rejectInventoriKeluar",\n        "laporanInventori",\n        "daftarMutasi",\n        "tambahMutasi",\n        "updateMutasi",\n        "deleteMutasi",\n        "approveMutasi",\n        "rejectMutasi",\n        "detailMutasi",\n        "laporanMutasi",\n        "scanInventori",\n        "scanFaktur",\n        "scanBarcodeInventori",\n        "scanBarcodeFaktur",\n        "daftarTiket",\n        "detailTiket",\n        "tanggapanTiket",\n        "hapusTiket"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Scan",\n        "Tiket"\n    ]\n}', '2021-10-14 07:18:58');
+	(1, 'superuser', '{\n    "modul": [\n        "pengguna",\n        "createPengguna",\n        "updatePengguna",\n        "deletePengguna",\n        "hakAkses",\n        "createHakAkses",\n        "updateHakAkses",\n        "deleteHakAkses",\n        "daftarUnit",\n        "tambahUnit",\n        "updateUnit",\n        "deleteUnit",\n        "daftarSubUnit",\n        "tambahSubUnit",\n        "updateSubUnit",\n        "deleteSubUnit",\n        "daftarSumberDana",\n        "tambahSumberDana",\n        "updateSumberDana",\n        "deleteSumberDana",\n        "daftarGolongan",\n        "createGolongan",\n        "updateGolongan",\n        "deleteGolongan",\n        "daftarBidang",\n        "createBidang",\n        "updateBidang",\n        "deleteBidang",\n        "daftarKelompok",\n        "createKelompok",\n        "updateKelompok",\n        "deleteKelompok",\n        "daftarSubKelompok",\n        "createSubKelompok",\n        "updateSubKelompok",\n        "deleteSubKelompok",\n        "daftarSubSubKelompok",\n        "createSubSubKelompok",\n        "updateSubSubKelompok",\n        "deleteSubSubKelompok",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "inventoriKeluar",\n        "createInventoriKeluar",\n        "updateInventoriKeluar",\n        "deleteInventoriKeluar",\n        "approveInventoriKeluar",\n        "detailInventori",\n        "detailInventoriKeluar",\n        "rejectInventoriKeluar",\n        "laporanInventori",\n        "daftarMutasi",\n        "tambahMutasi",\n        "updateMutasi",\n        "deleteMutasi",\n        "approveMutasi",\n        "rejectMutasi",\n        "detailMutasi",\n        "laporanMutasi",\n        "scanInventori",\n        "scanFaktur",\n        "scanBarcodeInventori",\n        "scanBarcodeFaktur",\n        "daftarTiket",\n        "detailTiket",\n        "tanggapanTiket",\n        "hapusTiket",\n        "identitasAplikasi",\n        "daftarModul"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Scan",\n        "Tiket",\n        "Pengaturan"\n    ]\n}', '2021-06-10 09:21:01'),
+	(2, 'staff', '{\n    "modul": [\n        "daftarUnit",\n        "tambahUnit",\n        "updateUnit",\n        "deleteUnit",\n        "daftarSubUnit",\n        "tambahSubUnit",\n        "updateSubUnit",\n        "deleteSubUnit",\n        "daftarSumberDana",\n        "tambahSumberDana",\n        "updateSumberDana",\n        "deleteSumberDana",\n        "daftarGolongan",\n        "createGolongan",\n        "updateGolongan",\n        "deleteGolongan",\n        "daftarBidang",\n        "createBidang",\n        "updateBidang",\n        "deleteBidang",\n        "daftarKelompok",\n        "createKelompok",\n        "updateKelompok",\n        "deleteKelompok",\n        "daftarSubKelompok",\n        "createSubKelompok",\n        "updateSubKelompok",\n        "deleteSubKelompok",\n        "daftarSubSubKelompok",\n        "createSubSubKelompok",\n        "updateSubSubKelompok",\n        "deleteSubSubKelompok",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "inventoriKeluar",\n        "createInventoriKeluar",\n        "updateInventoriKeluar",\n        "deleteInventoriKeluar",\n        "approveInventoriKeluar",\n        "detailInventori",\n        "detailInventoriKeluar",\n        "rejectInventoriKeluar",\n        "laporanInventori",\n        "daftarMutasi",\n        "tambahMutasi",\n        "updateMutasi",\n        "deleteMutasi",\n        "approveMutasi",\n        "rejectMutasi",\n        "detailMutasi",\n        "laporanMutasi",\n        "scanInventori",\n        "scanFaktur",\n        "scanBarcodeInventori",\n        "scanBarcodeFaktur",\n        "daftarTiket",\n        "detailTiket",\n        "tanggapanTiket",\n        "hapusTiket"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Scan",\n        "Tiket"\n    ]\n}', '2021-10-14 07:18:58');
 /*!40000 ALTER TABLE `e_hak_akses` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_identitas
@@ -231,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `e_kelompok` (
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id_kel`),
-  UNIQUE KEY `kd_kel` (`kd_kel`),
+  UNIQUE KEY `kd_kel` (`kd_kel`,`bid`),
   KEY `FK_e_kelompok_e_bidang` (`bid`),
   CONSTRAINT `FK_e_kelompok_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -396,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `e_pengguna` (
 -- Dumping data for table e-inventori.e_pengguna: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_pengguna` DISABLE KEYS */;
 INSERT INTO `e_pengguna` (`id_pengguna`, `username`, `password`, `email`, `hak_akses`, `nama_lengkap`, `foto_pengguna`, `no_wa`, `unit`, `sub_unit`, `jenkel`, `tgl_lahir`, `alamat`, `last_login`, `last_logout`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES
-	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', '', NULL, NULL, NULL, 'L', NULL, NULL, '2021-11-01 14:28:59', '2021-10-15 13:58:38', '2021-06-10 09:32:44', NULL, NULL, NULL),
+	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', '', NULL, NULL, NULL, 'L', NULL, NULL, '2021-11-03 00:19:17', '2021-10-15 13:58:38', '2021-06-10 09:32:44', NULL, NULL, NULL),
 	(2, 'rorkyendo', '72d8f949d00e431239b993f14b70d80d5313efc9', 'taufiqrorkyendo@gmail.com', 'staff', 'Taufiq Rorkyendo', NULL, '082276648478', 2, 0, 'L', NULL, NULL, NULL, NULL, '2021-10-14 07:19:32', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `e_pengguna` ENABLE KEYS */;
 
@@ -433,7 +433,7 @@ CREATE TABLE IF NOT EXISTS `e_sub_kelompok` (
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id_sub_kel`),
-  UNIQUE KEY `kd_skel` (`kd_skel`),
+  UNIQUE KEY `kd_skel` (`kd_skel`,`kel`),
   KEY `FK_e_sub_kelompok_e_kelompok` (`kel`),
   CONSTRAINT `FK_e_sub_kelompok_e_kelompok` FOREIGN KEY (`kel`) REFERENCES `e_kelompok` (`kd_kel`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -453,7 +453,7 @@ CREATE TABLE IF NOT EXISTS `e_sub_sub_kelompok` (
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id_ssub_kel`),
-  UNIQUE KEY `kd_sskel` (`kd_sskel`),
+  UNIQUE KEY `kd_sskel` (`kd_sskel`,`skel`),
   KEY `FK_e_ssub_kelompok_e_kelompok` (`skel`),
   CONSTRAINT `FK_e_ssub_kelompok_e_kelompok` FOREIGN KEY (`skel`) REFERENCES `e_sub_kelompok` (`kd_skel`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -555,6 +555,21 @@ INSERT INTO `e_unit` (`id_unit`, `nama_unit`, `alamat_unit`, `kode_unit`, `creat
 	(2, 'Gedung Fakultas 1', 'Jalanin aja dulu', 'GF1', 0, '0000-00-00 00:00:00', NULL, NULL),
 	(3, 'Gedung Fakultas 2', 'Jalan doang gk ngapa2in', 'GF2', 0, '0000-00-00 00:00:00', NULL, NULL);
 /*!40000 ALTER TABLE `e_unit` ENABLE KEYS */;
+
+-- Dumping structure for view e-inventori.v_bidang
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_bidang` (
+	`id_bid` INT(11) NOT NULL,
+	`kd_bid` INT(2) UNSIGNED ZEROFILL NOT NULL,
+	`ur_bid` VARCHAR(250) NOT NULL COLLATE 'latin1_swedish_ci',
+	`gol` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`created_by` INT(11) NOT NULL,
+	`created_time` DATETIME NOT NULL,
+	`updated_by` INT(11) NULL,
+	`updated_time` DATETIME NULL,
+	`kd_gol` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`ur_gol` VARCHAR(250) NULL COLLATE 'latin1_swedish_ci'
+) ENGINE=MyISAM;
 
 -- Dumping structure for view e-inventori.v_detail_inventori
 -- Creating temporary table to overcome VIEW dependency errors
@@ -722,6 +737,11 @@ CREATE TABLE `v_unit` (
 	`updated_time` DATETIME NULL,
 	`jmlInventori` BIGINT(21) NOT NULL
 ) ENGINE=MyISAM;
+
+-- Dumping structure for view e-inventori.v_bidang
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_bidang`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_bidang` AS select `b`.`id_bid` AS `id_bid`,`b`.`kd_bid` AS `kd_bid`,`b`.`ur_bid` AS `ur_bid`,`b`.`gol` AS `gol`,`b`.`created_by` AS `created_by`,`b`.`created_time` AS `created_time`,`b`.`updated_by` AS `updated_by`,`b`.`updated_time` AS `updated_time`,`g`.`kd_gol` AS `kd_gol`,`g`.`ur_gol` AS `ur_gol` from (`e_bidang` `b` left join `e_golongan` `g` on((`b`.`gol` = `g`.`kd_gol`)));
 
 -- Dumping structure for view e-inventori.v_detail_inventori
 -- Removing temporary table and create final VIEW structure
