@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `e_faktur` (
   CONSTRAINT `FK_faktur_updated` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_faktur: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_faktur: ~2 rows (approximately)
 /*!40000 ALTER TABLE `e_faktur` DISABLE KEYS */;
 INSERT INTO `e_faktur` (`id_faktur`, `kode_faktur`, `nim_mahasiswa`, `catatan_faktur`, `kategori_faktur`, `status_keluar`, `status_pengembalian`, `status_approval`, `durasi`, `created_by`, `created_time`, `updated_by`, `updated_time`, `approval_by`, `approval_time`, `dikembalikan_oleh`, `tgl_pengembalian`, `qrcode_faktur`, `barcode_faktur`) VALUES
 	(33, 'A1234', '171402030', 'Testing', 'out', 'pinjam', 'belum', 'pending', 30, 1, '2021-10-21 06:28:21', NULL, NULL, NULL, NULL, NULL, NULL, 'assets/img/qrfaktur/Faktur-33.png', 'assets/img/barcodefaktur/33.png'),
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `e_hak_akses` (
   UNIQUE KEY `nama_hak_akses` (`nama_hak_akses`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_hak_akses: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_hak_akses: ~2 rows (approximately)
 /*!40000 ALTER TABLE `e_hak_akses` DISABLE KEYS */;
 INSERT INTO `e_hak_akses` (`id_hak_akses`, `nama_hak_akses`, `modul_akses`, `parent_modul_akses`, `created_time`) VALUES
 	(1, 'superuser', '{\n    "modul": [\n        "pengguna",\n        "createPengguna",\n        "updatePengguna",\n        "deletePengguna",\n        "hakAkses",\n        "createHakAkses",\n        "updateHakAkses",\n        "deleteHakAkses",\n        "daftarUnit",\n        "tambahUnit",\n        "updateUnit",\n        "deleteUnit",\n        "daftarSubUnit",\n        "tambahSubUnit",\n        "updateSubUnit",\n        "deleteSubUnit",\n        "daftarSumberDana",\n        "tambahSumberDana",\n        "updateSumberDana",\n        "deleteSumberDana",\n        "daftarGolongan",\n        "createGolongan",\n        "updateGolongan",\n        "deleteGolongan",\n        "daftarBidang",\n        "createBidang",\n        "updateBidang",\n        "deleteBidang",\n        "daftarKelompok",\n        "createKelompok",\n        "updateKelompok",\n        "deleteKelompok",\n        "daftarSubKelompok",\n        "createSubKelompok",\n        "updateSubKelompok",\n        "deleteSubKelompok",\n        "daftarSubSubKelompok",\n        "createSubSubKelompok",\n        "updateSubSubKelompok",\n        "deleteSubSubKelompok",\n        "listInventori",\n        "createInventori",\n        "updateInventori",\n        "deleteInventori",\n        "kategori",\n        "createKategori",\n        "updateKategori",\n        "deleteKategori",\n        "inventoriKeluar",\n        "createInventoriKeluar",\n        "updateInventoriKeluar",\n        "deleteInventoriKeluar",\n        "approveInventoriKeluar",\n        "detailInventori",\n        "detailInventoriKeluar",\n        "rejectInventoriKeluar",\n        "laporanInventori",\n        "daftarMutasi",\n        "tambahMutasi",\n        "updateMutasi",\n        "deleteMutasi",\n        "approveMutasi",\n        "rejectMutasi",\n        "detailMutasi",\n        "laporanMutasi",\n        "scanInventori",\n        "scanFaktur",\n        "scanBarcodeInventori",\n        "scanBarcodeFaktur",\n        "daftarTiket",\n        "detailTiket",\n        "tanggapanTiket",\n        "hapusTiket",\n        "identitasAplikasi",\n        "daftarModul"\n    ]\n}', '{\n    "parent_modul": [\n        "Dashboard",\n        "MasterData",\n        "Inventori",\n        "Scan",\n        "Tiket",\n        "Pengaturan"\n    ]\n}', '2021-06-10 09:21:01'),
@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `e_identitas` (
   PRIMARY KEY (`id_profile`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table e-inventori.e_identitas: ~0 rows (approximately)
+-- Dumping data for table e-inventori.e_identitas: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_identitas` DISABLE KEYS */;
 INSERT INTO `e_identitas` (`id_profile`, `apps_name`, `apps_version`, `apps_code`, `agency`, `address`, `city`, `telephon`, `fax`, `website`, `header`, `footer`, `keyword`, `logo`, `icon`, `sidebar_login`, `about_us`, `email`) VALUES
 	(1, 'eInventaris', '1.0', 'eis', '| V1.0', '', '', '', '', '', '', '', '', 'assets/img/Logo_FasilkomTI_USU_Baru.png', 'assets/img/favicon.ico', 'assets/img/sidebar.jpg', '', NULL);
@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `e_kategori_inventori` (
   CONSTRAINT `FK_updated_kategori` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_kategori_inventori: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_kategori_inventori: ~3 rows (approximately)
 /*!40000 ALTER TABLE `e_kategori_inventori` DISABLE KEYS */;
 INSERT INTO `e_kategori_inventori` (`id_kategori`, `nama_kategori`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
 	(1, 'Barang Non Produksi', 1, '2021-06-11 08:59:20', 1, '2021-06-11 09:02:18'),
@@ -432,7 +432,7 @@ CREATE TABLE IF NOT EXISTS `e_modul` (
   CONSTRAINT `induk_child_modul` FOREIGN KEY (`induk_child_modul`) REFERENCES `e_modul` (`controller_modul`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_modul: ~72 rows (approximately)
+-- Dumping data for table e-inventori.e_modul: ~75 rows (approximately)
 /*!40000 ALTER TABLE `e_modul` DISABLE KEYS */;
 INSERT INTO `e_modul` (`id_modul`, `controller_modul`, `nama_modul`, `link_modul`, `type_modul`, `class_parent_modul`, `created_time`, `tampil_sidebar`, `child_module`, `induk_child_modul`) VALUES
 	(1, 'pengguna', 'Daftar Pengguna', 'panel/masterdata/pengguna', 'R', 'MasterData', '2021-06-10 07:59:17', 'Y', 'N', NULL),
@@ -565,7 +565,7 @@ CREATE TABLE IF NOT EXISTS `e_pengguna` (
   CONSTRAINT `FK_hak_akses` FOREIGN KEY (`hak_akses`) REFERENCES `e_hak_akses` (`nama_hak_akses`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_pengguna: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_pengguna: ~2 rows (approximately)
 /*!40000 ALTER TABLE `e_pengguna` DISABLE KEYS */;
 INSERT INTO `e_pengguna` (`id_pengguna`, `username`, `password`, `email`, `hak_akses`, `nama_lengkap`, `foto_pengguna`, `no_wa`, `unit`, `sub_unit`, `jenkel`, `tgl_lahir`, `alamat`, `last_login`, `last_logout`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES
 	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', '', NULL, NULL, NULL, 'L', NULL, NULL, '2021-11-03 10:18:51', '2021-10-15 13:58:38', '2021-06-10 09:32:44', NULL, NULL, NULL),
@@ -588,7 +588,7 @@ CREATE TABLE IF NOT EXISTS `e_satuan_inventori` (
   CONSTRAINT `FK_updated_satuan` FOREIGN KEY (`updated_by`) REFERENCES `e_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_satuan_inventori: ~0 rows (approximately)
+-- Dumping data for table e-inventori.e_satuan_inventori: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_satuan_inventori` DISABLE KEYS */;
 INSERT INTO `e_satuan_inventori` (`id_satuan`, `nama_satuan`, `singkatan_satuan`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
 	(1, 'Pieces', 'Pcs', 1, '2021-06-11 09:16:36', 1, '2021-10-02 08:46:44');
@@ -1453,7 +1453,7 @@ CREATE TABLE IF NOT EXISTS `e_sumber_dana` (
   UNIQUE KEY `kode_sumber_dana` (`kode_sumber_dana`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_sumber_dana: ~3 rows (approximately)
+-- Dumping data for table e-inventori.e_sumber_dana: ~4 rows (approximately)
 /*!40000 ALTER TABLE `e_sumber_dana` DISABLE KEYS */;
 INSERT INTO `e_sumber_dana` (`id_sumber_dana`, `kode_sumber_dana`, `keterangan_sumber_dana`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
 	(2, 'APBN', 'Sumber Dana APBN', 1, '2021-10-19 20:06:25', NULL, NULL),
@@ -1479,7 +1479,7 @@ CREATE TABLE IF NOT EXISTS `e_ticketing` (
   PRIMARY KEY (`id_ticket`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_ticketing: ~3 rows (approximately)
+-- Dumping data for table e-inventori.e_ticketing: ~4 rows (approximately)
 /*!40000 ALTER TABLE `e_ticketing` DISABLE KEYS */;
 INSERT INTO `e_ticketing` (`id_ticket`, `nama_lengkap`, `foto_laporan`, `id_unit`, `id_sub_unit`, `detail_lokasi`, `keterangan_laporan`, `status_laporan`, `dibuat_pada`, `ditanggapi_oleh`, `tanggapan_laporan`, `ditanggapi_pada`) VALUES
 	(1, 'Taufiq Rorkyendo', 'assets/img/fotoLaporan/ESP32-Pinout.jpg', 2, 1, 'Dekat Pojok ruang 1', 'Barangnya rusak parah', 'Y', '2021-10-13 18:54:18', 1, 'Oke akan segera kami proses, terimakasih atas laporannya', '2021-10-13 23:12:35'),
