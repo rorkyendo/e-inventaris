@@ -78,13 +78,13 @@
               </div>
               <script>
                 function cariKelompok(val){
-                  var kode_bidang = $('#bid').val();
+                  var kode_golongan = $('#gol').val();
                   $.ajax({
-                    url:'<?php echo base_url('panel/masterData/getBidang');?>',
+                    url:'<?php echo base_url('panel/masterData/getKelompok');?>',
                     type:'GET',
                     data:{
-                      'kd_gol':val,
-                      'kd_bid':kode_bidang
+                      'kd_gol':kode_golongan,
+                      'kd_bid':val
                     },success:function(resp){
                       if (resp!='false') {
                         $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
