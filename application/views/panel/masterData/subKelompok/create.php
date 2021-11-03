@@ -106,15 +106,15 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label">Kode Kelompok</label>
+                <label class="col-md-2 control-label">Kode Sub Kelompok</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Kode Kelompok" name="kd_skel" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Sub Kelompok" name="kd_skel" required />
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Uraian Kelompok</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Urain Kelompok" name="ur_skel" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Urain Sub Kelompok" name="ur_skel" required />
                 </div>
               </div>
             <hr />
