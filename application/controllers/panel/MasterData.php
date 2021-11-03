@@ -1004,7 +1004,7 @@ class MasterData extends CI_Controller
 		}
 	}
 	//--------------- END OF KELOMPOK------------------//
-	//--------------- KELOMPOK BEGIN------------------//
+	//--------------- SUB KELOMPOK BEGIN------------------//
 	public function daftarSubKelompok($param1=''){
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1=='cari') {
@@ -1148,5 +1148,17 @@ class MasterData extends CI_Controller
 			redirect(changeLink('panel/masterData/daftarSubKelompok/'));
 		}
 	}
-	//--------------- END OF KELOMPOK------------------//
+
+	public function getSubKelompok(){
+		$bid = $this->input->get('kd_bid');
+		$gol = $this->input->get('kd_gol');
+		$kel = $this->input->get('kd_kel');
+		$getSubKelompok = $this->GeneralModel->get_by_triple_id_general('e_sub_kelompok','gol',$gol,'bid',$bid,'kel',$kel);
+		if ($getSubKelompok) {
+			echo json_encode($getSubKelompok,JSON_PRETTY_PRINT);
+		}else{
+			echo 'false';
+		}
+	}
+	//--------------- END OF SUB KELOMPOK------------------//
 }
