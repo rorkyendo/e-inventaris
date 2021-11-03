@@ -1099,7 +1099,7 @@ class MasterData extends CI_Controller
 	public function updateSubKelompok($param1='',$param2=''){
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1=='doUpdate') {
-			$cekKodeSubKelompok = $this->GeneralModel->get_by_ffifth_id_general('e_sub_kelompok','id_skel',$param2,'kd_skel',$this->input->post('kd_skel'),'gol',$this->input->post('gol'),'bid',$this->input->post('bid'),'kd_kel',$this->input->post('kd_kel'));
+			$cekKodeSubKelompok = $this->GeneralModel->get_by_fifth_id_general('e_sub_kelompok','id_skel',$param2,'kd_skel',$this->input->post('kd_skel'),'gol',$this->input->post('gol'),'bid',$this->input->post('bid'),'kd_kel',$this->input->post('kd_kel'));
 			if ($cekKodeSubKelompok) {
 				$dataSubKelompok = array(
 					'kd_skel' => $this->input->post('kd_skel'),
@@ -1161,4 +1161,170 @@ class MasterData extends CI_Controller
 		}
 	}
 	//--------------- END OF SUB KELOMPOK------------------//
+	//--------------- SUB SUB KELOMPOK BEGIN------------------//
+
+	public function daftarSubSubKelompok($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='cari') {
+			$kodeGolongan = $this->input->post('kode_golongan');
+			$kodeBidang = $this->input->post('kode_bidang');
+			$kodeKelompok = $this->input->post('kode_kelompok');
+			$kodeSubKelompok = $this->input->post('kode_sub_kelompok');
+			return $this->MasterDataModel->getSubSubKelompok($kodeSubKelompok,$kodeGolongan,$kodeBidang,$kodeKelompok);		
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Daftar Sub-sub Kelompok';
+			$data['content'] = 'panel/masterData/subsubKelompok/index';
+			$data['kode_sub_kelompok'] = $this->input->get('kode_sub_kelompok');
+			$data['kode_golongan'] = $this->input->get('kode_golongan');
+			$data['kode_bidang'] = $this->input->get('kode_bidang');
+			$data['kode_kelompok'] = $this->input->get('kode_kelompok');
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
+			$data['bidang'] = $this->GeneralModel->get_by_id_general('e_bidang','gol',$data['kode_golongan']);
+			$data['kelompok'] = $this->GeneralModel->get_by_multi_id_general('e_kelompok','gol',$data['kode_golongan'],'bid',$data['kode_bidang']);
+			$data['sub_kelompok'] = $this->GeneralModel->get_by_triple_id_general('e_sub_kelompok','gol',$data['kode_golongan'],'bid',$data['kode_bidang'],'kel',$data['kode_sub_kelompok']);
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function createSubSubKelompok($param1=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doCreate') {
+			$cekKodeSubSubKelompok = $this->GeneralModel->get_by_fifth_id_general('e_sub_sub_kelompok','kd_sskel',$this->input->post('kd_sskel'),'kd_skel',$this->input->post('kd_skel'),'gol',$this->input->post('gol'),'bid',$this->input->post('bid'),'kd_kel',$this->input->post('kd_kel'));
+			if ($cekKodeSubSubKelompok) {
+				$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode kelompok sudah ada</div>');
+				redirect('panel/masterData/createSubKelompok');
+			}else{
+				$dataSubSubKelompok = array(
+					'kd_sskel' => $this->input->post('kd_sskel'),
+					'ur_sskel' => $this->input->post('ur_sskel'),
+					'skel' => $this->input->post('subkel'),
+					'bid' => $this->input->post('bid'),
+					'gol' => $this->input->post('gol'),
+					'kel' => $this->input->post('kel'),
+					'created_by' => $this->session->userdata('id_pengguna')
+				);
+				if ($this->GeneralModel->create_general('e_sub_sub_kelompok',$dataSubSubKelompok) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data Sub-sub Kelompok berhasil ditambahkan</div>');
+					redirect('panel/masterData/daftarSubSubKelompok');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data Sub-sub kelompok gagal ditambahkan</div>');
+					redirect('panel/masterData/daftarSubSubKelompok');
+				}
+			}
+		}elseif($param1=='doImport'){
+			$config['upload_path']          = 'assets/excel/';
+			$config['allowed_types'] = 'xlsx';
+			$this->upload->initialize($config);
+			if (!$this->upload->do_upload('dataSubSubKelompok')) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data Sub-sub kelompok gagal diupload ' . $this->upload->display_errors() . '</div>');
+				redirect('panel/masterData/daftarSubSubKelompok/');
+			} else {
+				$filename = $this->upload->data('file_name');
+				$data = $config['upload_path'] . $filename;
+				$inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($data);
+				$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+				$spreadsheet = $reader->load($data);
+				$sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+				$numrow = 1;
+				$dataSubSubKelompok = array();
+				foreach ($sheet as $row) {
+					if ($numrow > 1) {
+						array_push($dataSubSubKelompok,array(
+							'gol' => substr($row['A'],0,1),
+							'bid' => substr($row['A'],1,2),
+							'kel' => substr($row['A'],3,2),
+							'skel' => substr($row['A'],5,2),
+							'kd_sskel' => substr($row['A'],7,2),
+							'ur_sskel' => $row['B'],
+							'created_by' => $this->session->userdata('id_pengguna'),
+						));
+					}
+					$numrow++;
+				}
+				$this->db->insert_batch('e_sub_sub_kelompok',$dataSubSubKelompok);
+				try {
+					unlink($data);
+				} catch (\Exception $e) {
+				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data Sub-sub kelompok berhasil diupload</div>');
+				redirect('panel/masterData/daftarSubSubKelompok/');
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Tambah Sub-sub Kelompok';
+			$data['content'] = 'panel/masterData/subsubKelompok/create';
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateSubSubKelompok($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$cekKodeSubSubKelompok = $this->GeneralModel->get_by_sixth_id_general('e_sub_sub_kelompok','id_ssub_kel',$param2,'kd_sskel',$this->input->post('kd_sskel'),'kd_skel',$this->input->post('kd_skel'),'gol',$this->input->post('gol'),'bid',$this->input->post('bid'),'kd_kel',$this->input->post('kd_kel'));
+			
+			if ($cekKodeSubSubKelompok) {
+				$dataSubSubKelompok = array(
+					'kd_sskel' => $this->input->post('kd_sskel'),
+					'ur_sskel' => $this->input->post('ur_sskel'),
+					'bid' => $this->input->post('bid'),
+					'gol' => $this->input->post('gol'),
+					'kel' => $this->input->post('kel'),
+					'skel' => $this->input->post('skel'),
+					'updated_by' => $this->session->userdata('id_pengguna'),
+					'updated_time' => DATE('Y-m-d H:i:s')
+				);
+				if ($this->GeneralModel->update_general('e_sub_sub_kelompok','id_ssub_kel',$param2,$dataSubSubKelompok) == TRUE) {
+					$this->session->set_flashdata('notif','<div class="alert alert-success">Data Sub-sub kelompok berhasil diupdate</div>');
+					redirect('panel/masterData/daftarSubSubKelompok');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data Sub-sub kelompok gagal diupdate</div>');
+					redirect('panel/masterData/daftarSubSubKelompok');
+				}
+			}else{
+				$cekKodeSubSubKelompok = $this->GeneralModel->get_by_id_general('e_sub_sub_kelompok','kd_sskel',$this->input->post('kd_sskel'));
+				if ($cekKodeSubSubKelompok) {
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Kode sub-sub kelompok yang sama sudah ada</div>');
+					redirect('panel/masterData/daftarSubSubKelompok');
+				}else{
+					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, kode sub kelompok gagal diupdate</div>');
+					redirect('panel/masterData/daftarSubSubKelompok');
+				}
+			}
+		}else{
+			$data['title'] = $this->title;
+			$data['subtitle'] = 'Update Sub-sub Kelompok';
+			$data['content'] = 'panel/masterData/subsubKelompok/update';
+			$data['ssKelompok'] = $this->GeneralModel->get_by_id_general('e_sub_sub_kelompok','id_ssub_kel',$param1);
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
+			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function deleteSubSubKelompok($param1 = '')
+	{
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($this->GeneralModel->delete_general('e_sub_sub_kelompok', 'id_ssub_kel', $param1) == TRUE) {
+			$this->session->set_flashdata('notif', '<div class="alert alert-success">Data Sub-Sub Kelompok berhasil dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarSubSubKelompok/'));
+		} else {
+			$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data Sub-Sub Kelompok gagal dihapus</div>');
+			redirect(changeLink('panel/masterData/daftarSubSubKelompok/'));
+		}
+	}
+
+	public function getSubSubKelompok(){
+		$bid = $this->input->get('kd_bid');
+		$gol = $this->input->get('kd_gol');
+		$kel = $this->input->get('kd_kel');
+		$skel = $this->input->get('kd_skel');
+		$getSubSubKelompok = $this->GeneralModel->get_by_fourth_id_general('e_sub_sub_kelompok','gol',$gol,'bid',$bid,'kel',$kel,'skel',$skel);
+		if ($getSubSubKelompok) {
+			echo json_encode($getSubSubKelompok,JSON_PRETTY_PRINT);
+		}else{
+			echo 'false';
+		}
+	}
+
 }

@@ -1,4 +1,4 @@
-<?php foreach($sKelompok as $key):?>
+<?php foreach($ssKelompok as $key):?>
 <!-- begin #content -->
 <div id="content" class="content">
   <!-- begin breadcrumb -->
@@ -29,7 +29,7 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/updateSubKelompok/doUpdate/'.$key->id_skel)); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/updateSubSubKelompok/doUpdate/'.$key->id_ssub_kel)); ?>">
             <div class="col-md-12">
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Golongan</label>
@@ -105,28 +105,66 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Kelompok</label>
                 <div class="col-md-10">
-                  <select name="kel" id="kel" class="form-control select2">
+                  <select name="kel" id="kel" class="form-control select2" onchange="cariSubKelompok(this.value)">
                     <option value="">.:Pilih Kode Kelompok:.</option>
                   </select>
                 </div>
               </div>
+
+              <script>
+                function cariSubKelompok(val){
+                  var kode_golongan = $('#gol').val();
+                  var kode_bidang = $('#bid').val();
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getSubKelompok');?>',
+                    type:'GET',
+                    data:{
+                      'kd_gol':kode_golongan,
+                      'kd_bid':kode_bidang,
+                      'kd_kel':val
+
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#skel').html('<option value="">.:Pilih Kode Sub Kelompok:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#skel').append('<option value="'+val.kd_skel+'">'+val.kd_skel+'|'+val.ur_skel+'</option>');
+                        })
+                        $('#skel').val('<?php echo $key->skel;?>')
+                      }else{
+                        $('#skel').html('<option value="">.:Pilih Kode Sub Kelompok:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sub Kelompok</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Kode Kelompok" name="kd_skel" value="<?php echo $key->kd_skel;?>" required />
+                  <select name="skel" id="skel" class="form-control select2">
+                    <option value="">.:Pilih Kode Sub Kelompok:.</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Sub-Sub Kelompok</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Sub-Sub Kelompok" name="kd_sskel" value="<?php echo $key->kd_sskel;?>" required />
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Uraian Sub Kelompok</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Urain Kelompok" name="ur_skel" value="<?php echo $key->ur_skel?>" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Urain Sub-sub Kelompok" name="ur_sskel" value="<?php echo $key->ur_sskel?>" required />
                 </div>
               </div>        
             <hr />
             <div class="form-group">
               <div class="col-md-12">
                 <button type="submit" class="btn btn-sm btn-success  pull-right" style="margin-left:10px">Simpan</button>
-                <a href="<?php echo base_url(changeLink('panel/masterData/daftarSubKelompok/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
+                <a href="<?php echo base_url(changeLink('panel/masterData/daftarSubSubKelompok/')); ?>" class="btn btn-sm btn-danger pull-right">Batal</a>
               </div>
             </div>
           </div>
