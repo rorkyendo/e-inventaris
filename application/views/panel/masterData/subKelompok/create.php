@@ -1,4 +1,3 @@
-<?php foreach($kelompok as $key):?>
 <!-- begin #content -->
 <div id="content" class="content">
   <!-- begin breadcrumb -->
@@ -29,23 +28,20 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/updateKelompok/doUpdate/'.$key->id_kel)); ?>">
+          <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/createSubKelompok/doCreate/')); ?>">
             <div class="col-md-12">
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Golongan</label>
                 <div class="col-md-10">
                   <select name="gol" id="gol" class="form-control select2" onchange="cariBidang(this.value)" required>
                     <option value="">.:Pilih Kode Golongan:.</option>
-                    <?php foreach($golongan as $row):?>
-                      <option value="<?php echo $row->kd_gol;?>"><?php echo $row->kd_gol;?>|<?php echo $row->ur_gol;?></option>
+                    <?php foreach($golongan as $key):?>
+                      <option value="<?php echo $key->kd_gol;?>"><?php echo $key->kd_gol;?>|<?php echo $key->ur_gol;?></option>
                     <?php endforeach;?>
                   </select>
                 </div>
               </div>
               <script>
-                $('#gol').val('<?php echo $key->gol;?>')
-                cariBidang('<?php echo $key->gol;?>')
-
                 function cariBidang(val){
                   $.ajax({
                     url:'<?php echo base_url('panel/masterData/getBidang');?>',
@@ -59,7 +55,6 @@
                         $.each(data,function(key,val){
                           $('#bid').append('<option value="'+val.kd_bid+'">'+val.kd_bid+'|'+val.ur_bid+'</option>');
                         })
-                        $('#bid').val('<?php echo $key->bid;?>');
                       }else{
                         $('#bid').html('<option value="">.:Pilih Kode Bidang:.</option>');
                       }
@@ -72,23 +67,56 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Bidang</label>
                 <div class="col-md-10">
-                  <select name="bid" id="bid" class="form-control select2">
+                  <select name="bid" id="bid" class="form-control select2" onchange="cariKelompok(this.value)">
                     <option value="">.:Pilih Kode Bidang:.</option>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function cariKelompok(val){
+                  var kode_bidang = $('#bid').val();
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getKelompok');?>',
+                    type:'GET',
+                    data:{
+                      'kd_gol':val,
+                      'kd_bid':kode_bidang
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#kel').append('<option value="'+val.kd_kel+'">'+val.kd_kel+'|'+val.ur_kel+'</option>');
+                        })
+                      }else{
+                        $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Kelompok</label>
+                <div class="col-md-10">
+                  <select name="kel" id="kel" class="form-control select2">
+                    <option value="">.:Pilih Kode Kelompok:.</option>
                   </select>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Kelompok</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Kode Kelompok" value="<?php echo $key->kd_kel;?>" name="kd_kel" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Kelompok" name="kd_skel" required />
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Uraian Kelompok</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Urain Kelompok" value="<?php echo $key->ur_kel;?>" name="ur_kel" required />
+                  <input type="text" class="form-control" placeholder="Masukkan Urain Kelompok" name="ur_skel" required />
                 </div>
-              </div>        
+              </div>
             <hr />
             <div class="form-group">
               <div class="col-md-12">
@@ -106,4 +134,3 @@
 <!-- end row -->
 </div>
 <!-- end #content -->
-<?php endforeach;?>

@@ -98,4 +98,26 @@ class MasterDataModel extends CI_Model {
     return print_r($this->datatables->generate('json'));
   }
 
+    public function getSubKelompok($kd_gol,$kd_bid,$kd_kel)
+  {
+    $this->datatables->select('*,e_sub_kelompok.id_skel as id_skel');
+    $this->datatables->from('e_sub_kelompok');
+    $this->datatables->add_column(
+      'action',
+       anchor(changeLink('panel/masterData/updateSubKelompok/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
+      . anchor(changeLink('panel/masterData/deleteSubKelompok/$1'), '<i class="fa fa-times"></i>', array('class' => 'btn btn-danger btn-xs', "onclick" => "return confirm('Apakah kamu yakin akan menghapus sub kelompok?')")),
+      'id_skel'
+    );
+    if (!empty($kd_gol)) {
+      $this->datatables->where('gol',$kd_gol);
+    }
+    if (!empty($kd_bid)) {
+      $this->datatables->where('bid',$kd_bid);
+    }
+    if (!empty($kd_kel)) {
+      $this->datatables->where('kel',$kd_bid);
+    }
+    return print_r($this->datatables->generate('json'));
+  }
+
 }

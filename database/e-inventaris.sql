@@ -401,7 +401,7 @@ CREATE TABLE IF NOT EXISTS `e_pengguna` (
 -- Dumping data for table e-inventori.e_pengguna: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_pengguna` DISABLE KEYS */;
 INSERT INTO `e_pengguna` (`id_pengguna`, `username`, `password`, `email`, `hak_akses`, `nama_lengkap`, `foto_pengguna`, `no_wa`, `unit`, `sub_unit`, `jenkel`, `tgl_lahir`, `alamat`, `last_login`, `last_logout`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES
-	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', '', NULL, NULL, NULL, 'L', NULL, NULL, '2021-11-03 00:19:17', '2021-10-15 13:58:38', '2021-06-10 09:32:44', NULL, NULL, NULL),
+	(1, 'superuser', '72d8f949d00e431239b993f14b70d80d5313efc9', 'test@mail.com', 'superuser', 'superuser', '', NULL, NULL, NULL, 'L', NULL, NULL, '2021-11-03 10:18:51', '2021-10-15 13:58:38', '2021-06-10 09:32:44', NULL, NULL, NULL),
 	(2, 'rorkyendo', '72d8f949d00e431239b993f14b70d80d5313efc9', 'taufiqrorkyendo@gmail.com', 'staff', 'Taufiq Rorkyendo', NULL, '082276648478', 2, 0, 'L', NULL, NULL, NULL, NULL, '2021-10-14 07:19:32', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `e_pengguna` ENABLE KEYS */;
 
@@ -429,7 +429,7 @@ INSERT INTO `e_satuan_inventori` (`id_satuan`, `nama_satuan`, `singkatan_satuan`
 
 -- Dumping structure for table e-inventori.e_sub_kelompok
 CREATE TABLE IF NOT EXISTS `e_sub_kelompok` (
-  `id_sub_kel` int(11) NOT NULL AUTO_INCREMENT,
+  `id_skel` int(11) NOT NULL AUTO_INCREMENT,
   `kd_skel` int(2) unsigned zerofill NOT NULL,
   `ur_skel` varchar(250) NOT NULL,
   `kel` int(2) unsigned zerofill NOT NULL,
@@ -439,7 +439,7 @@ CREATE TABLE IF NOT EXISTS `e_sub_kelompok` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id_sub_kel`),
+  PRIMARY KEY (`id_skel`),
   UNIQUE KEY `kd_skel` (`kd_skel`,`kel`,`bid`,`gol`),
   KEY `FK_e_sub_kelompok_e_kelompok` (`kel`),
   KEY `FK_e_sub_kelompok_e_bidang` (`bid`),
@@ -447,10 +447,12 @@ CREATE TABLE IF NOT EXISTS `e_sub_kelompok` (
   CONSTRAINT `FK_e_sub_kelompok_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_e_sub_kelompok_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_e_sub_kelompok_e_kelompok` FOREIGN KEY (`kel`) REFERENCES `e_kelompok` (`kd_kel`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_sub_kelompok: ~0 rows (approximately)
+-- Dumping data for table e-inventori.e_sub_kelompok: ~1 rows (approximately)
 /*!40000 ALTER TABLE `e_sub_kelompok` DISABLE KEYS */;
+INSERT INTO `e_sub_kelompok` (`id_skel`, `kd_skel`, `ur_skel`, `kel`, `bid`, `gol`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
+	(1, 01, 'Tanah coba coba', 01, 1, 1, 1, '2021-11-03 11:20:21', NULL, NULL);
 /*!40000 ALTER TABLE `e_sub_kelompok` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_sub_sub_kelompok
@@ -459,14 +461,23 @@ CREATE TABLE IF NOT EXISTS `e_sub_sub_kelompok` (
   `kd_sskel` int(3) unsigned zerofill NOT NULL,
   `ur_sskel` varchar(250) NOT NULL,
   `skel` int(2) unsigned zerofill NOT NULL,
+  `kel` int(2) unsigned NOT NULL,
+  `bid` int(2) unsigned NOT NULL,
+  `gol` int(1) unsigned NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` int(11) DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id_ssub_kel`),
-  UNIQUE KEY `kd_sskel` (`kd_sskel`,`skel`),
+  UNIQUE KEY `kd_sskel` (`kd_sskel`,`skel`,`kel`,`bid`,`gol`),
   KEY `FK_e_ssub_kelompok_e_kelompok` (`skel`),
-  CONSTRAINT `FK_e_ssub_kelompok_e_kelompok` FOREIGN KEY (`skel`) REFERENCES `e_sub_kelompok` (`kd_skel`) ON DELETE NO ACTION ON UPDATE CASCADE
+  KEY `FK_e_sub_sub_kelompok_e_kelompok` (`kel`),
+  KEY `FK_e_sub_sub_kelompok_e_bidang` (`bid`),
+  KEY `FK_e_sub_sub_kelompok_e_golongan` (`gol`),
+  CONSTRAINT `FK_e_ssub_kelompok_e_kelompok` FOREIGN KEY (`skel`) REFERENCES `e_sub_kelompok` (`kd_skel`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_sub_sub_kelompok_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_sub_sub_kelompok_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_sub_sub_kelompok_e_kelompok` FOREIGN KEY (`kel`) REFERENCES `e_kelompok` (`kd_kel`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table e-inventori.e_sub_sub_kelompok: ~0 rows (approximately)

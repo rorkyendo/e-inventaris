@@ -94,6 +94,66 @@ class GeneralModel extends CI_Model
     return $this->db->get($table)->result();
   }
 
+    function get_by_fourth_id_general($table, $id, $val, $id2='', $val2='', $id3='', $val3='', $id4='', $val4='')
+  {
+    if (!empty($id) && !empty($val)) {
+      $this->db->where($id, $val);
+    }
+    if (!empty($id2) && !empty($val2)) {
+      $this->db->where($id2, $val2);
+    }
+    if (!empty($id3) && !empty($val3)) {
+      $this->db->where($id3, $val3);
+    }
+    if (!empty($id4) && !empty($val4)) {
+      $this->db->where($id4, $val4);
+    }
+    return $this->db->get($table)->result();
+  }
+
+    function get_by_fifth_id_general($table, $id, $val, $id2='', $val2='', $id3='', $val3='', $id4='', $val4='', $id5='', $val5='')
+  {
+    if (!empty($id) && !empty($val)) {
+      $this->db->where($id, $val);
+    }
+    if (!empty($id2) && !empty($val2)) {
+      $this->db->where($id2, $val2);
+    }
+    if (!empty($id3) && !empty($val3)) {
+      $this->db->where($id3, $val3);
+    }
+    if (!empty($id4) && !empty($val4)) {
+      $this->db->where($id4, $val4);
+    }
+    if (!empty($id5) && !empty($val5)) {
+      $this->db->where($id5, $val5);
+    }
+    return $this->db->get($table)->result();
+  }
+
+    function get_by_sixth_id_general($table, $id, $val, $id2='', $val2='', $id3='', $val3='', $id4='', $val4='', $id5='', $val5='', $id6='', $val6='')
+  {
+    if (!empty($id) && !empty($val)) {
+      $this->db->where($id, $val);
+    }
+    if (!empty($id2) && !empty($val2)) {
+      $this->db->where($id2, $val2);
+    }
+    if (!empty($id3) && !empty($val3)) {
+      $this->db->where($id3, $val3);
+    }
+    if (!empty($id4) && !empty($val4)) {
+      $this->db->where($id4, $val4);
+    }
+    if (!empty($id5) && !empty($val5)) {
+      $this->db->where($id5, $val5);
+    }
+    if (!empty($id6) && !empty($val6)) {
+      $this->db->where($id6, $val6);
+    }
+    return $this->db->get($table)->result();
+  }
+
   function get_like_general($table, $id, $val)
   {
     $query = $this->db->query("SELECT * FROM $table WHERE $id LIKE '%$val%'");

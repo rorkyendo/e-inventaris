@@ -32,18 +32,6 @@
           <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/updateBidang/doUpdate/'.$key->id_bid)); ?>">
             <div class="col-md-12">
               <div class="form-group">
-                <label class="col-md-2 control-label">Kode Bidang</label>
-                <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Kode Bidang" value="<?php echo $key->kd_bid;?>" name="kd_bid" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Uraian Bidang</label>
-                <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Urain Bidang" value="<?php echo $key->ur_bid;?>" name="ur_bid" required />
-                </div>
-              </div>
-              <div class="form-group">
                 <label class="col-md-2 control-label">Kode Golongan</label>
                 <div class="col-md-10">
                   <select name="gol" id="gol" class="form-control select2">
@@ -57,6 +45,18 @@
               <script>
                 $('#gol').val('<?php echo $key->gol;?>')
               </script>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Bidang</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Bidang" value="<?php echo $key->kd_bid;?>" name="kd_bid" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Uraian Bidang</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan Urain Bidang" value="<?php echo $key->ur_bid;?>" name="ur_bid" required />
+                </div>
+              </div>
             <hr />
             <div class="form-group">
               <div class="col-md-12">

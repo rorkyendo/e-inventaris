@@ -24,7 +24,7 @@
         </div>
         <div class="panel-body">
           <?php echo $this->session->flashdata('notif'); ?>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <select class="form-control select2" id="kode_golongan" onchange="cariGolongan(this.value)">
               <option value="">.:Pilih Golongan:.</option>
               <?php foreach ($golongan as $key) : ?>
@@ -38,10 +38,10 @@
             $('#kode_golongan').val('<?php echo $kode_golongan; ?>')
 
             function cariGolongan(val) {
-              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarKelompok?kode_golongan=')); ?>' + val)
+              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarSubKelompok?kode_golongan=')); ?>' + val)
             }
           </script>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <select class="form-control select2" id="kode_bidang" onchange="cariBidang(this.value)">
               <option value="">.:Pilih Bidang:.</option>
               <?php foreach($bidang as $key):?>
@@ -55,11 +55,28 @@
             $('#kode_bidang').val('<?php echo $kode_bidang; ?>')
 
             function cariBidang(val) {
-              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarKelompok?kode_golongan='.$kode_golongan.'&kode_bidang=')); ?>' + val)
+              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarSubKelompok?kode_golongan='.$kode_golongan.'&kode_bidang=')); ?>' + val)
             }
           </script>
-          <?php if(cekModul('createKelompok') == TRUE): ?>
-            <a href="<?php echo base_url(changeLink('panel/masterData/createKelompok/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Kelompok</a>
+          <div class="col-md-3">
+            <select class="form-control select2" id="kode_kelompok" onchange="cariKelompok(this.value)">
+              <option value="">.:Pilih Kelompok:.</option>
+              <?php foreach($kelompok as $key):?>
+                <option value="<?php echo $key->kd_kel;?>"><?php echo $key->kd_kel;?> | <?php echo $key->ur_kel;?></option>
+              <?php endforeach;?>
+            </select>
+            <br/>
+            <br/>
+          </div>
+          <script type="text/javascript">
+            $('#kode_kelompok').val('<?php echo $kode_kelompok; ?>')
+
+            function cariKelompok(val) {
+              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarSubKelompok?kode_golongan='.$kode_golongan.'&kode_bidang='.$kode_bidang.'&kode_kelompok=')); ?>' + val)
+            }
+          </script>
+          <?php if(cekModul('createSubKelompok') == TRUE): ?>
+            <a href="<?php echo base_url(changeLink('panel/masterData/createSubKelompok/')); ?>" class="btn btn-xs btn-primary pull-right">Tambah Sub Kelompok</a>
           <?php endif; ?>
           <br />
           <br />
@@ -71,7 +88,8 @@
                 <th>Kode Golongan</th>
                 <th>Kode Bidang</th>
                 <th>Kode Kelompok</th>
-                <th>Uraian Kelompok</th>
+                <th>Kode Sub Kelompok</th>
+                <th>Uraian Sub Kelompok</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -106,11 +124,12 @@
       "lengthChange": true,
       // Load data for the table's content from an Ajax source
       "ajax": {
-        "url": '<?php echo site_url(changeLink('panel/masterData/daftarKelompok/cari')); ?>',
+        "url": '<?php echo site_url(changeLink('panel/masterData/daftarSubKelompok/cari')); ?>',
         "type": "POST",
         "data":{
           "kode_golongan":"<?php echo $kode_golongan;?>",
-          "kode_bidang":"<?php echo $kode_bidang;?>"
+          "kode_bidang":"<?php echo $kode_bidang;?>",
+          "kode_kelompok":"<?php echo $kode_kelompok;?>",
         }
       },
       //Set column definition initialisation properties.
@@ -131,11 +150,15 @@
           width: 100
         },
         {
-          "data": "kd_kel",
+          "data": "kel",
           width: 100
         },
         {
-          "data": "ur_kel",
+          "data": "kd_skel",
+          width: 100
+        },
+        {
+          "data": "ur_skel",
           width: 100
         },
         {

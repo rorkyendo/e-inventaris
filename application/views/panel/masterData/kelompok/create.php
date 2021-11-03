@@ -31,18 +31,6 @@
           <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/createKelompok/doCreate/')); ?>">
             <div class="col-md-12">
               <div class="form-group">
-                <label class="col-md-2 control-label">Kode Kelompok</label>
-                <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Kode Kelompok" name="kd_kel" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Uraian Kelompok</label>
-                <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan Urain Kelompok" name="ur_kel" required />
-                </div>
-              </div>
-              <div class="form-group">
                 <label class="col-md-2 control-label">Kode Golongan</label>
                 <div class="col-md-10">
                   <select name="gol" id="gol" class="form-control select2" onchange="cariBidang(this.value)" required>
@@ -82,6 +70,18 @@
                   <select name="bid" id="bid" class="form-control select2">
                     <option value="">.:Pilih Kode Bidang:.</option>
                   </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Kelompok</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan Kode Kelompok" name="kd_kel" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Uraian Kelompok</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" placeholder="Masukkan Urain Kelompok" name="ur_kel" required />
                 </div>
               </div>
             <hr />

@@ -31,6 +31,17 @@
           <form class="form-horizontal" method="post" action="<?php echo base_url(changeLink('panel/masterData/createBidang/doCreate/')); ?>">
             <div class="col-md-12">
               <div class="form-group">
+                <label class="col-md-2 control-label">Kode Golongan</label>
+                <div class="col-md-10">
+                  <select name="gol" id="gol" class="form-control select2">
+                    <option value="">.:Pilih Kode Golongan:.</option>
+                    <?php foreach($golongan as $key):?>
+                      <option value="<?php echo $key->kd_gol;?>"><?php echo $key->kd_gol;?>|<?php echo $key->ur_gol;?></option>
+                    <?php endforeach;?>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Kode Bidang</label>
                 <div class="col-md-10">
                   <input type="text" class="form-control" placeholder="Masukkan Kode Bidang" name="kd_bid" required />
@@ -40,17 +51,6 @@
                 <label class="col-md-2 control-label">Uraian Bidang</label>
                 <div class="col-md-10">
                   <input type="text" class="form-control" placeholder="Masukkan Urain Bidang" name="ur_bid" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Kode Golongan</label>
-                <div class="col-md-10">
-                  <select name="gol" id="gol" class="form-control select2">
-                    <option value="">.:Pilih Kode Golongan:.</option>
-                    <?php foreach($golongan as $key):?>
-                      <option value="<?php echo $key->kd_gol;?>"><?php echo $key->kd_gol;?>|<?php echo $key->ur_gol;?></option>
-                    <?php endforeach;?>
-                  </select>
                 </div>
               </div>
             <hr />
