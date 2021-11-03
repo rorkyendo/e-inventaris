@@ -620,6 +620,40 @@ class MasterData extends CI_Controller
 					redirect('panel/masterData/daftarGolongan');
 				}
 			}
+		}elseif($param1=='doImport'){
+			$config['upload_path']          = 'assets/excel/';
+			$config['allowed_types'] = 'xlsx';
+			$this->upload->initialize($config);
+			if (!$this->upload->do_upload('dataGolongan')) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data golongan gagal diupload ' . $this->upload->display_errors() . '</div>');
+				redirect('panel/masterData/daftarGolongan/');
+			} else {
+				$filename = $this->upload->data('file_name');
+				$data = $config['upload_path'] . $filename;
+				$inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($data);
+				$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+				$spreadsheet = $reader->load($data);
+				$sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+				$numrow = 1;
+				$dataGolongan = array();
+				foreach ($sheet as $row) {
+					if ($numrow > 1) {
+						array_push($dataGolongan,array(
+							'kd_gol' => $row['A'],
+							'ur_gol' => $row['B'],
+							'created_by' => $this->session->userdata('id_pengguna'),
+						));
+					}
+					$numrow++;
+				}
+				$this->db->insert_batch('e_golongan',$dataGolongan);
+				try {
+					unlink($data);
+				} catch (\Exception $e) {
+				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data golongan berhasil diupload</div>');
+				redirect('panel/masterData/daftarGolongan/');
+			}
 		}else{
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Tambah Golongan';
@@ -714,6 +748,41 @@ class MasterData extends CI_Controller
 					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data bidang gagal ditambahkan</div>');
 					redirect('panel/masterData/daftarBidang');
 				}
+			}
+		}elseif($param1=='doImport'){
+			$config['upload_path']          = 'assets/excel/';
+			$config['allowed_types'] = 'xlsx';
+			$this->upload->initialize($config);
+			if (!$this->upload->do_upload('dataBidang')) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data bidang gagal diupload ' . $this->upload->display_errors() . '</div>');
+				redirect('panel/masterData/daftarBidang/');
+			} else {
+				$filename = $this->upload->data('file_name');
+				$data = $config['upload_path'] . $filename;
+				$inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($data);
+				$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+				$spreadsheet = $reader->load($data);
+				$sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+				$numrow = 1;
+				$dataBidang = array();
+				foreach ($sheet as $row) {
+					if ($numrow > 1) {
+						array_push($dataBidang,array(
+							'gol' => substr($row['A'],0,1),
+							'kd_bid' => substr($row['A'],1,2),
+							'ur_bid' => $row['B'],
+							'created_by' => $this->session->userdata('id_pengguna'),
+						));
+					}
+					$numrow++;
+				}
+				$this->db->insert_batch('e_bidang',$dataBidang);
+				try {
+					unlink($data);
+				} catch (\Exception $e) {
+				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data bidang berhasil diupload</div>');
+				redirect('panel/masterData/daftarBidang/');
 			}
 		}else{
 			$data['title'] = $this->title;
@@ -826,6 +895,42 @@ class MasterData extends CI_Controller
 					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data kelompok gagal ditambahkan</div>');
 					redirect('panel/masterData/daftarKelompok');
 				}
+			}
+		}elseif($param1=='doImport'){
+			$config['upload_path']          = 'assets/excel/';
+			$config['allowed_types'] = 'xlsx';
+			$this->upload->initialize($config);
+			if (!$this->upload->do_upload('dataKelompok')) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data kelompok gagal diupload ' . $this->upload->display_errors() . '</div>');
+				redirect('panel/masterData/daftarKelompok/');
+			} else {
+				$filename = $this->upload->data('file_name');
+				$data = $config['upload_path'] . $filename;
+				$inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($data);
+				$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+				$spreadsheet = $reader->load($data);
+				$sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+				$numrow = 1;
+				$dataKelompok = array();
+				foreach ($sheet as $row) {
+					if ($numrow > 1) {
+						array_push($dataKelompok,array(
+							'gol' => substr($row['A'],0,1),
+							'bid' => substr($row['A'],1,2),
+							'kd_kel' => substr($row['A'],3,2),
+							'ur_kel' => $row['B'],
+							'created_by' => $this->session->userdata('id_pengguna'),
+						));
+					}
+					$numrow++;
+				}
+				$this->db->insert_batch('e_kelompok',$dataKelompok);
+				try {
+					unlink($data);
+				} catch (\Exception $e) {
+				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data kelompok berhasil diupload</div>');
+				redirect('panel/masterData/daftarKelompok/');
 			}
 		}else{
 			$data['title'] = $this->title;
@@ -944,6 +1049,43 @@ class MasterData extends CI_Controller
 					$this->session->set_flashdata('notif','<div class="alert alert-danger">Terjadi kesalahan, data Sub kelompok gagal ditambahkan</div>');
 					redirect('panel/masterData/daftarSubKelompok');
 				}
+			}
+		}elseif($param1=='doImport'){
+			$config['upload_path']          = 'assets/excel/';
+			$config['allowed_types'] = 'xlsx';
+			$this->upload->initialize($config);
+			if (!$this->upload->do_upload('dataSubKelompok')) {
+				$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data Sub kelompok gagal diupload ' . $this->upload->display_errors() . '</div>');
+				redirect('panel/masterData/daftarSubKelompok/');
+			} else {
+				$filename = $this->upload->data('file_name');
+				$data = $config['upload_path'] . $filename;
+				$inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($data);
+				$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+				$spreadsheet = $reader->load($data);
+				$sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+				$numrow = 1;
+				$dataSubKelompok = array();
+				foreach ($sheet as $row) {
+					if ($numrow > 1) {
+						array_push($dataSubKelompok,array(
+							'gol' => substr($row['A'],0,1),
+							'bid' => substr($row['A'],1,2),
+							'kel' => substr($row['A'],3,2),
+							'kd_skel' => substr($row['A'],5,2),
+							'ur_skel' => $row['B'],
+							'created_by' => $this->session->userdata('id_pengguna'),
+						));
+					}
+					$numrow++;
+				}
+				$this->db->insert_batch('e_sub_kelompok',$dataSubKelompok);
+				try {
+					unlink($data);
+				} catch (\Exception $e) {
+				}
+				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data Sub kelompok berhasil diupload</div>');
+				redirect('panel/masterData/daftarSubKelompok/');
 			}
 		}else{
 			$data['title'] = $this->title;

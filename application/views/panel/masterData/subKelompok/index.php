@@ -19,6 +19,7 @@
       <div class="panel panel-inverse">
         <div class="panel-heading">
           <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-success" data-toggle="modal" data-target="#import"><i class="fa fa-download"></i> Import</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
         </div>
@@ -169,3 +170,30 @@
     });
   });
 </script>
+<div id="import" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Import Data Sub Kelompok</h4>
+      </div>
+      <div class="modal-body">
+        <form class="" action="<?php echo base_url('panel/masterData/createSubKelompok/doImport'); ?>" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="">Upload File Disini</label>
+            <input type="file" accept="application/msexcel" name="dataSubKelompok" class="form-control">
+            <font color="red">*Upload data dengan format xlsx</font><br />
+            <b><a href="<?php echo base_url('assets/excel/Format_Data_Sub_Kelompok.xlsx'); ?>">Download format import data disini</a></b><br />
+          </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>
+        <button type="submit" class="btn btn-sm btn-success">Upload</a>
+          </form>
+      </div>
+    </div>
+
+  </div>
+</div>

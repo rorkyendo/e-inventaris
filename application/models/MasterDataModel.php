@@ -81,8 +81,8 @@ class MasterDataModel extends CI_Model {
 
     public function getKelompok($kd_gol,$kd_bid)
   {
-    $this->datatables->select('*,v_kelompok.id_kel as id_kel');
-    $this->datatables->from('v_kelompok');
+    $this->datatables->select('*,e_kelompok.id_kel as id_kel');
+    $this->datatables->from('e_kelompok');
     $this->datatables->add_column(
       'action',
        anchor(changeLink('panel/masterData/updateKelompok/$1'), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-warning btn-xs')) . ' '
