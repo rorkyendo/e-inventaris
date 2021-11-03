@@ -88,11 +88,8 @@ CREATE TABLE IF NOT EXISTS `e_detail_faktur` (
   CONSTRAINT `FK_detail_faktur_id_inventori` FOREIGN KEY (`id_inventori`) REFERENCES `e_inventori` (`id_inventori`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_detail_faktur: ~2 rows (approximately)
+-- Dumping data for table e-inventori.e_detail_faktur: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_detail_faktur` DISABLE KEYS */;
-INSERT INTO `e_detail_faktur` (`id_detail_faktur`, `id_faktur`, `id_inventori`, `keterangan_mutasi`, `unit_awal`, `sub_unit_awal`, `unit_pindah`, `sub_unit_pindah`) VALUES
-	(9, 33, 16, NULL, NULL, NULL, NULL, NULL),
-	(13, 34, 16, NULL, 2, 3, 2, 1);
 /*!40000 ALTER TABLE `e_detail_faktur` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_faktur
@@ -210,6 +207,11 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
   `kode_unit` varchar(20) DEFAULT NULL,
   `kode_sub_unit` varchar(20) DEFAULT NULL,
   `kode_sumber_dana` varchar(20) DEFAULT NULL,
+  `gol` int(1) unsigned zerofill NOT NULL,
+  `bid` int(2) unsigned zerofill NOT NULL,
+  `kel` int(2) unsigned zerofill NOT NULL,
+  `skel` int(2) unsigned zerofill NOT NULL,
+  `sskel` int(3) unsigned zerofill NOT NULL,
   `kode_inventori` varchar(50) NOT NULL,
   `no_inventori` int(4) unsigned zerofill NOT NULL,
   `nama_inventori` varchar(250) NOT NULL,
@@ -226,18 +228,27 @@ CREATE TABLE IF NOT EXISTS `e_inventori` (
   `status_inventori` enum('Tersedia','Rusak','Dipinjam') NOT NULL DEFAULT 'Tersedia',
   PRIMARY KEY (`id_inventori`),
   UNIQUE KEY `kode_inventori` (`kode_inventori`),
+  UNIQUE KEY `no_inventori` (`no_inventori`,`gol`,`bid`,`kel`,`skel`,`sskel`),
   KEY `FK_e_inventori_e_unit` (`kode_unit`),
   KEY `FK_e_inventori_e_sub_unit` (`kode_sub_unit`),
   KEY `FK_e_inventori_e_sumber_dana` (`kode_sumber_dana`),
+  KEY `FK_e_inventori_e_golongan` (`gol`),
+  KEY `FK_e_inventori_e_bidang` (`bid`),
+  KEY `FK_e_inventori_e_kelompok` (`kel`),
+  KEY `FK_e_inventori_e_sub_kelompok` (`skel`),
+  KEY `FK_e_inventori_e_sub_sub_kelompok` (`sskel`),
+  CONSTRAINT `FK_e_inventori_e_bidang` FOREIGN KEY (`bid`) REFERENCES `e_bidang` (`kd_bid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_inventori_e_golongan` FOREIGN KEY (`gol`) REFERENCES `e_golongan` (`kd_gol`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_inventori_e_kelompok` FOREIGN KEY (`kel`) REFERENCES `e_kelompok` (`kd_kel`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_inventori_e_sub_kelompok` FOREIGN KEY (`skel`) REFERENCES `e_sub_kelompok` (`kd_skel`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_e_inventori_e_sub_sub_kelompok` FOREIGN KEY (`sskel`) REFERENCES `e_sub_sub_kelompok` (`kd_sskel`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_e_inventori_e_sub_unit` FOREIGN KEY (`kode_sub_unit`) REFERENCES `e_sub_unit` (`kode_sub_unit`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_e_inventori_e_sumber_dana` FOREIGN KEY (`kode_sumber_dana`) REFERENCES `e_sumber_dana` (`kode_sumber_dana`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_e_inventori_e_unit` FOREIGN KEY (`kode_unit`) REFERENCES `e_unit` (`kode_unit`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_inventori: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_inventori: ~0 rows (approximately)
 /*!40000 ALTER TABLE `e_inventori` DISABLE KEYS */;
-INSERT INTO `e_inventori` (`id_inventori`, `kode_unit`, `kode_sub_unit`, `kode_sumber_dana`, `kode_inventori`, `no_inventori`, `nama_inventori`, `foto_inventori`, `keterangan_inventori`, `harga_barang`, `kategori_inventori`, `qrcode`, `barcode`, `created_by`, `created_time`, `updated_by`, `updated_time`, `status_inventori`) VALUES
-	(16, 'GF1', 'RA1', 'APBN', '3.03.01.03.001.0001', 0000, 'Kursi 0001', 'assets/img/fotoInventori/no-image-icon-234851.png', NULL, 25000, 3, 'assets/img/qrbarang/3.03.01.03.001.0001.png', 'assets/img/barcodebarang/3.03.01.03.001.0001.png', 1, '2021-10-20 08:34:05', 1, '2021-10-23 08:30:50', 'Dipinjam');
 /*!40000 ALTER TABLE `e_inventori` ENABLE KEYS */;
 
 -- Dumping structure for table e-inventori.e_kategori_inventori
@@ -605,7 +616,7 @@ CREATE TABLE IF NOT EXISTS `e_sub_kelompok` (
   CONSTRAINT `FK_e_sub_kelompok_e_kelompok` FOREIGN KEY (`kel`) REFERENCES `e_kelompok` (`kd_kel`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1668 DEFAULT CHARSET=latin1;
 
--- Dumping data for table e-inventori.e_sub_kelompok: ~1 rows (approximately)
+-- Dumping data for table e-inventori.e_sub_kelompok: ~765 rows (approximately)
 /*!40000 ALTER TABLE `e_sub_kelompok` DISABLE KEYS */;
 INSERT INTO `e_sub_kelompok` (`id_skel`, `kd_skel`, `ur_skel`, `kel`, `bid`, `gol`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES
 	(903, 01, 'TANAH BANGUNAN PERUMAHAN/G.TEMPAT TINGGAL', 01, 01, 2, 1, '2021-11-03 14:57:04', NULL, NULL),
