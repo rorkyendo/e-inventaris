@@ -995,7 +995,7 @@ class MasterData extends CI_Controller
 		}
 	}
 
-	public function deleteSubSubKelompok($param1 = '')
+	public function deleteSubKelompok($param1 = '')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($this->GeneralModel->delete_general('e_sub_kelompok', 'id_skel', $param1) == TRUE) {
