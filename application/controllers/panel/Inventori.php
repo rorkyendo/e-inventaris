@@ -243,6 +243,49 @@ class Inventori extends CI_Controller
 					)
 			);
 			$this->form_validation->set_rules(
+					'gol', 'Kode Golongan',
+					'required',
+					array(
+							'required'      => 'Kode Golongan tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'bid', 'Kode Bidang',
+					'required',
+					array(
+							'required'      => 'Kode Bidang tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'kel', 'Kode Kelompok',
+					'required',
+					array(
+							'required'      => 'Kode Kelompok tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'skel', 'Kode Sub Kelompok',
+					'required',
+					array(
+							'required'      => 'Kode Sub Kelompok tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'sskel', 'Kode Sub-sub Kelompok',
+					'required',
+					array(
+							'required'      => 'Kode Sub-sub Kelompok tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'no_inventori', 'No Inventori',
+					'required|is_unique[e_inventori.no_inventori]',
+					array(
+							'required'      => 'No Inventori tidak boleh kosong',
+							'unique'		=> 'No Inventori Sudah ada dan tidak dapat digunakan'
+					)
+			);
+			$this->form_validation->set_rules(
 					'kode_inventori', 'Kode Inventori',
 					'required|is_unique[e_inventori.kode_inventori]',
 					array(
@@ -278,6 +321,12 @@ class Inventori extends CI_Controller
 					'kode_unit' => $this->input->post('kode_unit'),
 					'kode_sub_unit' => $this->input->post('kode_sub_unit'),
 					'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
+					'gol' => $this->input->post('gol'),
+					'bid' => $this->input->post('bid'),
+					'kel' => $this->input->post('kel'),
+					'skel' => $this->input->post('skel'),
+					'sskel' => $this->input->post('sskel'),
+					'no_inventori' => $this->input->post('no_inventori'),
 					'kode_inventori' => $this->input->post('kode_inventori'),
 					'nama_inventori' => $this->input->post('nama_inventori'),
 					'harga_barang' => $this->input->post('harga_barang'),
@@ -373,6 +422,7 @@ class Inventori extends CI_Controller
 			$data['sumberDana'] = $this->GeneralModel->get_general('e_sumber_dana');
 			$data['satuan'] = $this->GeneralModel->get_general('e_satuan_inventori');
 			$data['unit'] = $this->GeneralModel->get_general('e_unit');
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
 			$this->load->view('panel/content', $data);
 		}
 	}
@@ -404,6 +454,49 @@ class Inventori extends CI_Controller
 					'required',
 					array(
 							'required'      => 'Kode Sumber Dana tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'gol', 'Kode Golongan',
+					'required',
+					array(
+							'required'      => 'Kode Golongan tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'bid', 'Kode Bidang',
+					'required',
+					array(
+							'required'      => 'Kode Bidang tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'kel', 'Kode Kelompok',
+					'required',
+					array(
+							'required'      => 'Kode Kelompok tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'skel', 'Kode Sub Kelompok',
+					'required',
+					array(
+							'required'      => 'Kode Sub Kelompok tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'sskel', 'Kode Sub-sub Kelompok',
+					'required',
+					array(
+							'required'      => 'Kode Sub-sub Kelompok tidak boleh kosong'
+					)
+			);
+			$this->form_validation->set_rules(
+					'no_inventori', 'No Inventori',
+					'required|is_unique[e_inventori.no_inventori]',
+					array(
+							'required'      => 'No Inventori tidak boleh kosong',
+							'unique'		=> 'No Inventori Sudah ada dan tidak dapat digunakan'
 					)
 			);
 			if (empty($cekKodeInventori)) {
@@ -445,6 +538,12 @@ class Inventori extends CI_Controller
 					'kode_unit' => $this->input->post('kode_unit'),
 					'kode_sub_unit' => $this->input->post('kode_sub_unit'),
 					'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
+					'gol' => $this->input->post('gol'),
+					'bid' => $this->input->post('bid'),
+					'kel' => $this->input->post('kel'),
+					'skel' => $this->input->post('skel'),
+					'sskel' => $this->input->post('sskel'),
+					'no_inventori' => $this->input->post('no_inventori'),
 					'kode_inventori' => $this->input->post('kode_inventori'),
 					'nama_inventori' => $this->input->post('nama_inventori'),
 					'harga_barang' => $this->input->post('harga_barang'),
@@ -555,6 +654,7 @@ class Inventori extends CI_Controller
 			$data['sumberDana'] = $this->GeneralModel->get_general('e_sumber_dana');
 			$data['kategori'] = $this->GeneralModel->get_general('e_kategori_inventori');
 			$data['unit'] = $this->GeneralModel->get_general('e_unit');
+			$data['golongan'] = $this->GeneralModel->get_general('e_golongan');
 			$this->load->view('panel/content', $data);
 		}
 	}

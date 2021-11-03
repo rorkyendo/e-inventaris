@@ -133,9 +133,137 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Kode Golongan</label>
+                <div class="col-md-10">
+                  <select name="gol" id="gol" class="form-control select2" onchange="cariBidang(this.value)" required>
+                    <option value="">.:Pilih Kode Golongan:.</option>
+                    <?php foreach($golongan as $key):?>
+                      <option value="<?php echo $key->kd_gol;?>"><?php echo $key->kd_gol;?>|<?php echo $key->ur_gol;?></option>
+                    <?php endforeach;?>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function cariBidang(val){
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getBidang');?>',
+                    type:'GET',
+                    data:{
+                      'gol':val
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#bid').html('<option value="">.:Pilih Kode Bidang:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#bid').append('<option value="'+val.kd_bid+'">'+val.kd_bid+'|'+val.ur_bid+'</option>');
+                        })
+                      }else{
+                        $('#bid').html('<option value="">.:Pilih Kode Bidang:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Bidang</label>
+                <div class="col-md-10">
+                  <select name="bid" id="bid" class="form-control select2" onchange="cariKelompok(this.value)">
+                    <option value="">.:Pilih Kode Bidang:.</option>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function cariKelompok(val){
+                  var kode_golongan = $('#gol').val();
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getKelompok');?>',
+                    type:'GET',
+                    data:{
+                      'kd_gol':kode_golongan,
+                      'kd_bid':val
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#kel').append('<option value="'+val.kd_kel+'">'+val.kd_kel+'|'+val.ur_kel+'</option>');
+                        })
+                      }else{
+                        $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Kelompok</label>
+                <div class="col-md-10">
+                  <select name="kel" id="kel" class="form-control select2" onchange="cariSubKelompok(this.value)">
+                    <option value="">.:Pilih Kode Kelompok:.</option>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function cariSubKelompok(val){
+                  var kode_golongan = $('#gol').val();
+                  var kode_bidang = $('#bid').val();
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getSubKelompok');?>',
+                    type:'GET',
+                    data:{
+                      'kd_gol':kode_golongan,
+                      'kd_bid':kode_bidang,
+                      'kd_kel':val,
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#skel').html('<option value="">.:Pilih Kode Sub Kelompok:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#skel').append('<option value="'+val.kd_skel+'">'+val.kd_skel+'|'+val.ur_skel+'</option>');
+                        })
+                      }else{
+                        $('#skel').html('<option value="">.:Pilih Kode Sub Kelompok:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Sub Kelompok</label>
+                <div class="col-md-10">
+                  <select name="skel" id="skel" class="form-control select2">
+                    <option value="">.:Pilih Kode Sub Kelompok:.</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">No Inventori</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="<?php echo set_value('no_inventori'); ?>" id="no_inventori" placeholder="Masukkan No Inventori" onchange="inputKodeInventori(this.value)" name="no_inventori" required />
+  								<?php echo form_error('no_inventori'); ?>
+                </div>
+              </div>
+              <script>
+                function inputKodeInventori(val){
+                  var gol = $('#gol').val();
+                  var bid = $('#bid').val();
+                  var kel = $('#kel').val();
+                  var skel = $('#skel').val();
+                  var sskel = $('#sskel').val();
+                  $('#kode_inventori').val(gol+'.'+bid+'.'+kel+'.'+skel+'.'+sskel+'.'+val)
+                }
+              </script>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Kode Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" value="<?php echo set_value('kode_inventori'); ?>" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" required />
+                  <input type="text" class="form-control" value="<?php echo set_value('kode_inventori'); ?>" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" readonly required />
+                  <font color="red">Kode Inventori dibuat otomatis berdasarkan gol.bid.kel.subkel.subsubkel.noinventori</font>
   								<?php echo form_error('kode_inventori'); ?>
                 </div>
               </div>
