@@ -31,7 +31,11 @@
             <div class="col-md-4">
               <h4 class="text-center">Foto Inventori</h4>
               <center>
-                  <img src="<?php echo base_url() . $key->foto_inventori; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
+                  <?php if(empty($key->foto_inventori)): ?>
+                    <img src="<?php echo base_url() . $logo; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
+                  <?php else: ?>
+                    <img src="<?php echo base_url() . $key->foto_inventori; ?>" class="img-responsive" alt="preview" id="preview" style="height:80px">
+                  <?php endif; ?>
               </center>
               <br />
             </div>

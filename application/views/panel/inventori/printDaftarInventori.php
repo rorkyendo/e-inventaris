@@ -109,9 +109,9 @@ $html = '<hr/><table border="1px" style="collapse:collapse;">
           </tr>
           <tr>
             <th width="20%">Kode Inventori</th>
-            <th width="20%">Nama Inventori</th>
+            <th width="15%">Nama Inventori</th>
             <th width="15%">Nama Unit</th>
-            <th width="15%">Nama Sub Unit</th>
+            <th width="20%">Nama Sub Unit</th>
             <th width="20%">Kategori Inventori</th>
             <th width="10%">Status</th>
           </tr>
