@@ -237,15 +237,52 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sub Kelompok</label>
                 <div class="col-md-10">
-                  <select name="skel" id="skel" class="form-control select2">
+                  <select name="skel" id="skel" class="form-control select2" onchange="cariSubSubKelompok(this.value)">
                     <option value="">.:Pilih Kode Sub Kelompok:.</option>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function cariSubSubKelompok(val){
+                  var kode_golongan = $('#gol').val();
+                  var kode_bidang = $('#bid').val();
+                  var kode_kelompok = $('#kel').val();
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getSubSubKelompok');?>',
+                    type:'GET',
+                    data:{
+                      'kd_gol':kode_golongan,
+                      'kd_bid':kode_bidang,
+                      'kd_kel':kode_kelompok,
+                      'kd_skel':val,
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#sskel').html('<option value="">.:Pilih Kode Sub-sub Kelompok:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#sskel').append('<option value="'+val.kd_sskel+'">'+val.kd_sskel+'|'+val.ur_sskel+'</option>');
+                        })
+                      }else{
+                        $('#sskel').html('<option value="">.:Pilih Kode Sub-sub Kelompok:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Sub-sub Kelompok</label>
+                <div class="col-md-10">
+                  <select name="sskel" id="sskel" class="form-control select2">
+                    <option value="">.:Pilih Kode Sub-sub Kelompok:.</option>
                   </select>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">No Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" value="<?php echo set_value('no_inventori'); ?>" id="no_inventori" placeholder="Masukkan No Inventori" onchange="inputKodeInventori(this.value)" name="no_inventori" required />
+                  <input type="text" class="form-control" value="<?php echo set_value('no_inventori'); ?>" id="no_inventori" placeholder="Masukkan No Inventori" onchange="inputKodeInventori(this.value)" minlength="4" maxlength="4" name="no_inventori" required />
   								<?php echo form_error('no_inventori'); ?>
                 </div>
               </div>

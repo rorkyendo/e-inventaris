@@ -163,6 +163,7 @@
                           $('#bid').append('<option value="'+val.kd_bid+'">'+val.kd_bid+'|'+val.ur_bid+'</option>');
                         })
                         $('#bid').val('<?php echo $row->bid;?>');
+                        cariKelompok('<?php echo $row->bid;?>')
                       }else{
                         $('#bid').html('<option value="">.:Pilih Kode Bidang:.</option>');
                       }
@@ -197,6 +198,7 @@
                           $('#kel').append('<option value="'+val.kd_kel+'">'+val.kd_kel+'|'+val.ur_kel+'</option>');
                         })
                         $('#kel').val('<?php echo $row->kel;?>');
+                        cariSubKelompok('<?php echo $row->kel;?>')
                       }else{
                         $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
                       }
@@ -233,6 +235,7 @@
                           $('#skel').append('<option value="'+val.kd_skel+'">'+val.kd_skel+'|'+val.ur_skel+'</option>');
                         })
                         $('#skel').val('<?php echo $row->skel;?>');
+                        cariSubSubKelompok('<?php echo $row->skel;?>')
                       }else{
                         $('#skel').html('<option value="">.:Pilih Kode Sub Kelompok:.</option>');
                       }
@@ -245,15 +248,53 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sub Kelompok</label>
                 <div class="col-md-10">
-                  <select name="skel" id="skel" class="form-control select2">
+                  <select name="skel" id="skel" class="form-control select2" onchange="cariSubSubKelompok(this.value)">
                     <option value="">.:Pilih Kode Sub Kelompok:.</option>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function cariSubSubKelompok(val){
+                  var kode_golongan = $('#gol').val();
+                  var kode_bidang = $('#bid').val();
+                  var kode_kelompok = $('#kel').val();
+                  $.ajax({
+                    url:'<?php echo base_url('panel/masterData/getSubSubKelompok');?>',
+                    type:'GET',
+                    data:{
+                      'kd_gol':kode_golongan,
+                      'kd_bid':kode_bidang,
+                      'kd_kel':kode_kelompok,
+                      'kd_skel':val,
+                    },success:function(resp){
+                      if (resp!='false') {
+                        $('#sskel').html('<option value="">.:Pilih Kode Sub-sub Kelompok:.</option>');
+                        var data = JSON.parse(resp);
+                        $.each(data,function(key,val){
+                          $('#sskel').append('<option value="'+val.kd_sskel+'">'+val.kd_sskel+'|'+val.ur_sskel+'</option>');
+                        })
+                        $('#sskel').val('<?php echo $row->sskel;?>');
+                      }else{
+                        $('#sskel').html('<option value="">.:Pilih Kode Sub-sub Kelompok:.</option>');
+                      }
+                    },error:function(){
+                      alert('Terjadi kesalahan!')
+                    }
+                  })
+                }
+              </script>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Kode Sub-sub Kelompok</label>
+                <div class="col-md-10">
+                  <select name="sskel" id="sskel" class="form-control select2">
+                    <option value="">.:Pilih Kode Sub-sub Kelompok:.</option>
                   </select>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">No Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" value="<?php echo $row->no_inventori; ?>" id="no_inventori" placeholder="Masukkan No Inventori" onchange="inputKodeInventori(this.value)" name="no_inventori" required />
+                  <input type="text" class="form-control" value="<?php echo $row->no_inventori; ?>" id="no_inventori" placeholder="Masukkan No Inventori" onchange="inputKodeInventori(this.value)" minlength="4" maxlength="4" name="no_inventori" required />
   								<?php echo form_error('no_inventori'); ?>
                 </div>
               </div>
@@ -270,7 +311,8 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Inventori</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" value="<?php echo $row->kode_inventori; ?>" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" required />
+                  <input type="text" class="form-control" value="<?php echo $row->kode_inventori; ?>" id="kode_inventori" placeholder="Masukkan Kode Inventori" name="kode_inventori" readonly required/>
+                  <font color="red">Kode Inventori dibuat otomatis berdasarkan gol.bid.kel.subkel.subsubkel.noinventori</font>
   								<?php echo form_error('kode_inventori'); ?>
                 </div>
               </div>

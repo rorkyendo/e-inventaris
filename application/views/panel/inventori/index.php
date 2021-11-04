@@ -145,7 +145,7 @@
           "data": "foto_inventori",
           width: 100,
           render: function(data, type, row, meta) {
-            if (row.foto_inventori == '') {
+            if (row.foto_inventori == '' || row.foto_inventori == null) {
               return "<b class='text-danger'>Tidak ada foto</b>";              
             }else{
               return "<img src='<?php echo base_url(); ?>" + row.foto_inventori + "' class='img-responsive' style='width:250px'>"
