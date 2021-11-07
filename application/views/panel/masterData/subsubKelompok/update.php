@@ -44,6 +44,7 @@
               </div>
               <script>
                 $('#gol').val('<?php echo $key->gol;?>')
+                cariBidang('<?php echo $key->gol;?>')
                 function cariBidang(val){
                   $.ajax({
                     url:'<?php echo base_url('panel/masterData/getBidang');?>',
@@ -93,6 +94,7 @@
                           $('#kel').append('<option value="'+val.kd_kel+'">'+val.kd_kel+'|'+val.ur_kel+'</option>');
                         })
                         $('#kel').val('<?php echo $key->kel;?>')
+                        cariSubKelompok('<?php echo $key->kel;?>')
                       }else{
                         $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
                       }

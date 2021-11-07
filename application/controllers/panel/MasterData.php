@@ -1170,7 +1170,7 @@ class MasterData extends CI_Controller
 			$kodeBidang = $this->input->post('kode_bidang');
 			$kodeKelompok = $this->input->post('kode_kelompok');
 			$kodeSubKelompok = $this->input->post('kode_sub_kelompok');
-			return $this->MasterDataModel->getSubSubKelompok($kodeSubKelompok,$kodeGolongan,$kodeBidang,$kodeKelompok);		
+			return $this->MasterDataModel->getSubSubKelompok($kodeGolongan,$kodeBidang,$kodeKelompok,$kodeSubKelompok);		
 		}else{
 			$data['title'] = $this->title;
 			$data['subtitle'] = 'Daftar Sub-sub Kelompok';
@@ -1235,7 +1235,7 @@ class MasterData extends CI_Controller
 							'bid' => substr($row['A'],1,2),
 							'kel' => substr($row['A'],3,2),
 							'skel' => substr($row['A'],5,2),
-							'kd_sskel' => substr($row['A'],7,2),
+							'kd_sskel' => substr($row['A'],7,3),
 							'ur_sskel' => $row['B'],
 							'created_by' => $this->session->userdata('id_pengguna'),
 						));

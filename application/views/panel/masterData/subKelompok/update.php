@@ -44,6 +44,7 @@
               </div>
               <script>
                 $('#gol').val('<?php echo $key->gol;?>')
+                cariBidang('<?php echo $key->gol;?>')
                 function cariBidang(val){
                   $.ajax({
                     url:'<?php echo base_url('panel/masterData/getBidang');?>',

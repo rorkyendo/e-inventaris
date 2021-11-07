@@ -77,7 +77,7 @@
             }
           </script>
           <div class="col-md-3">
-            <select class="form-control select2" id="kode_kelompok" onchange="cariSubKelompok(this.value)">
+            <select class="form-control select2" id="kode_sub_kelompok" onchange="cariSubKelompok(this.value)">
               <option value="">.:Pilih Sub Kelompok:.</option>
               <?php foreach($sub_kelompok as $key):?>
                 <option value="<?php echo $key->kd_skel;?>"><?php echo $key->kd_skel;?> | <?php echo $key->ur_skel;?></option>
@@ -90,7 +90,7 @@
             $('#kode_sub_kelompok').val('<?php echo $kode_sub_kelompok; ?>')
 
             function cariSubKelompok(val) {
-              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarSubSubKelompok?kode_golongan='.$kode_golongan.'&kode_sub_kelompok='.$kode_sub_kelompok.'&kode_bidang='.$kode_bidang.'&kode_kelompok=')); ?>' + val)
+              location.replace('<?php echo base_url(changeLink('panel/masterData/daftarSubSubKelompok?kode_golongan='.$kode_golongan.'&kode_bidang='.$kode_bidang.'&kode_kelompok='.$kode_kelompok.'&kode_sub_kelompok=')); ?>' + val)
             }
           </script>
           <br>

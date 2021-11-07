@@ -120,7 +120,7 @@ class MasterDataModel extends CI_Model {
     return print_r($this->datatables->generate('json'));
   }
   
-  public function getSubSubKelompok($kd_skel,$kd_gol,$kd_bid,$kd_kel)
+  public function getSubSubKelompok($kd_gol,$kd_bid,$kd_kel,$kd_skel)
   {
     $this->datatables->select('*,e_sub_sub_kelompok.id_ssub_kel as id_ssub_kel');
     $this->datatables->from('e_sub_sub_kelompok');
@@ -131,9 +131,6 @@ class MasterDataModel extends CI_Model {
       'id_ssub_kel'
     );
     if (!empty($kd_gol)) {
-      $this->datatables->where('skel',$kd_skel);
-    }
-    if (!empty($kd_gol)) {
       $this->datatables->where('gol',$kd_gol);
     }
     if (!empty($kd_bid)) {
@@ -141,6 +138,9 @@ class MasterDataModel extends CI_Model {
     }
     if (!empty($kd_kel)) {
       $this->datatables->where('kel',$kd_bid);
+    }
+    if (!empty($kd_skel)) {
+      $this->datatables->where('skel',$kd_skel);
     }
     return print_r($this->datatables->generate('json'));
   }
