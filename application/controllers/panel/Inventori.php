@@ -307,6 +307,13 @@ class Inventori extends CI_Controller
 							'required'      => 'Kategori Inventori tidak boleh kosong'
 					)
 			);
+			$this->form_validation->set_rules(
+					'kode_satker', 'Kode Satker',
+					'required',
+					array(
+							'required'      => 'Kode Satker tidak boleh kosong'
+					)
+			);
 			//---------- END OF VALIDATION -------------//
 			if ($this->form_validation->run() == FALSE) {
 				$data['title'] = $this->title;
@@ -330,6 +337,7 @@ class Inventori extends CI_Controller
 					'kode_inventori' => $this->input->post('kode_inventori'),
 					'nama_inventori' => $this->input->post('nama_inventori'),
 					'harga_barang' => $this->input->post('harga_barang'),
+					'kode_satker' => '023.04.0700.415030.021.KD '.$this->input->post('kode_satker'),
 					'kategori_inventori' => $this->input->post('id_kategori'),
 					'created_by' => $this->session->userdata('id_pengguna')
 				);
@@ -523,6 +531,13 @@ class Inventori extends CI_Controller
 							'required'      => 'Kategori Inventori tidak boleh kosong'
 					)
 			);
+			$this->form_validation->set_rules(
+					'kode_satker', 'Kode Satker',
+					'required',
+					array(
+							'required'      => 'Kode Satker tidak boleh kosong'
+					)
+			);
 			//---------- END OF VALIDATION -------------//
 			if ($this->form_validation->run() == FALSE) {
 				$data['title'] = $this->title;
@@ -548,6 +563,7 @@ class Inventori extends CI_Controller
 					'nama_inventori' => $this->input->post('nama_inventori'),
 					'harga_barang' => $this->input->post('harga_barang'),
 					'kategori_inventori' => $this->input->post('id_kategori'),
+					'kode_satker' => '023.04.0700.415030.021.KD '.$this->input->post('kode_satker'),
 					'updated_by' => $this->session->userdata('id_pengguna'),
 					'updated_time' => DATE('Y-m-d H:i:s')
 				);

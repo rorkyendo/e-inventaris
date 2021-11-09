@@ -71,6 +71,7 @@
                 <th>Sub Unit</th>
                 <th>Keterangan Sumber Dana</th>
                 <th>Foto Inventori</th>
+                <th>Kode Satker</th>
                 <th>Kode Inventori</th>
                 <th>Nama Barang</th>
                 <th>Status</th>
@@ -153,6 +154,10 @@
           }
         },
         {
+          "data": "kode_satker",
+          width: 100,
+        }, 
+        {
           "data": "kode_inventori",
           width: 100,
           render: function(data, type, row) {
@@ -205,7 +210,7 @@
           "data": "action",
           width: 100,
           render: function(data, type, row, meta) {
-            var onclick = "cetak('<?php echo base_url(); ?>" + row.qrcode + "','<?php echo base_url(); ?>" + row.barcode + "','"+row.keterangan_sumber_dana+"')"
+            var onclick = "cetak('<?php echo base_url(); ?>" + row.qrcode + "','<?php echo base_url(); ?>" + row.barcode + "','"+row.keterangan_sumber_dana+"','"+row.kode_satker+"')"
             return row.action+'<button type="button" class="btn btn-xs btn-success" onclick="'+onclick+'"><i class="fa fa-print"></i> Print</button>'
           }
         },
@@ -215,8 +220,9 @@
 </script>
 
 <script>
-  function cetak(qrcode,barcode,sumberDana){
+  function cetak(qrcode,barcode,sumberDana,kodeSatker){
     $('#sumberDana').text(sumberDana);
+    $('#kodeSatker').text(kodeSatker);
     $('#print_qr').attr("src",qrcode);
     $('#print_barcode').attr("src",barcode);
     printCode($('<div/>').append($('#pre_print').clone()).html())
@@ -237,7 +243,11 @@
   <center>
     <table border="1px" style="border-collapse: collapse;">
       <tr>
-        <td colspan="2" align="center"><b id="sumberDana"></b></td>
+        <td colspan="2" align="center">
+          <b id="sumberDana"></b>
+          <br/>
+          <b id="kodeSatker"></b>
+        </td>
       </tr>
       <tr>
         <td><img src="" id="print_qr" style="width:80px;" alt="qrcode"></td>

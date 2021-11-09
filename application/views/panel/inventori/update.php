@@ -317,6 +317,21 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Kode Satker</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" value="023.04.0700.415030.021.KD" readonly/>
+                </div>
+                <div class="col-md-2">
+                  <?php if(!empty(set_value('kode_satker'))){
+                    $kode_satker = set_value('kode_satker');
+                  }else{
+                    $kode_satker = str_replace('023.04.0700.415030.021.KD ','',$row->kode_satker);
+                  } ?>
+                  <input type="text" class="form-control" value="<?php echo $kode_satker; ?>" id="kode_satker" placeholder="Masukkan Kode Satker" name="kode_satker" required />
+  								<?php echo form_error('kode_satker'); ?>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-md-2 control-label">Nama Inventori</label>
                 <div class="col-md-10">
                   <input type="text" class="form-control" value="<?php echo $row->nama_inventori; ?>" placeholder="Masukkan Nama Inventori" name="nama_inventori" required />
