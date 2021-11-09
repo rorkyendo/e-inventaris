@@ -9,10 +9,10 @@ class MYPDF extends TCPDF
     $html = $this->CustomHeaderText;
     if ($this->page == 1) {
       $this->writeHTML($html, true, false, false, false, '');
-      $this->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
+      $this->SetMargins(PDF_MARGIN_LEFT, 45, PDF_MARGIN_RIGHT);
     } else {
       $this->writeHTML($html, true, false, false, false, '');
-      $this->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
+      $this->SetMargins(PDF_MARGIN_LEFT, 45, PDF_MARGIN_RIGHT);
     }
   }
 }
@@ -24,7 +24,8 @@ $headerTxt = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <table sytle="width:100%" border="1px" style="collapse:collapse;" cellspacing="0" cellpadding="0">
         <tr>
           <td style="width:60%;" align="center" colspan="2">
-            '.$inventori[0]->keterangan_sumber_dana.'
+            '.$inventori[0]->keterangan_sumber_dana.'<br/>
+            '.$inventori[0]->kode_satker.'
           </td>
         </tr>
         <tr>
@@ -82,12 +83,18 @@ $pdf->AddPage();
 // set text shadow effect
 // $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
 
+if (!empty($inventori[0]->foto_inventori)) {
+  $fotoInventori = $inventori[0]->foto_inventori;
+}else{
+  $fotoInventori = $identitasAplikasi[0]->logo;
+}
+
 $html = '<hr/><table border="1px" style="collapse:collapse;">
                 <tr>
                   <td align="center" colspan="2">
                     <br/>
                     <br/>
-                    <img src="@'.base64_encode(file_get_contents(FCPATH . $inventori[0]->foto_inventori)).'" style="width:160px;">
+                    <img src="@'.base64_encode(file_get_contents(FCPATH . $fotoInventori)).'" style="width:160px;">
                   </td>
                 </tr>
                 <tr>

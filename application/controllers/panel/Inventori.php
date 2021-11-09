@@ -698,6 +698,7 @@ class Inventori extends CI_Controller
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1=='print') {
 			$data['inventori'] = $this->GeneralModel->get_by_id_general('v_inventori', 'id_inventori', $param2);
+			$data['identitasAplikasi'] = $this->GeneralModel->get_by_id_general('e_identitas', 'id_profile', 1);
 			$this->load->view('panel/inventori/print', $data);
 		}else{
 			$data['title'] = $this->title;

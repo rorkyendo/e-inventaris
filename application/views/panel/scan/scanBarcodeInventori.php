@@ -54,8 +54,8 @@
                   <td id='subUnit'></td>
                 </tr>
                 <tr>
-                  <td>Keterangan Sub Unit</td>
-                  <td id='keteranganSubUnit'></td>
+                  <td>Kode Satker</td>
+                  <td id='kodeSatker'></td>
                   <td>Kode Inventori</td>
                   <td id='kodeInventori'></td>
                 </tr>
@@ -191,12 +191,11 @@
           $('#reader').attr('hidden',true);
           
           $.each(data,function(key,val){
-            var kode = val.kode_unit+'/'+val.kode_sub_unit+'/'+val.kode_inventori;
             $('#barcode').html('<img src="<?php echo base_url();?>'+val.barcode+'" class="img-responsive" style="width:220px;height:220px">')     
             $('#unit').text(val.nama_unit)     
             $('#subUnit').text(val.nama_sub_unit)     
-            $('#keteranganSubUnit').text(val.keterangan_sub_unit)     
-            $('#kodeInventori').text(kode)     
+            $('#kodeSatker').text(val.kode_satker)     
+            $('#kodeInventori').text(val.kode_inventori)     
             $('#namaInventori').text(val.nama_inventori)     
             $('#hargaInventori').text('Rp ' + new Intl.NumberFormat(['bal','ID']).format(val.harga_barang))     
           })

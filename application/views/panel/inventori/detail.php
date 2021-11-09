@@ -20,7 +20,7 @@
       <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
         <div class="panel-heading">
           <div class="panel-heading-btn">
-            <button type="button" onclick="cetak('<?php echo base_url() . $key->qrcode; ?>','<?php echo base_url() . $key->barcode; ?>','<?php echo $key->keterangan_sumber_dana;?>')" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Print Barcode</button>
+            <button type="button" onclick="cetak('<?php echo base_url() . $key->qrcode; ?>','<?php echo base_url() . $key->barcode; ?>','<?php echo $key->keterangan_sumber_dana;?>','<?php echo $key->kode_satker;?>')" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Print Barcode</button>
             <a target="_blank" href="<?php echo base_url('panel/inventori/detailInventori/print/'.$key->id_inventori);?>" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Print</a>
           </div>
           <h4 class="panel-title"><?php echo $subtitle; ?></h4>
@@ -69,8 +69,8 @@
                     <td><?php echo $key->nama_sub_unit;?></td>
                   </tr>
                   <tr>
-                    <td>Keterangan Sub Unit</td>
-                    <td><?php echo $key->keterangan_sub_unit;?></td>
+                    <td>Kode Satker</td>
+                    <td><?php echo $key->kode_satker;?></td>
                     <td>Kode Inventori</td>
                     <td><?php echo $key->kode_inventori;?></td>
                   </tr>
@@ -100,8 +100,9 @@
 </div>
 <!-- end #content -->
 <script>
-  function cetak(qrcode,barcode,sumberDana){
+  function cetak(qrcode,barcode,sumberDana,kodeSatker){
     $('#sumberDana').text(sumberDana);
+    $('#kodeSatker').text(kodeSatker);
     $('#print_qr').attr("src",qrcode);
     $('#print_barcode').attr("src",barcode);
     printCode($('<div/>').append($('#pre_print').clone()).html())
@@ -122,7 +123,10 @@
   <center>
     <table border="1px" style="border-collapse: collapse;">
       <tr>
-        <td colspan="2" align="center"><b id="sumberDana"></b></td>
+        <td colspan="2" align="center">
+          <b id="sumberDana"></b><br/>
+          <b id="kodeSatker"></b>
+        </td>
       </tr>
       <tr>
         <td><img src="" id="print_qr" style="width:80px;" alt="qrcode"></td>

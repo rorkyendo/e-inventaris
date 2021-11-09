@@ -54,8 +54,8 @@
                   <td id='subUnit'></td>
                 </tr>
                 <tr>
-                  <td>Keterangan Sub Unit</td>
-                  <td id='KeteranganSubUnit'></td>
+                  <td>Kode Satker</td>
+                  <td id='kodeSatker'></td>
                   <td>Kode Inventori</td>
                   <td id='kodeInventori'></td>
                 </tr>
@@ -140,7 +140,7 @@
             $('#qrCode').html('<img src="<?php echo base_url();?>'+val.qrcode+'" class="img-responsive" style="width:220px;height:220px">')     
             $('#unit').text(val.nama_unit)     
             $('#subUnit').text(val.nama_sub_unit)     
-            $('#keteranganSubUnit').text(val.keterangan_sub_unit)     
+            $('#kodeSatker').text(val.kode_satker)     
             $('#kodeInventori').text(kode)     
             $('#namaInventori').text(val.nama_inventori)     
             $('#hargaInventori').text('Rp ' + new Intl.NumberFormat(['bal','ID']).format(val.harga_barang))     
