@@ -144,6 +144,7 @@
                 </div>
               </div>
               <script>
+                cariBidang('<?php echo set_value('gol');?>')
                 function cariBidang(val){
                   $.ajax({
                     url:'<?php echo base_url('panel/masterData/getBidang');?>',
@@ -157,6 +158,7 @@
                         $.each(data,function(key,val){
                           $('#bid').append('<option value="'+val.kd_bid+'">'+val.kd_bid+'|'+val.ur_bid+'</option>');
                         })
+                        cariKelompok('<?php echo set_value('bid');?>')
                       }else{
                         $('#bid').html('<option value="">.:Pilih Kode Bidang:.</option>');
                       }
@@ -190,6 +192,7 @@
                         $.each(data,function(key,val){
                           $('#kel').append('<option value="'+val.kd_kel+'">'+val.kd_kel+'|'+val.ur_kel+'</option>');
                         })
+                        cariSubKelompok('<?php echo set_value('kel');?>')
                       }else{
                         $('#kel').html('<option value="">.:Pilih Kode Kelompok:.</option>');
                       }
@@ -274,16 +277,57 @@
               <div class="form-group">
                 <label class="col-md-2 control-label">Kode Sub-sub Kelompok</label>
                 <div class="col-md-10">
-                  <select name="sskel" id="sskel" class="form-control select2">
+                  <select name="sskel" id="sskel" class="form-control select2" onchange="getLastRecord(this.value)">
                     <option value="">.:Pilih Kode Sub-sub Kelompok:.</option>
                   </select>
                 </div>
               </div>
+              <script>
+                function getLastRecord(val){
+                  var gol = $('#gol').val();
+                  var kel = $('#kel').val();
+                  var skel = $('#skel').val();
+                  var sskel = val
+                  $.ajax({
+                    url:'<?php echo base_url('panel/inventori/getLastRecord');?>',
+                    type:'GET',
+                    data:{
+                      gol:gol,
+                      kel:kel,
+                      skel:skel,
+                      sskel:sskel
+                    },success:function(resp){
+                      if (resp!='false') {
+                        var last = Number(resp)+Number(1)
+                        $('#no_inventori').val(('0000' + last).slice(-4));
+                      }
+                    }
+                  })
+                }
+
+                  function pad_with_zeroes(number, length) {
+
+                      var my_string = '' + number;
+                      while (my_string.length < length) {
+                          my_string = '0' + my_string;
+                      }
+
+                      return my_string;
+
+                  }
+              </script>
               <div class="form-group">
                 <label class="col-md-2 control-label">No Inventori</label>
                 <div class="col-md-10">
                   <input type="text" class="form-control" value="<?php echo set_value('no_inventori'); ?>" id="no_inventori" placeholder="Masukkan No Inventori" onchange="inputKodeInventori(this.value)" minlength="4" maxlength="4" name="no_inventori" required />
   								<?php echo form_error('no_inventori'); ?>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Jumlah Inventori</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" value="<?php echo set_value('jumlah_inventori'); ?>" id="jumlah_inventori" placeholder="Masukkan Jumlah Inventori" name="jumlah_inventori"/>
+                  <font color="red">*Jumlah inventori berfungsi untuk melakukan penambahan no inventori secara otomatis pada saat disimpan <br/>(Kosongkan jika hanya ingin menyimpan 1 inventori)</font>
                 </div>
               </div>
               <script>

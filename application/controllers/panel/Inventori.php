@@ -184,6 +184,23 @@ class Inventori extends CI_Controller
 			}
 	}
 
+	public function getLastRecord(){
+		$gol = $this->input->get('gol');
+		$kel = $this->input->get('kel');
+		$skel = $this->input->get('skel');
+		$sskel = $this->input->get('sskel');
+
+		$getLastRecord = $this->GeneralModel->get_by_fourth_id_general('e_inventori','gol',$gol,'kel',$kel,'skel',$skel,'sskel',$sskel);
+		if ($getLastRecord) {
+			foreach ($getLastRecord as $key) {
+				$lastRec = $key->no_inventori;
+			}
+			echo $lastRec;
+		}else{
+			echo 'false';
+		}
+	}
+
 	public function listInventori($param1='')
 	{
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
@@ -278,14 +295,6 @@ class Inventori extends CI_Controller
 					)
 			);
 			$this->form_validation->set_rules(
-					'no_inventori', 'No Inventori',
-					'required|is_unique[e_inventori.no_inventori]',
-					array(
-							'required'      => 'No Inventori tidak boleh kosong',
-							'unique'		=> 'No Inventori Sudah ada dan tidak dapat digunakan'
-					)
-			);
-			$this->form_validation->set_rules(
 					'kode_inventori', 'Kode Inventori',
 					'required|is_unique[e_inventori.kode_inventori]',
 					array(
@@ -324,102 +333,212 @@ class Inventori extends CI_Controller
 				$data['unit'] = $this->GeneralModel->get_general('e_unit');
 				$this->load->view('panel/content', $data);
 			}else{
-				$dataInventori = array(
-					'kode_unit' => $this->input->post('kode_unit'),
-					'kode_sub_unit' => $this->input->post('kode_sub_unit'),
-					'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
-					'gol' => $this->input->post('gol'),
-					'bid' => $this->input->post('bid'),
-					'kel' => $this->input->post('kel'),
-					'skel' => $this->input->post('skel'),
-					'sskel' => $this->input->post('sskel'),
-					'no_inventori' => $this->input->post('no_inventori'),
-					'kode_inventori' => $this->input->post('kode_inventori'),
-					'nama_inventori' => $this->input->post('nama_inventori'),
-					'harga_barang' => $this->input->post('harga_barang'),
-					'kode_satker' => '023.04.0700.415030.021.KD '.$this->input->post('kode_satker'),
-					'kategori_inventori' => $this->input->post('id_kategori'),
-					'created_by' => $this->session->userdata('id_pengguna')
-				);
-				//---------------- UPLOAD INVENTORI ---------------//
-				$config['upload_path']          = 'assets/img/fotoInventori/';
-				$config['allowed_types']        = 'gif|jpg|png|jpeg';
-				$config['max_size']             = 10000;
+				$jumlah_inventori = $this->input->post('jumlah_inventori');
+
+				if (!empty($jumlah_inventori)) {
+					for ($i=0; $i < $jumlah_inventori; $i++) { 
+						$no_inventori = $this->input->post('no_inventori')+$i;
+						$kode_inventori = explode('.',$this->input->post('kode_inventori'));
+						$gol = $kode_inventori[0];
+						$bid = $kode_inventori[1];
+						$kel = $kode_inventori[2];
+						$skel = $kode_inventori[3];
+						$sskel = $kode_inventori[4];
+						$no = $kode_inventori[5];
+						$no = str_pad($no+$i, 4, '0', STR_PAD_LEFT);
+						$kode_inventori = $gol.'.'.$bid.'.'.$kel.'.'.$skel.'.'.$sskel.'.'.$no;
+						$dataInventori = array(
+							'kode_unit' => $this->input->post('kode_unit'),
+							'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+							'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
+							'gol' => $this->input->post('gol'),
+							'bid' => $this->input->post('bid'),
+							'kel' => $this->input->post('kel'),
+							'skel' => $this->input->post('skel'),
+							'sskel' => $this->input->post('sskel'),
+							'no_inventori' => $no_inventori,
+							'kode_inventori' => $kode_inventori,
+							'nama_inventori' => $this->input->post('nama_inventori'),
+							'harga_barang' => $this->input->post('harga_barang'),
+							'kode_satker' => '023.04.0700.415030.021.KD '.$this->input->post('kode_satker'),
+							'kategori_inventori' => $this->input->post('id_kategori'),
+							'created_by' => $this->session->userdata('id_pengguna')
+						);
+						//---------------- UPLOAD INVENTORI ---------------//
+						$config['upload_path']          = 'assets/img/fotoInventori/';
+						$config['allowed_types']        = 'gif|jpg|png|jpeg';
+						$config['max_size']             = 10000;
 
 
-				$this->upload->initialize($config);
+						$this->upload->initialize($config);
 
-				if (! $this->upload->do_upload('foto_inventori')) {
-				} else {
-						$dataInventori += array('foto_inventori' => $config['upload_path'].$this->upload->data('file_name'));
-				}
+						if (! $this->upload->do_upload('foto_inventori')) {
+						} else {
+								$dataInventori += array('foto_inventori' => $config['upload_path'].$this->upload->data('file_name'));
+						}
 
-				$tempdir = "assets/img/qrbarang/";
-				if (!file_exists($tempdir))
-					mkdir($tempdir);
+						$tempdir = "assets/img/qrbarang/";
+						if (!file_exists($tempdir))
+							mkdir($tempdir);
 
-				$logopath = 'assets/img/Fasilkom-TI.png';
+						$logopath = 'assets/img/Fasilkom-TI.png';
 
-				if ($this->GeneralModel->create_general('e_inventori', $dataInventori) == true) {
-					$id_inventori = $this->db->insert_id();
-					
-					//isi qrcode jika di scan
-					$codeContents = $dataInventori['kode_inventori'];
-					$dataQrFile = $dataInventori['kode_inventori'].'.png';				
-					//------------------ Pembuatan Barcode ----------------------------//
-					$this->zend->load('Zend/Barcode.php'); 
-					$barcode = $dataQrFile;
-					$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$codeContents), array())->draw($codeContents,'image', array('text'=>$codeContents), array());
-					$imageName = $barcode;
-					$imagePath = 'assets/img/barcodebarang/';
-					imagejpeg($imageResource, $imagePath.$imageName); 
-					$pathBarcode = $imagePath.$imageName; 				
-					$dataInventori2 = array(
-						'barcode' => $pathBarcode
-					);
-					//------------------ Pembuatan QR Code ----------------------------//
-					$dataQrFile = $dataInventori['kode_inventori'].'.png';				
-					//simpan file qrcode
-					QRcode::png($codeContents, $tempdir . $dataQrFile, QR_ECLEVEL_H, 10, 4);
+						if ($this->GeneralModel->create_general('e_inventori', $dataInventori) == true) {
+							$id_inventori = $this->db->insert_id();
+							
+							//isi qrcode jika di scan
+							$codeContents = $dataInventori['kode_inventori'];
+							$dataQrFile = $dataInventori['kode_inventori'].'.png';				
+							//------------------ Pembuatan Barcode ----------------------------//
+							$this->zend->load('Zend/Barcode.php'); 
+							$barcode = $dataQrFile;
+							$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$codeContents), array())->draw($codeContents,'image', array('text'=>$codeContents), array());
+							$imageName = $barcode;
+							$imagePath = 'assets/img/barcodebarang/';
+							imagejpeg($imageResource, $imagePath.$imageName); 
+							$pathBarcode = $imagePath.$imageName; 				
+							$dataInventori2 = array(
+								'barcode' => $pathBarcode
+							);
+							//------------------ Pembuatan QR Code ----------------------------//
+							$dataQrFile = $dataInventori['kode_inventori'].'.png';				
+							//simpan file qrcode
+							QRcode::png($codeContents, $tempdir . $dataQrFile, QR_ECLEVEL_H, 10, 4);
 
-					// ambil file qrcode
-					$QR = imagecreatefrompng($tempdir .$dataQrFile);
+							// ambil file qrcode
+							$QR = imagecreatefrompng($tempdir .$dataQrFile);
 
-					$dataInventori2 += array(
-						'qrcode' => 'assets/img/qrbarang/'.$dataQrFile
-					);
+							$dataInventori2 += array(
+								'qrcode' => 'assets/img/qrbarang/'.$dataQrFile
+							);
 
-					$this->GeneralModel->update_general('e_inventori', 'id_inventori', $id_inventori, $dataInventori2);
+							$this->GeneralModel->update_general('e_inventori', 'id_inventori', $id_inventori, $dataInventori2);
 
-					// memulai menggambar logo dalam file qrcode
-					$logo = imagecreatefrompng($logopath);
+							// memulai menggambar logo dalam file qrcode
+							$logo = imagecreatefrompng($logopath);
 
-					imagecolortransparent($logo, imagecolorallocatealpha($logo, 0, 0, 0, 127));
-					imagealphablending($logo, false);
-					imagesavealpha($logo, true);
+							imagecolortransparent($logo, imagecolorallocatealpha($logo, 0, 0, 0, 127));
+							imagealphablending($logo, false);
+							imagesavealpha($logo, true);
 
-					$QR_width = imagesx($QR);
-					$QR_height = imagesy($QR);
+							$QR_width = imagesx($QR);
+							$QR_height = imagesy($QR);
 
-					$logo_width = imagesx($logo);
-					$logo_height = imagesy($logo);
+							$logo_width = imagesx($logo);
+							$logo_height = imagesy($logo);
 
-					// Scale logo to fit in the QR Code
-					$logo_qr_width = $QR_width / 5;
-					$scale = $logo_width / $logo_qr_width;
-					$logo_qr_height = $logo_height / $scale;
+							// Scale logo to fit in the QR Code
+							$logo_qr_width = $QR_width / 5;
+							$scale = $logo_width / $logo_qr_width;
+							$logo_qr_height = $logo_height / $scale;
 
-					imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+							imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
 
-					// Simpan kode QR lagi, dengan logo di atasnya
-					imagepng($QR, $tempdir . $dataQrFile);
-					//------------------ End Of Pembuatan QR Code ----------------------------//
-
+							// Simpan kode QR lagi, dengan logo di atasnya
+							imagepng($QR, $tempdir . $dataQrFile);
+							//------------------ End Of Pembuatan QR Code ----------------------------//
+						}
+					}
 					$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori berhasil ditambahkan</div>');
 					redirect(changeLink('panel/inventori/listInventori'));
-				} else {
-					$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data inventori gagal ditambahkan</div>');
-					redirect(changeLink('panel/inventori/listInventori'));
+				}else{
+					$dataInventori = array(
+						'kode_unit' => $this->input->post('kode_unit'),
+						'kode_sub_unit' => $this->input->post('kode_sub_unit'),
+						'kode_sumber_dana' => $this->input->post('kode_sumber_dana'),
+						'gol' => $this->input->post('gol'),
+						'bid' => $this->input->post('bid'),
+						'kel' => $this->input->post('kel'),
+						'skel' => $this->input->post('skel'),
+						'sskel' => $this->input->post('sskel'),
+						'no_inventori' => $this->input->post('no_inventori'),
+						'kode_inventori' => $this->input->post('kode_inventori'),
+						'nama_inventori' => $this->input->post('nama_inventori'),
+						'harga_barang' => $this->input->post('harga_barang'),
+						'kode_satker' => '023.04.0700.415030.021.KD '.$this->input->post('kode_satker'),
+						'kategori_inventori' => $this->input->post('id_kategori'),
+						'created_by' => $this->session->userdata('id_pengguna')
+					);
+					//---------------- UPLOAD INVENTORI ---------------//
+					$config['upload_path']          = 'assets/img/fotoInventori/';
+					$config['allowed_types']        = 'gif|jpg|png|jpeg';
+					$config['max_size']             = 10000;
+
+
+					$this->upload->initialize($config);
+
+					if (! $this->upload->do_upload('foto_inventori')) {
+					} else {
+							$dataInventori += array('foto_inventori' => $config['upload_path'].$this->upload->data('file_name'));
+					}
+
+					$tempdir = "assets/img/qrbarang/";
+					if (!file_exists($tempdir))
+						mkdir($tempdir);
+
+					$logopath = 'assets/img/Fasilkom-TI.png';
+
+					if ($this->GeneralModel->create_general('e_inventori', $dataInventori) == true) {
+						$id_inventori = $this->db->insert_id();
+						
+						//isi qrcode jika di scan
+						$codeContents = $dataInventori['kode_inventori'];
+						$dataQrFile = $dataInventori['kode_inventori'].'.png';				
+						//------------------ Pembuatan Barcode ----------------------------//
+						$this->zend->load('Zend/Barcode.php'); 
+						$barcode = $dataQrFile;
+						$imageResource = Zend_Barcode::factory('code128', 'image', array('text'=>$codeContents), array())->draw($codeContents,'image', array('text'=>$codeContents), array());
+						$imageName = $barcode;
+						$imagePath = 'assets/img/barcodebarang/';
+						imagejpeg($imageResource, $imagePath.$imageName); 
+						$pathBarcode = $imagePath.$imageName; 				
+						$dataInventori2 = array(
+							'barcode' => $pathBarcode
+						);
+						//------------------ Pembuatan QR Code ----------------------------//
+						$dataQrFile = $dataInventori['kode_inventori'].'.png';				
+						//simpan file qrcode
+						QRcode::png($codeContents, $tempdir . $dataQrFile, QR_ECLEVEL_H, 10, 4);
+
+						// ambil file qrcode
+						$QR = imagecreatefrompng($tempdir .$dataQrFile);
+
+						$dataInventori2 += array(
+							'qrcode' => 'assets/img/qrbarang/'.$dataQrFile
+						);
+
+						$this->GeneralModel->update_general('e_inventori', 'id_inventori', $id_inventori, $dataInventori2);
+
+						// memulai menggambar logo dalam file qrcode
+						$logo = imagecreatefrompng($logopath);
+
+						imagecolortransparent($logo, imagecolorallocatealpha($logo, 0, 0, 0, 127));
+						imagealphablending($logo, false);
+						imagesavealpha($logo, true);
+
+						$QR_width = imagesx($QR);
+						$QR_height = imagesy($QR);
+
+						$logo_width = imagesx($logo);
+						$logo_height = imagesy($logo);
+
+						// Scale logo to fit in the QR Code
+						$logo_qr_width = $QR_width / 5;
+						$scale = $logo_width / $logo_qr_width;
+						$logo_qr_height = $logo_height / $scale;
+
+						imagecopyresampled($QR, $logo, $QR_width / 2.5, $QR_height / 2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+
+						// Simpan kode QR lagi, dengan logo di atasnya
+						imagepng($QR, $tempdir . $dataQrFile);
+						//------------------ End Of Pembuatan QR Code ----------------------------//
+
+						$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori berhasil ditambahkan</div>');
+						redirect(changeLink('panel/inventori/listInventori'));
+					} else {
+						$this->session->set_flashdata('notif', '<div class="alert alert-danger">Data inventori gagal ditambahkan</div>');
+						redirect(changeLink('panel/inventori/listInventori'));
+					}
 				}
 			}
 		} else {
@@ -440,7 +559,6 @@ class Inventori extends CI_Controller
 		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
 		if ($param1 == 'doUpdate') {
 			$cekKodeInventori = $this->GeneralModel->get_by_id_general('e_inventori','kode_inventori',$this->input->post('kode_inventori'));
-
 
 			//--- VALIDATION ---//
 			$this->form_validation->set_rules(
@@ -497,14 +615,6 @@ class Inventori extends CI_Controller
 					'required',
 					array(
 							'required'      => 'Kode Sub-sub Kelompok tidak boleh kosong'
-					)
-			);
-			$this->form_validation->set_rules(
-					'no_inventori', 'No Inventori',
-					'required|is_unique[e_inventori.no_inventori]',
-					array(
-							'required'      => 'No Inventori tidak boleh kosong',
-							'unique'		=> 'No Inventori Sudah ada dan tidak dapat digunakan'
 					)
 			);
 			if (empty($cekKodeInventori)) {
