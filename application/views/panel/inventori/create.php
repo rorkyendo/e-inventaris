@@ -300,6 +300,7 @@
                       if (resp!='false') {
                         var last = Number(resp)+Number(1)
                         $('#no_inventori').val(('0000' + last).slice(-4));
+                        inputKodeInventori($('#no_inventori').val())
                       }
                     }
                   })
