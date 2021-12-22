@@ -186,11 +186,12 @@ class Inventori extends CI_Controller
 
 	public function getLastRecord(){
 		$gol = $this->input->get('gol');
+		$bid = $this->input->get('bid');
 		$kel = $this->input->get('kel');
 		$skel = $this->input->get('skel');
 		$sskel = $this->input->get('sskel');
 
-		$getLastRecord = $this->GeneralModel->get_by_fourth_id_general('e_inventori','gol',$gol,'kel',$kel,'skel',$skel,'sskel',$sskel);
+		$getLastRecord = $this->GeneralModel->get_by_fifth_id_general('e_inventori','gol',$gol,'bid',$bid,'kel',$kel,'skel',$skel,'sskel',$sskel);
 		if ($getLastRecord) {
 			foreach ($getLastRecord as $key) {
 				$lastRec = $key->no_inventori;

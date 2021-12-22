@@ -285,6 +285,7 @@
               <script>
                 function getLastRecord(val){
                   var gol = $('#gol').val();
+                  var bid = $('#bid').val();
                   var kel = $('#kel').val();
                   var skel = $('#skel').val();
                   var sskel = val
@@ -293,6 +294,7 @@
                     type:'GET',
                     data:{
                       gol:gol,
+                      bid:bid,
                       kel:kel,
                       skel:skel,
                       sskel:sskel
