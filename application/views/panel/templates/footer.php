@@ -50,11 +50,21 @@
 	</script>
 	<script>
 		function onlyNumberKey(evt) {
-			// Only ASCII charactar in that range allowed
-			var ASCIICode = (evt.which) ? evt.which : evt.keyCode
-			if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
-				return false;
-			return true;
+			var theUjian = evt || window.event;
+
+			// Handle paste
+			if (theUjian.type === 'paste') {
+				key = event.clipboardData.getData('text/plain');
+			} else {
+				// Handle key press
+				var key = theUjian.keyCode || theUjian.which;
+				key = String.fromCharCode(key);
+			}
+			var regex = /[0-9]|\./;
+			if (!regex.test(key)) {
+				theUjian.returnValue = false;
+				if (theUjian.preventDefault) theUjian.preventDefault();
+			}
 		}
 	</script>
 	<script type="text/javascript">

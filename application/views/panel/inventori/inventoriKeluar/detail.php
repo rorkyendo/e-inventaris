@@ -57,12 +57,26 @@
                     <?php echo $faktur[0]->created_time; ?>
                   </td>
                 </tr>
+                <tr>
+                	<td>Peminjam</td>
+                	<td> :
+                		<?php echo strtoupper($faktur[0]->peminjam); ?>
+                	</td>
+                </tr>
                 <?php if(!empty($faktur[0]->nim_mahasiswa)): ?>
                 <tr>
                   <td>NIM Mahasiswa</td>
                   <td> :
                     <?php echo $faktur[0]->nim_mahasiswa; ?>
                   </td>
+                </tr>
+                <?php endif; ?>
+                <?php if(!empty($faktur[0]->nip_pegawai)): ?>
+                <tr>
+                	<td>NIP Pegawai</td>
+                	<td> :
+                		<?php echo $faktur[0]->nip_pegawai; ?>
+                	</td>
                 </tr>
                 <?php endif; ?>
                 <tr>

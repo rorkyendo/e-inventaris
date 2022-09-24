@@ -867,6 +867,9 @@ class Inventori extends CI_Controller
 			$dataFaktur = array(
 				'kategori_faktur' => 'out',
 				'nim_mahasiswa' => $this->input->post('nim_mahasiswa'),
+				'nip_pegawai' => $this->input->post('nip_pegawai'),
+				'peminjam' => $this->input->post('peminjam'),
+				'wa_peminjam' => $this->input->post('wa_peminjam'),
 				'kode_faktur' => $this->input->post('kode_faktur'),
 				'catatan_faktur' => $this->input->post('catatan_faktur'),
 				'durasi' => $this->input->post('durasi'),
@@ -960,7 +963,10 @@ class Inventori extends CI_Controller
 					} catch (\Throwable $th) {
 					}
 				}
-				
+
+				$message = "Halo *".$dataFaktur['nama_peminjam']."* Faktur kamu dengan *ID ".$id_faktur."* akan segera di proses, Terima kasih.";
+				sendNotifWA($dataFaktur['wa_peminjam'],$message);
+
 				$this->session->set_flashdata('notif', '<div class="alert alert-success">Data inventori keluar berhasil ditambahkan</div>');
 				redirect(changeLink('panel/inventori/inventoriKeluar'));
 			} else {
@@ -983,6 +989,9 @@ class Inventori extends CI_Controller
 			$dataFaktur = array(
 				'kode_faktur' => $this->input->post('kode_faktur'),
 				'nim_mahasiswa' => $this->input->post('nim_mahasiswa'),
+				'nip_pegawai' => $this->input->post('nip_pegawai'),
+				'peminjam' => $this->input->post('peminjam'),
+				'wa_peminjam' => $this->input->post('wa_peminjam'),
 				'catatan_faktur' => $this->input->post('catatan_faktur'),
 				'durasi' => $this->input->post('durasi'),
 				'status_keluar' => $this->input->post('status_keluar'),

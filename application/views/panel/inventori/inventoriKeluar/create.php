@@ -55,10 +55,57 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-md-2 control-label">Peminjam</label>
+                <div class="col-md-10">
+                  <select name="peminjam" id="peminjam" class="form-control" onchange="pilihPeminjam(this.value)" required>
+                    <option value="">.:Pilih Peminjam:.</option>
+                    <option value="mahasiswa">Mahasiswa</option>
+                    <option value="pegawai">Pegawai</option>
+                  </select>
+                </div>
+              </div>
+              <script>
+                function pilihPeminjam(val){
+                  if(val=='mahasiswa'){
+                    $('#formPegawai').attr('hidden',true)
+                    $('#formMahasiswa').removeAttr('hidden')
+                    $('#mahasiswa').val('')
+                  }else if(val=='pegawai'){
+                    $('#formMahasiswa').attr('hidden',true)
+                    $('#formPegawai').removeAttr('hidden')
+                    $('#pegawai').val('')
+                  }else{
+                    alert('Anda tidak memilih peminjam');
+                    $('#formMahasiswa').attr('hidden',true)
+                    $('#formPegawai').attr('hidden',true)
+                    $('#mahasiswa').val('')
+                    $('#pegawai').val('')
+                  }
+                }
+              </script>
+              <div class="form-group" hidden id="formMahasiswa">
                 <label class="col-md-2 control-label">NIM Mahasiswa</label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control" placeholder="Masukkan NIM Mahasiswa apabila peminjaman dilakukan oleh mahasiswa" name="nim_mahasiswa"/>
+                  <input type="text" class="form-control" id="mahasiswa" placeholder="Masukkan NIM Mahasiswa apabila peminjaman dilakukan oleh mahasiswa" name="nim_mahasiswa"/>
                 </div>
+              </div>
+              <div class="form-group" hidden id="formPegawai">
+              	<label class="col-md-2 control-label">NIP Pegawai</label>
+              	<div class="col-md-10">
+              		<input type="text" class="form-control" id="pegawai" placeholder="Masukkan NIP Pegawai apabila peminjaman dilakukan oleh pagawai" name="nip_pegawai" />
+              	</div>
+              </div>
+              <div class="form-group">
+              	<label class="col-md-2 control-label">Nama Peminjam</label>
+              	<div class="col-md-10">
+              		<input type="text" class="form-control" id="peminjam" placeholder="Masukkan Nama Peminjam" name="nama_peminjam" />
+              	</div>
+              </div>
+              <div class="form-group">
+              	<label class="col-md-2 control-label">WA Peminjam</label>
+              	<div class="col-md-10">
+              		<input type="text" class="form-control" id="wa_peminjam" placeholder="Masukkan WA Peminjam" onkeypress="onlyNumberKey(event)" name="wa_peminjam" />
+              	</div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label">Durasi Peminjaman (Hari)</label>
@@ -81,6 +128,20 @@
                 <div class="panel-heading">
                   <h4 class="panel-title">List Inventori</h4>
                 </div>
+                <br />
+                <label class="col-md-2 control-label">Pilih Inventori</label>
+                <div class="col-md-10">
+                  <select class="form-control select2" onchange="cariInventori(this.value)">
+                    <option value="">.:Pilih Inventori:.</option>
+                    <?php foreach($inventori as $key):?>
+                      <option value="<?php echo $key->kode_inventori;?>"><?php echo $key->kode_inventori;?> |
+                      <?php echo $key->nama_inventori;?></option>
+                      <?php endforeach;?>
+                    </select>
+                  </div>
+                <br />
+                <br />
+                <hr />
                 <div class="panel-body" id="groupInvent">
                 </div>
               </div>
