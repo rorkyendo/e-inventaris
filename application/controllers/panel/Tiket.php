@@ -58,7 +58,7 @@ class Tiket extends CI_Controller
 			$dataTanggapan = array(
 				'ditanggapi_oleh' => $this->session->userdata('id_pengguna'),
 				'tanggapan_laporan' => $this->input->post('tanggapan_laporan'),
-				'status_laporan' => 'Y',
+				'status_laporan' => 'accept',
 				'ditanggapi_pada' => DATE('Y-m-d H:i:s')
 			);
 
@@ -74,7 +74,44 @@ class Tiket extends CI_Controller
 			$data['subtitle'] = 'Tanggapan Tiket';
 			$data['content'] = 'panel/tiket/tanggapan';
 			$data['tiket'] = $this->GeneralModel->get_by_id_general('v_ticketing','id_ticket',$param1);
+			$data['staff'] = $this->GeneralModel->get_by_id_general('e_pengguna','hak_akses','staff');
 			$this->load->view('panel/content', $data);
+		}
+	}
+
+	public function updateTiket($param1='',$param2=''){
+		if (cekModul($this->akses_controller) == FALSE) redirect('auth/access_denied');
+		if ($param1=='doUpdate') {
+			$dataTiket = array(
+				'diperbaiki_oleh' => $this->input->post('diperbaiki_oleh'),
+				'estimasi_selesai' => $this->input->post('estimasi_selesai'),
+				'status_laporan' => $this->input->post('status_laporan'),
+			);
+
+			if($dataTiket['status_laporan'] == 'finish'){
+				$dataTiket += array(
+					'diselesaikan_pada' => DATE('Y-m-d H:i:s')
+				);
+			}else{
+				$dataTiket += array(
+					'status_laporan' => 'process'
+				);
+			}
+
+			$pengguna = $this->GeneralModel->get_by_id_general('e_pengguna','id_pengguna',$dataTiket['diperbaiki_oleh']);
+			if($pengguna){
+				$message = "Halo *".$pengguna[0]->nama_lengkap."* ada tiket baru masuk, silahkan cek tiket melalui link berikut ini ";
+				$message .= base_url('ticketing/cekLaporan?id_ticketing='.$param2);
+				sendNotifWA($pengguna[0]->no_wa,$message);
+			}
+
+			if ($this->GeneralModel->update_general('e_ticketing','id_ticket',$param2,$dataTiket) == TRUE) {
+				$this->session->set_flashdata('notif','<div class="alert alett-success">Data tiket berhasil diupdate</div>');
+				redirect('panel/tiket/detailTiket/'.$param2);
+			}else{
+				$this->session->set_flashdata('notif','<div class="alert alett-danger">Data tiket gagal diupdate</div>');
+				redirect('panel/tiket/detailTiket/'.$param2);
+			}
 		}
 	}
 

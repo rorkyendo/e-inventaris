@@ -40,8 +40,10 @@
                 <label for="">Status Laporan</label>
                 <select name="status_laporan" class="form-control" id="status_laporan">
                   <option value="">.:Pilih Status Laporan:.</option>
-                  <option value="N">Sudah ditanggapi</option>
-                  <option value="Y">Belum ditanggapi</option>
+                  <option value="pending">Belum ditanggapi</option>
+                  <option value="accept">Sudah ditanggapi tapi belum diproses</option>
+                  <option value="process">Sudah diproses</option>
+                  <option value="finish">Sudah selesai diproses</option>
                 </select>
               </div>
             </div>
@@ -91,6 +93,26 @@
           width: Infinity
         }]
       },
+      dom: 'Blfrtip',
+      buttons: [{
+          extend: 'excel',
+          exportOptions: {
+            columns: ':visible'
+          }
+        },
+        {
+          extend: 'csv',
+          exportOptions: {
+            columns: ':visible'
+          }
+        },
+        {
+          extend: 'pdf',
+          exportOptions: {
+            columns: ':visible'
+          }
+        }
+      ],
       "filter": true,
       "processing": true, //Feature control the processing indicator.
       "serverSide": true, //Feature control DataTables' server-side processing mode.
@@ -131,10 +153,14 @@
           "data": "status_laporan",
           width: 100,
           render: function(data, type, row) {
-            if (row.status_laporan == 'N') {
-              return '<b class="text-success">Belum ditanggapi</b>';
-            }else if(row.status_laporan == 'Y'){
-              return '<b class="text-danger">Sudah ditanggapi</b>';
+            if (row.status_laporan == 'pending') {
+              return '<b class="text-danger">Belum ditanggapi</b>';
+            }else if(row.status_laporan == 'accept'){
+              return '<b class="text-primary">Sudah ditanggapi tapi belum diproses</b>';
+            }else if(row.status_laporan == 'process'){
+              return '<b class="text-warning">Sedang diproses</b>';
+            }else if(row.status_laporan == 'finish'){
+              return '<b class="text-success">Sudah selesai diproses</b>';
             }
           }
         },

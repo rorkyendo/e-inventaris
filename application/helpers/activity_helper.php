@@ -28,7 +28,7 @@ if ( ! function_exists('activityLog'))
 }
 
 function sendNotifWA($nomer,$pesan){
-      $token = 'IIL3tQF47BNakxY6ZfWg7hCn4gMUH2QGEq3FWHkW235qYYSkBgGOrVzJ8BXX'; //masukan token disii
+      $token = 'eAy1vLOYj3NY3vuCN5qALU8oUJcc7HjbLSpkAnc8Dzi8NcDk3yRV2v1iimNf'; //masukan token disii
 
       $nomer = str_replace(substr($nomer,0,1),'62',substr($nomer,0,1)).substr($nomer,1);
       $curl = curl_init();

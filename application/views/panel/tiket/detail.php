@@ -61,10 +61,14 @@
                 </tr>
                 <tr align="left">
                   <td>Status Laporan</td>
-                  <?php if($key->status_laporan == 'N'): ?>
+                  <?php if($key->status_laporan == 'pending'): ?>
                     <td><b class="text-danger">Belum ditanggapi</b></td>
-                  <?php else: ?>
-                    <td><b class="text-success">Sudah ditanggapi</b></td>
+                  <?php elseif($key->status_laporan == 'accept'): ?>
+                    <td><b class="text-primary">Sudah ditanggapi dan menunggu perbaikan</b></td>
+                  <?php elseif($key->status_laporan == 'process'): ?>
+                    <td><b class="text-warning">Diproses dalam perbaikan</b></td>
+                  <?php elseif($key->status_laporan == 'finish'): ?>
+                    <td><b class="text-success">Selesai diperbaiki</b></td>
                   <?php endif; ?>
                 </tr>
                 <tr align="left">
@@ -80,6 +84,25 @@
                 <tr align="left">
                   <td>Ditanggapi pada</td>
                   <td> <?php echo $key->ditanggapi_pada;?></td>
+                </tr>
+              </tr>
+                <tr align="left">
+                  <td>Di perbaiki oleh</td>
+                  <td>
+                      <?php echo $key->diperbaiki_oleh;?>
+                  </td>
+                </tr>
+                <tr align="left">
+                  <td>Estimasi Selesai</td>
+                  <td> <?php echo $key->estimasi_selesai;?></td>
+                </tr>
+              </tr>
+              </tr>
+                <tr align="left">
+                  <td>Di selesaikan pada</td>
+                  <td>
+                      <?php echo $key->diselesaikan_pada;?>
+                  </td>
                 </tr>
               </tr>
             </table>

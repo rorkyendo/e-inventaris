@@ -122,10 +122,14 @@
 														</tr>
 														<tr align="left">
 															<td>Status Laporan</td>
-															<?php if($key->status_laporan == 'N'): ?>
+															<?php if($key->status_laporan == 'pending'): ?>
 																<td><b class="text-danger">Belum ditanggapi</b></td>
-															<?php else: ?>
-																<td><b class="text-success">Sudah ditanggapi</b></td>
+															<?php elseif($key->status_laporan == 'accept'): ?>
+																<td><b class="text-primary">Sudah ditanggapi dan menunggu perbaikan</b></td>
+															<?php elseif($key->status_laporan == 'process'): ?>
+																<td><b class="text-warning">Diproses dalam perbaikan</b></td>
+															<?php elseif($key->status_laporan == 'finish'): ?>
+																<td><b class="text-success">Selesai diperbaiki</b></td>
 															<?php endif; ?>
 														</tr>
 														<tr align="left">
@@ -140,6 +144,20 @@
 															<td>Ditanggapi pada</td>
 															<td> <?php echo $key->ditanggapi_pada;?></td>
 														</tr>
+														<?php if(!empty($key->diperbaiki_oleh)): ?>
+														<tr align="left">
+															<td>Diperbaiki Oleh</td>
+															<td> <?php echo $key->diperbaiki_oleh;?></td>
+														</tr>
+														<tr align="left">
+															<td>Estimasi Selesai</td>
+															<td> <?php echo $key->estimasi_selesai;?></td>
+														</tr>
+														<tr align="left">
+															<td>Waktu Selesai</td>
+															<td> <?php echo $key->diselesaikan_pada;?></td>
+														</tr>
+														<?php endif; ?>
 													</tr>
 												</table>
 											</div>
@@ -161,11 +179,6 @@
 			</div>
 	</div>
 	<!-- ================== BEGIN BASE JS ================== -->
-	<!--[if lt IE 9]>
-		<script src="<?php echo base_url('assets/');?>crossbrowserjs/html5shiv.js"></script>
-		<script src="<?php echo base_url('assets/');?>crossbrowserjs/respond.min.js"></script>
-		<script src="<?php echo base_url('assets/');?>crossbrowserjs/excanvas.min.js"></script>
-	<![endif]-->
 	<script src="<?php echo base_url('assets/');?>plugins/slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="<?php echo base_url('assets/');?>plugins/jquery-cookie/jquery.cookie.js"></script>
 	<!-- ================== END BASE JS ================== -->
@@ -183,27 +196,5 @@
 		<script type="text/javascript">
 		$('.select2').select2();
 	</script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-53034621-1', 'auto');
-  ga('send', 'pageview');
-</script>
-<script type="text/javascript">
-		function showPass() {
-				if (document.getElementById("password").type == 'password') {
-						document.getElementById("password").type = 'text';
-						document.getElementById("iconshow").classList.remove('fa-eye-slash');
-						document.getElementById("iconshow").classList.add('fa-eye');
-				} else {
-						document.getElementById("password").type = 'password';
-						document.getElementById("iconshow").classList.remove('fa-eye');
-						document.getElementById("iconshow").classList.add('fa-eye-slash');
-				}
-		}
-</script>
 </body>
 </html>

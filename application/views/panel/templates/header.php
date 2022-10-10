@@ -37,6 +37,7 @@
 	<link href="<?php echo base_url('assets/'); ?>plugins/summernote/summernote.css" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo base_url('assets/'); ?>plugins/highcharts-7.1.2/code/css/highcharts.css">
 	<link href="<?php echo base_url('assets/'); ?>plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
+	<link href="<?php echo base_url('assets/'); ?>plugins/Datatables/extensions/Buttons/css/buttons.bootstrap.min.css" rel="stylesheet" />
 	<!-- ================== END PAGE LEVEL STYLE ================== -->
 
 	<!-- ================== BEGIN BASE JS ================== -->
@@ -56,6 +57,14 @@
 	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/media/js/jquery.dataTables.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/media/js/dataTables.bootstrap.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/buttons.bootstrap.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/buttons.flash.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/buttons.html5.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/buttons.print.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/pdfmake.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/jszip.min.js"></script>
+	<script src="<?php echo base_url('assets/'); ?>plugins/DataTables/extensions/Buttons/js/vfs_fonts.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>js/table-manage-default.demo.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>js/apps.min.js"></script>
 	<script src="<?php echo base_url('assets/'); ?>js/qrscanner.js"></script>

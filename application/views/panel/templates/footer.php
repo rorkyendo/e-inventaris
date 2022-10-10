@@ -29,6 +29,7 @@
 			App.init();
 			DashboardV2.init();
 			FormWizardValidation.init();
+			$('<div class="col-md-12"><br/></div>').insertAfter('.dt-buttons')
 		});
 		$("#jquery-tagIt-primary").val()
 	</script>
