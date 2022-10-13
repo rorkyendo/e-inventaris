@@ -71,16 +71,14 @@
                   pilihPeminjam('<?php echo $row->peminjam;?>')
                 })
                 function pilihPeminjam(val){
-                  $('#mahasiswa').val('<?php echo $row->nim_mahasiswa;?>')
-                  $('#pegawai').val('<?php echo $row->nip_pegawai;?>')
                   if(val=='mahasiswa'){
                     $('#formPegawai').attr('hidden',true)
                     $('#formMahasiswa').removeAttr('hidden')
-                    $('#mahasiswa').val('')
+                    $('#mahasiswa').val('<?php echo $row->nim_mahasiswa;?>')
                   }else if(val=='pegawai'){
                     $('#formMahasiswa').attr('hidden',true)
                     $('#formPegawai').removeAttr('hidden')
-                    $('#pegawai').val('')
+                    $('#pegawai').val('<?php echo $row->nip_pegawai;?>')
                   }else{
                     alert('Anda tidak memilih peminjam');
                     $('#formMahasiswa').attr('hidden',true)
@@ -172,7 +170,7 @@
                       </div>
                       <div class="col-md-3">
                         <label for="">Nama inventori</label>
-                        <input type="text" class="form-control" value="<?php echo $key->nama_inventori;?> (<?php echo $key->singkatan_satuan;?>)" readonly>
+                        <input type="text" class="form-control" value="<?php echo $key->nama_inventori;?>" readonly>
                         <input type="hidden" name="id_inventori[]" class="form-control" value="<?php echo $key->id_inventori;?>" required>
                       </div>
                     </div>

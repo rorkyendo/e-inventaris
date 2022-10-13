@@ -98,7 +98,7 @@
               <div class="form-group">
               	<label class="col-md-2 control-label">Nama Peminjam</label>
               	<div class="col-md-10">
-              		<input type="text" class="form-control" id="peminjam" placeholder="Masukkan Nama Peminjam" name="nama_peminjam" />
+              		<input type="text" class="form-control" id="nama_peminjam" placeholder="Masukkan Nama Peminjam" name="nama_peminjam" />
               	</div>
               </div>
               <div class="form-group">

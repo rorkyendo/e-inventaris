@@ -156,16 +156,42 @@
                   <th>Nama Unit</th>
                   <th>Nama Sub Unit</th>
                   <th>Nama Inventori</th>
+                  <?php if($faktur[0]->status_keluar == 'pinjam'): ?>
+                  <th>Catatan</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                  <?php endif;?>
                 </tr>
               </thead>
               <tbody>
-                <?php $no = 1;
+                <?php $no = 1;$terima=1;
                 foreach ($detailFaktur as $row) : ?>
                   <tr>
                     <td><?php echo $no++; ?></td>
                     <td><?php echo $row->nama_unit; ?></td>
                     <td><?php echo $row->nama_sub_unit; ?></td>
                     <td><?php echo $row->nama_inventori; ?></td>
+                  <?php if($faktur[0]->status_keluar == 'pinjam'): ?>
+                    <td><?php echo $row->catatan_penerimaan; ?></td>
+                    <td>
+                      <?php if($row->status_penerimaan=='N'): ?>
+                        <b class="text-danger">Ditolak</b>
+                      <?php elseif($row->status_penerimaan=='Y'): ?>
+                        <b class="text-success">Diterima</b>
+                      <?php $terima++;?>
+                      <?php else: ?>
+                        <b class="text-warning">Pending</b>
+                      <?php endif; ?>
+                    </td>
+                    <td>
+                      <?php if ($faktur[0]->status_approval != 'pending') : ?>
+                        <a href="<?php echo base_url('panel/inventori/approveInventoriKeluar/acceptId/'.$row->id_detail_faktur);?>" onclick="return confirm('Apakah kamu yakin akan menerima barang yang dikembalikan?')" class="btn btn-xs btn-primary">Terima</a>
+                        <a href="#" class="btn btn-xs btn-danger" onclick="tolak('<?php echo $row->id_detail_faktur;?>')">Tolak</a>
+                      <?php else:?>
+                        <b class="text-danger">Silahkan lakukan approval terlebih dahulu</b>
+                      <?php endif; ?>
+                    </td>
+                  <?php endif;?>
                   </tr>
               </tbody>
             <?php endforeach; ?>
@@ -176,7 +202,11 @@
                 <a href="<?php echo base_url(changeLink('panel/inventori/approveInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan mengapprove faktur ini?')" style="margin-left:10px;">Approve</a>
                 <a href="<?php echo base_url(changeLink('panel/inventori/rejectInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-warning pull-right" onclick="return confirm('apakah kamu yakin akan mereject faktur ini?')" style="margin-left:10px;">Reject</a>
               <?php elseif($faktur[0]->status_approval == 'accept' && $faktur[0]->status_keluar == 'pinjam' && $faktur[0]->status_pengembalian == 'belum'):?>
-                <a href="<?php echo base_url(changeLink('panel/inventori/pengembalianInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan melakukan pengembalian pada faktur ini?')" style="margin-left:10px;"><i class="fa fa-undo"></i> Pengembaliam</a>
+                <?php if($terima < $no): ?>
+                  <b class="text-danger">*Mohon maaf masih ada barang yang belum dikembalikan penerimaan pengembalian tidak bisa dilakukan</b>
+                <?php else: ?>
+                  <a href="<?php echo base_url(changeLink('panel/inventori/pengembalianInventoriKeluar/' . $faktur[0]->id_faktur)); ?>" class="btn btn-sm btn-success pull-right" onclick="return confirm('apakah kamu yakin akan melakukan pengembalian pada faktur ini?')" style="margin-left:10px;"><i class="fa fa-undo"></i> Pengembaliam</a>
+                <?php endif; ?>
               <?php endif; ?>
               <a href="<?php echo base_url(changeLink('panel/inventori/inventoriKeluar/')); ?>" class="btn btn-sm btn-danger pull-right" style="margin-left:10px;">Kembali</a>
             </div>
@@ -222,4 +252,37 @@
       </tr>
     </table>
   </center>
+</div>
+
+<script>
+  function tolak(id){
+    $('#modalReject').modal('show');
+    $('#formTolak').prop('action','<?php echo base_url('panel/inventori/rejectInventoriKeluar/rejectId/');?>'+id)
+  }
+</script>
+<!-- Modal -->
+<div id="modalReject" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Penolakan Penerimaan</h4>
+			</div>
+			<div class="modal-body">
+				<form class="" id="formTolak" action="" method="post">
+					<div class="form-group">
+						<label for="">Masukkan catatan</label>
+              <textarea name="catatan_penerimaan" class="form-control" id="catatan_penerimaan" cols="30" rows="10"></textarea>
+					</div>
+			</div>
+			<div class="modal-footer">
+				<a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>
+				<button type="submit" class="btn btn-sm btn-success">Simpan</a>
+					</form>
+			</div>
+		</div>
+
+	</div>
 </div>
