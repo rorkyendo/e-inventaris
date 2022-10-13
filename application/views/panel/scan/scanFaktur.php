@@ -38,6 +38,9 @@
               <br>
               <br>
             </center>
+              <div class="form-group">
+                <input type="text" class="form-control" onchange="cariFaktur(this.value)" placeholder="Scan atau masukkan kode faktur disini..">
+              </div>
           </div>
 
         </div>

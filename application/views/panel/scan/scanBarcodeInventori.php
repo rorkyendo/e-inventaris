@@ -38,6 +38,9 @@
               <br>
               <br>
             </center>
+              <div class="form-group">
+                <input type="text" class="form-control" onchange="cariInventori(this.value)" placeholder="Scan atau masukkan kode inventori disini..">
+              </div>
           </div>
           <div class="col-md-12">
             <h5 class="text-center">Detail inventori</h5>
@@ -186,8 +189,10 @@
         if (resp!='false') {          
           var data = JSON.parse(resp)
 
-          Quagga.stop();
-          _scannerIsRunning = false;
+          if (_scannerIsRunning) {
+            Quagga.stop();
+            _scannerIsRunning = false;
+          }
           $('#reader').attr('hidden',true);
           
           $.each(data,function(key,val){
