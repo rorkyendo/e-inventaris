@@ -66,6 +66,8 @@
                 <th>Detail Lokasi</th>
                 <th>Status Laporan</th>
                 <th>Tgl Laporan</th>
+                <th>Estimasi Selesai</th>
+                <th>Diselesaikan pada</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -166,6 +168,14 @@
         },
         {
           "data": "dibuat_pada",
+          width: 100,
+        },
+        {
+          "data": "estimasi_selesai",
+          width: 100,
+        },
+        {
+          "data": "diselesaikan_pada",
           width: 100,
         },
         {
