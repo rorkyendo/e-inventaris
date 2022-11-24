@@ -143,15 +143,9 @@
                   </select>
                 </div>
               </div>
-              <div class="form-group">
-                <label class="col-md-2 control-label">Sub Unit</label>
-                <div class="col-md-10">
-                  <font color="red">*Silahkan pilih unit terlebih dahulu</font>
-                  <select class="form-control select2" id="sub_unit" name="sub_unit">
-                    <option value="">.:Pilih Sub Unit:.</option>
-                  </select>
-                </div>
-              </div>
+              <script>
+                  $('#unit').val('<?php echo $pengguna[0]->unit; ?>')
+              </script>
               <script type="text/javascript">
                 function cekPassword() {
                   var repass = $('#re_password').val()

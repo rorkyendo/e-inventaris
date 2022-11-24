@@ -58,7 +58,6 @@ class MasterData extends CI_Controller
 				'jenkel' => $this->input->post('jenkel'),
 				'alamat' => $this->input->post('alamat'),	
 				'unit' => $this->input->post('unit'),	
-				'sub_unit' => $this->input->post('sub_unit'),	
 				'no_wa' => $this->input->post('no_wa'),	
 			);
 
@@ -107,7 +106,6 @@ class MasterData extends CI_Controller
 				'jenkel' => $this->input->post('jenkel'),
 				'alamat' => $this->input->post('alamat'),
 				'unit' => $this->input->post('unit'),	
-				'sub_unit' => $this->input->post('sub_unit'),	
 				'no_wa' => $this->input->post('no_wa'),	
 			);
 			//---------------- UPDATE FOTO PENGGUNA ---------------//
