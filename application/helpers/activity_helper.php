@@ -39,7 +39,7 @@ function sendNotifWA($nomer,$pesan){
       curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
       curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($curl, CURLOPT_POSTFIELDS, $forms );
-      curl_setopt($curl, CURLOPT_URL, "https://mediodev.site/public/api/kirim_wa");
+      curl_setopt($curl, CURLOPT_URL, "https://mediodev.my.id/public/api/kirim_wa");
       curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
       curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
       curl_setopt($curl, CURLOPT_HTTPHEADER, array(
